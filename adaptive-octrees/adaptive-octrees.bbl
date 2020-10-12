@@ -1,0 +1,59 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nty/global//global/global}
+  \entry{Sundar:2008:SIAM}{article}{}
+    \name{author}{3}{}{%
+      {{hash=SH}{%
+         family={Sundar},
+         familyi={S\bibinitperiod},
+         given={Hari},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=SRS}{%
+         family={Sampath},
+         familyi={S\bibinitperiod},
+         given={Rahul\bibnamedelima S},
+         giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=BG}{%
+         family={Biros},
+         familyi={B\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {SIAM}%
+    }
+    \strng{namehash}{SHSRSBG1}
+    \strng{fullhash}{SHSRSBG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{number}{5}
+    \field{pages}{2675\bibrangedash 2708}
+    \field{title}{Bottom-up construction and 2: 1 balance refinement of linear
+  octrees in parallel}
+    \field{volume}{30}
+    \field{journaltitle}{SIAM Journal on Scientific Computing}
+    \field{year}{2008}
+  \endentry
+\enddatalist
+\endinput
