@@ -17,6 +17,20 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global}
+  \entry{excalibur}{misc}{}
+    \list{publisher}{1}{%
+      {EPSRC}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \field{title}{Exascale Computing for System-Level Engineering}
+    \verb{url}
+    \verb https://excalibur-sle.github.io/
+    \endverb
+    \field{journaltitle}{Excalibur SLE}
+  \endentry
+
   \entry{Sundar:2008:SIAM}{article}{}
     \name{author}{3}{}{%
       {{hash=SH}{%

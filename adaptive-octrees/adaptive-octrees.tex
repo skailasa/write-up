@@ -3,11 +3,19 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
 \usepackage[backend=bibtex]{biblatex}
 \addbibresource{adaptive-octrees.bib}
 
 \title{Adaptive Octrees, Algorithms and Implementations}
-\author{Srinath Kailasa \thanks{Contact me at srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
+\author{Srinath Kailasa \thanks{SK is funded by an EPSRC DTP at UCL}}
 
 \date{\today}
 
@@ -17,11 +25,27 @@
 
 \section*{Abstract}
 
-Octrees find a wide variety of applications across computational science.
+Octrees find a wide variety of applications across computational science as they
+allow for the spatial decomposition of a three dimensional domain. The adaptivity of
+an octree refers to the potential to have neighbouring tree nodes of non-uniform
+size at a given level of the octree. This allows for a better description of
+non-uniformly distributed data, allowing the octree to `adapt' to the data. In this
+document we describe the main theoretical underpinnings of adaptive octrees, with
+special reference to their application in Fast Multipole Methods. We move on to
+a description of major sequential and parallel implementations of adaptive octrees,
+and describe the strategy being undertaken by the new Python/SYCL implementation
+being developed as a part of the Excalibur exascale software collaboration \cite{excalibur},
+\href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree}.
 
 \cite{Sundar:2008:SIAM}
 
-\section*{Foo}
+\section*{Motivation}
+
+
+\section*{Algorithms}
+
+
+\section*{AdaptOctree Software}
 
 
 \printbibliography
