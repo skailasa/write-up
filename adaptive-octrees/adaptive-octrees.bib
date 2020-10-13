@@ -15,3 +15,55 @@
   journal={Excalibur SLE},
   publisher={EPSRC}
   }
+
+@article{Lashuk:2012:ACM,
+author = {Lashuk, Ilya and Chandramowlishwaran, Aparna and Langston, Harper and Nguyen, Tuan-Anh and Sampath, Rahul and Shringarpure, Aashay and Vuduc, Richard and Ying, Lexing and Zorin, Denis and Biros, George},
+journal = {Communications of the ACM},
+month = {may},
+number = {5},
+pages = {101--109},
+title = {{A massively parallel adaptive fast multipole method on heterogeneous architectures}},
+volume = {55},
+year = {2012}
+}
+
+@article{Carrier1988,
+abstract = {An algorithm is presented for the rapid evaluation of the potential and force fields in systems involving large numbers of particles whose interactions are Coulombic or gravitational in nature. For a system of N particles, an amount of work of the order O(N2) has traditionally been required to evaluate all pairwise interactions, unless some approximation or truncation method is used. The algorithm of the present paper requires an amount of work proportional to N to evaluate all interactions to within roundoff error, making it considerably more practical for large-scale problems encountered in plasma physics, fluid dynamics, molecular dynamics, and celestial mechanics.},
+author = {Carrier, J. and Greengard, L. and Rokhlin, V.},
+doi = {10.1137/0909044},
+file = {:Users/sri/Documents/Mendeley Desktop/2007{\_}hudson.pdf:pdf},
+issn = {0196-5204},
+journal = {SIAM Journal on Scientific and Statistical Computing},
+month = {jul},
+number = {4},
+pages = {669--686},
+title = {{A Fast Adaptive Multipole Algorithm for Particle Simulations}},
+url = {http://epubs.siam.org/doi/10.1137/0909044},
+volume = {9},
+year = {1988}
+}
+
+
+@article{Malhotra,
+abstract = {The solution of a constant-coefficient elliptic partial differential equation (PDE) can be computed using an integral transform: a convolution with the fundamental solution of the PDE, also known as a volume potential. We present a Fast Multipole Method (FMM) for computing volume potentials and use them to construct spatially-adaptive solvers for the Poisson, Stokes and Helmholtz problems. Conventional N-body methods apply to discrete particle interactions. With volume potentials, one replaces the sums with volume integrals. Particle N-body methods can be used to accelerate such integrals but it is more efficient to develop a special FMM. In this paper, we discuss the efficient implementation of such an FMM. We use high-order piecewise Chebyshev polynomials and an octree data structure to represent the input and output fields, enable spectrally accurate approximation of the near field, and the kernel independent FMM (KIFMM) for the far field approximation. For distributed memory parallelism, we use space filling curves, locally essential trees, and a hypercube-like communication scheme developed previously in our group. We present new near and far interaction traversals which optimize cache usage. Also, unlike particle N-body codes, we need a 2:1 balanced tree to allow for precomputations. We present a fast scheme for 2:1 balancing. Finally, we use vectorization, including the AVX instruction set on the Intel Sandy Bridge architecture to get over 50{\%} of peak floating point performance. We use task parallelism to employ the Xeon Phi on the Stampede platform at the Texas Advanced Computing Center (TACC). We achieve about 600GFlop/s of double precision performance on a single node. Our largest run on Stam- pede took 3.5s on 16K cores for a problem with 18E+9 unknowns for a highly nonuniform particle distri- bution (corresponding to an effective resolution exceeding 2E+23 unknowns since we used 23 levels in our octree).},
+author = {Malhotra, Dhairya and Biros, George},
+doi = {10.1145/2898349},
+file = {:Users/sri/Documents/Mendeley Desktop/Malhotra, Biros - Unknown - A A Distributed Memory Fast Multipole Method for Volume Potentials.pdf:pdf},
+issn = {0098-3500},
+journal = {ACM Transactions on Mathematical Software},
+keywords = {FMM,N-Body Problems,Potential theory ACM},
+mendeley-groups = {Doctorate},
+month = {sep},
+number = {2},
+pages = {1--27},
+title = {{A Distributed Memory Fast Multipole Method for Volume Potentials}},
+url = {http://dx.doi.org/10.1145/0000000.0000000 https://dl.acm.org/doi/10.1145/2898349},
+volume = {43},
+year = {2016}
+}
+
+@misc{boxtree,
+  title = {Boxtree},
+  url = {https://github.com/inducer/boxtree},
+  author = {Andreas Klöckner et. al.}
+ }

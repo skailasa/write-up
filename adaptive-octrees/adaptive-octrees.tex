@@ -1,9 +1,15 @@
 \documentclass[12pt, a4, twoside]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -15,7 +21,7 @@
 \addbibresource{adaptive-octrees.bib}
 
 \title{Adaptive Octrees, Algorithms and Implementations}
-\author{Srinath Kailasa \thanks{SK is funded by an EPSRC DTP at UCL}}
+\author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
 
 \date{\today}
 
@@ -25,25 +31,100 @@
 
 \section*{Abstract}
 
-Octrees find a wide variety of applications across computational science as they
-allow for the spatial decomposition of a three dimensional domain. The adaptivity of
-an octree refers to the potential to have neighbouring tree nodes of non-uniform
-size at a given level of the octree. This allows for a better description of
-non-uniformly distributed data, allowing the octree to `adapt' to the data. In this
-document we describe the main theoretical underpinnings of adaptive octrees, with
-special reference to their application in Fast Multipole Methods. We move on to
-a description of major sequential and parallel implementations of adaptive octrees,
-and describe the strategy being undertaken by the new Python/SYCL implementation
-being developed as a part of the Excalibur exascale software collaboration \cite{excalibur},
-\href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree}.
-
-\cite{Sundar:2008:SIAM}
+Octrees find a wide variety of applications across computational science as they allow for the spatial decomposition of a three dimensional domain. The adaptivity of an octree refers to the potential to have neighbouring tree nodes of non-uniform size at a given level of the octree. This allows for a better description of non-uniformly distributed data, allowing the octree to `adapt' to the data. In this document we describe the main theoretical underpinnings of adaptive octrees, with special reference to their application in Fast Multipole Methods. We move on to a description of major sequential and parallel implementations of adaptive octrees, and describe the strategy being undertaken by the new Python/SYCL implementation being developed as a part of the Excalibur exascale software collaboration, \href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree}  \cite{excalibur}.
 
 \section*{Motivation}
 
+The motivation behind the \href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree} software is to create:
 
-\section*{Algorithms}
+\begin{itemize}
+    \item A Python library for adaptive octrees, pluggable into the PyExaFMM interface.
+    \item SYCL acceleration for data parallelism.
+    \item MPI acceleration for process parallelism.
+\end{itemize}
 
+Few generic oct/quadtree implementations seem to exist in the open source. A cursory google search found a single example of a well maintained library, that makes use of shared memory parallelism via OpenMP and OpenCL acceleration for data parallelism maintained by the Klöckner group at UIUC \cite{boxtree} - the home of PyOpenCL. The overarching goal in creating this software is a further modularity and acceleration of PyExaFMM.
+
+\section*{Octrees}
+
+It is preferable to to work with \textit{linear} representations of Octrees. In this context linearity refers to just storing the Morton encoded keys of octants at the lowest level of granularity, or leaves. This contrasts with traditional implementations which make use of pointers, which can be hard to synchronise in parallel implementations \cite{Sundar:2008:SIAM}. Furthermore, this seems to have been adopted as a standard way of representing octrees judging by recent literature on the subject \cite{Malhotra,Lashuk:2012:ACM}. Furthermore space filling curves based on Morton encodings seem to be a standard \cite{Malhotra,Sundar:2008:SIAM}, due to their relative simplicity.
+
+In the context of FMMs, the original implementation using an adaptive octree \cite{Carrier1988}, constructed the octree in a sequential manner. The algorithm for this is simple, starting from the root node, we recurse post order (top-down) the octree, refining a child box if it contains more than $S$ particles, which is a user determined constant.
+
+Approaches to parallelise this begin by assigning equal numbers of particles to be worked on by each processing unit in a parallel scheme, however this results in the following difficulties, which we quote from \cite{Sundar:2008:SIAM}
+
+\begin{enumerate}
+    \item If the number of particles in a given octant is less than $S$ for a given processing unit, this doesn't mean that this is true when that octant's particles are accumulated over all processors. Thus we may end up with coarser octants than intended.
+    \item Generally, we'd like unique octants in each processor, to reduce communication overheads. This makes it imperative to remove duplicates across processing units.
+    \item Since there are guaranteed to be a number of duplicates and overlaps in terms of the locally constructed trees (`local' in the sense of the processing unit) this adds to the amount of work that can't be considered `useful' i.e. solving the problem.
+\end{enumerate}
+
+Therefore Sundar et. al propose an alternative `bottom-up' approach in which octrees are represented by the Morton ids corresponding to their leaf nodes. This is a linear data structure, and therefore far easier to work with in parallel implementations. It doesn't take much to imagine partitioning schemes where leaf nodes are chunked and distributed across processing units. If we take care to chunk based on Morton id ranges, we can preserve locality of data and ensure that each processor is able to construct a local subtree. This is the approach taken in available parallel octree implementations \cite{Lashuk:2012:ACM, Malhotra}. This approach incurs a cost in that the algorithms with which to construct adaptive trees become correspondingly more complex.
+
+Before moving on to algorithms, we describe some necessary facts about the approach taken to Morton encoding by Sundar et al that aid their implementation \cite{Sundar:2008:SIAM}. They form Morton ids via an \textit{interleaving} of bits corresponding to the index of an octant at a given level, finally they append $\floor*{\log_2 D_{\max}} + 1$ bits corresponding to the level of the octant, where $D_{\max}$ is the maximum depth of the octree. This is best illustrated through an example, consider an octant at octree level 2, with the following index tuple $(1, 2, 3)$, corresponding to it's $x$ $y$ and $z$ indices. Then its Morton ID is constructed as,
+
+\begin{flalign}
+    (\underbrace{001}_{x}, \underbrace{010}_{y}, \underbrace{011}_{z}) \\
+    \rightarrow \text{interleaving,} \> \> 000011101 \\
+    \rightarrow \text{append level (2),} \> \> 000011101010
+\end{flalign}
+
+Constructing Morton ids in this fashion imbibes them with some useful properties for our purposes of tree construction.
+
+\dots
+
+
+
+\subsection*{Algorithms}
+
+Sundar et. al break up their approach into two main algorithmic contributions.
+
+\begin{enumerate}
+    \item Constructing a linear octree from a set of points spanning a three dimensional domain.
+    \item Enforcing an optimal 2:1 balance constraint over the linear octree.
+\end{enumerate}
+
+They have tested implementations involving the linearisation and balancing of octrees containing $1 \times 10^9$ nodes in  $\approx 60$s on the Pittsburgh Supercomputing Center’s TCS-1 AlphaServer containing 1024 processor units. However, as we shall see, the methods described in \cite{Sundar:2008:SIAM} overlap for each goal, therefore can't really be considered separately.
+
+The strategy can be discretised into the following steps
+
+\begin{enumerate}
+    \item \textit{Distribute Workload} - Ensure that each processing unit has roughly the same amount of computation to get through.
+    \item \textit{Balance Subtrees} - For each subtree, enforce the 2:1 balancing constraint.
+    \item \textit{Merge} - Remove duplicates.
+\end{enumerate}
+
+\subsubsection*{1. \textit{Distribute Workload}}
+
+\begin{itemize}
+    \item Begin by sorting based on Morton id, after refinement of domain into uniform grid at the maximum level of refinement $D_{\max}$.
+    \item Distribute these ids evenly across processor nodes.
+    \item Between `first' and `last' Morton ids for a given processor node, compute the minimal octants required to span the region.
+    \item Use this as an input to algorithm to find \textit{complete} octree spanning the domain.
+    \item Refine each `block' - the terminology for a leaf in this final linear octree, to comply with the constraint of fewer than $S$ particles per node
+\end{itemize}
+
+Blocks can then be assigned a weight, corresponding to particles they contain, ready to be distributed to each processor node.
+
+\subsubsection*{2. \textit{Balance Subtrees}}
+
+The balancing algorithm is simple,
+
+
+\begin{algorithm}
+    \caption{Euclid’s algorithm}\label{euclid}
+    \begin{algorithmic}[1]
+    \Function{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+    \State $r\gets a\bmod b$
+    \While{$r\not=0$}\Comment{We have the answer if r is 0}
+    \State $a\gets b$
+    \State $b\gets r$
+    \State $r\gets a\bmod b$
+    \EndWhile\label{euclidendwhile}
+    \State \textbf{return} $b$\Comment{The gcd is b}
+    \EndFunction
+    \end{algorithmic}
+ \end{algorithm}
 
 \section*{AdaptOctree Software}
 

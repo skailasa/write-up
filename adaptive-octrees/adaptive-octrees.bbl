@@ -17,6 +17,88 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global}
+  \entry{boxtree}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=eaAK}{%
+         prefix={et.},
+         prefixi={e\bibinitperiod},
+         family={al.},
+         familyi={a\bibinitperiod},
+         given={Andreas\bibnamedelima Klöckner},
+         giveni={A\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{aAKe1}
+    \strng{fullhash}{aAKe1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{title}{Boxtree}
+    \verb{url}
+    \verb https://github.com/inducer/boxtree
+    \endverb
+  \endentry
+
+  \entry{Carrier1988}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CJ}{%
+         family={Carrier},
+         familyi={C\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=GL}{%
+         family={Greengard},
+         familyi={G\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=RV}{%
+         family={Rokhlin},
+         familyi={R\bibinitperiod},
+         given={V.},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CJGLRV1}
+    \strng{fullhash}{CJGLRV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{abstract}{%
+    An algorithm is presented for the rapid evaluation of the potential and
+  force fields in systems involving large numbers of particles whose
+  interactions are Coulombic or gravitational in nature. For a system of N
+  particles, an amount of work of the order O(N2) has traditionally been
+  required to evaluate all pairwise interactions, unless some approximation or
+  truncation method is used. The algorithm of the present paper requires an
+  amount of work proportional to N to evaluate all interactions to within
+  roundoff error, making it considerably more practical for large-scale
+  problems encountered in plasma physics, fluid dynamics, molecular dynamics,
+  and celestial mechanics.%
+    }
+    \verb{doi}
+    \verb 10.1137/0909044
+    \endverb
+    \field{issn}{0196-5204}
+    \field{number}{4}
+    \field{pages}{669\bibrangedash 686}
+    \field{title}{{A Fast Adaptive Multipole Algorithm for Particle
+  Simulations}}
+    \verb{url}
+    \verb http://epubs.siam.org/doi/10.1137/0909044
+    \endverb
+    \field{volume}{9}
+    \verb{file}
+    \verb :Users/sri/Documents/Mendeley Desktop/2007{\_}hudson.pdf:pdf
+    \endverb
+    \field{journaltitle}{SIAM Journal on Scientific and Statistical Computing}
+    \field{year}{1988}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
   \entry{excalibur}{misc}{}
     \list{publisher}{1}{%
       {EPSRC}%
@@ -29,6 +111,159 @@
     \verb https://excalibur-sle.github.io/
     \endverb
     \field{journaltitle}{Excalibur SLE}
+  \endentry
+
+  \entry{Lashuk:2012:ACM}{article}{}
+    \name{author}{10}{}{%
+      {{hash=LI}{%
+         family={Lashuk},
+         familyi={L\bibinitperiod},
+         given={Ilya},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=CA}{%
+         family={Chandramowlishwaran},
+         familyi={C\bibinitperiod},
+         given={Aparna},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Langston},
+         familyi={L\bibinitperiod},
+         given={Harper},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=NTA}{%
+         family={Nguyen},
+         familyi={N\bibinitperiod},
+         given={Tuan-Anh},
+         giveni={T\bibinithyphendelim A\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Sampath},
+         familyi={S\bibinitperiod},
+         given={Rahul},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Shringarpure},
+         familyi={S\bibinitperiod},
+         given={Aashay},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=VR}{%
+         family={Vuduc},
+         familyi={V\bibinitperiod},
+         given={Richard},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=YL}{%
+         family={Ying},
+         familyi={Y\bibinitperiod},
+         given={Lexing},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=ZD}{%
+         family={Zorin},
+         familyi={Z\bibinitperiod},
+         given={Denis},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BG}{%
+         family={Biros},
+         familyi={B\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LI+1}
+    \strng{fullhash}{LICALHNTASRSAVRYLZDBG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \field{number}{5}
+    \field{pages}{101\bibrangedash 109}
+    \field{title}{{A massively parallel adaptive fast multipole method on
+  heterogeneous architectures}}
+    \field{volume}{55}
+    \field{journaltitle}{Communications of the ACM}
+    \field{year}{2012}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Malhotra}{article}{}
+    \name{author}{2}{}{%
+      {{hash=MD}{%
+         family={Malhotra},
+         familyi={M\bibinitperiod},
+         given={Dhairya},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BG}{%
+         family={Biros},
+         familyi={B\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \keyw{FMM,N-Body Problems,Potential theory ACM}
+    \strng{namehash}{MDBG1}
+    \strng{fullhash}{MDBG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{abstract}{%
+    The solution of a constant-coefficient elliptic partial differential
+  equation (PDE) can be computed using an integral transform: a convolution
+  with the fundamental solution of the PDE, also known as a volume potential.
+  We present a Fast Multipole Method (FMM) for computing volume potentials and
+  use them to construct spatially-adaptive solvers for the Poisson, Stokes and
+  Helmholtz problems. Conventional N-body methods apply to discrete particle
+  interactions. With volume potentials, one replaces the sums with volume
+  integrals. Particle N-body methods can be used to accelerate such integrals
+  but it is more efficient to develop a special FMM. In this paper, we discuss
+  the efficient implementation of such an FMM. We use high-order piecewise
+  Chebyshev polynomials and an octree data structure to represent the input and
+  output fields, enable spectrally accurate approximation of the near field,
+  and the kernel independent FMM (KIFMM) for the far field approximation. For
+  distributed memory parallelism, we use space filling curves, locally
+  essential trees, and a hypercube-like communication scheme developed
+  previously in our group. We present new near and far interaction traversals
+  which optimize cache usage. Also, unlike particle N-body codes, we need a 2:1
+  balanced tree to allow for precomputations. We present a fast scheme for 2:1
+  balancing. Finally, we use vectorization, including the AVX instruction set
+  on the Intel Sandy Bridge architecture to get over 50{\%} of peak floating
+  point performance. We use task parallelism to employ the Xeon Phi on the
+  Stampede platform at the Texas Advanced Computing Center (TACC). We achieve
+  about 600GFlop/s of double precision performance on a single node. Our
+  largest run on Stam- pede took 3.5s on 16K cores for a problem with 18E+9
+  unknowns for a highly nonuniform particle distri- bution (corresponding to an
+  effective resolution exceeding 2E+23 unknowns since we used 23 levels in our
+  octree).%
+    }
+    \verb{doi}
+    \verb 10.1145/2898349
+    \endverb
+    \field{issn}{0098-3500}
+    \field{number}{2}
+    \field{pages}{1\bibrangedash 27}
+    \field{title}{{A Distributed Memory Fast Multipole Method for Volume
+  Potentials}}
+    \verb{url}
+    \verb http://dx.doi.org/10.1145/0000000.0000000 https://dl.acm.org/doi/10.1
+    \verb 145/2898349
+    \endverb
+    \field{volume}{43}
+    \verb{file}
+    \verb :Users/sri/Documents/Mendeley Desktop/Malhotra, Biros - Unknown - A A
+    \verb  Distributed Memory Fast Multipole Method for Volume Potentials.pdf:p
+    \verb df
+    \endverb
+    \field{journaltitle}{ACM Transactions on Mathematical Software}
+    \field{year}{2016}
+    \warn{\item Invalid format of field 'month'}
   \endentry
 
   \entry{Sundar:2008:SIAM}{article}{}
