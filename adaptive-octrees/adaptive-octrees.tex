@@ -157,7 +157,7 @@ In order to construct a complete linear octree from a set of octants, you just h
     \Function{PointsToOctree}{$L$}
     \State $F \gets$ [Octant($p, \> D_{\max}$), $\forall p \in L$]
     \For{each $b \in B$}
-        \If{NumberOfPoints($b$) $> N_{\max}^p$}
+        \If{NumberOfPoints($b$) $> S$}
             \State $B \gets B - b + \mathcal{C}(b)$
         \EndIf
     \EndFor
@@ -167,26 +167,43 @@ In order to construct a complete linear octree from a set of octants, you just h
 
 \subsubsection*{2. \textit{Balance Subtrees}}
 
-The balancing strategy is simple,
+Step (1) results in an balanced linear octree, for many applications it's useful to impose a degree of smoothness over the domain by imposing a balance constraint. A `2:1' balance constraint refers to the fact that two adjacent octree nodes (i.e. which share an edge, a face or a corner) are no more than a level apart in terms of their size. For FMM implementations this constraint leads to fewer operator precomputations.
+
+Once we've obtained a balanced linear octree, balancing it is done via algorithm (\ref{alg:balance}). This works by starting an iteration at the finest level of the octree possible $D_{\max}$, generating the coarsest possible neighbours for octants at this level, and seeing if there is an intersection with octants already present. If there is they are retained in the final tree, then we iterate to the next coarsest level and so forth. At the end of the iteration we'll be left with a balanced tree by definition.
 
 \begin{algorithm}
-    \caption{Balance a Complete Linear Octree}\label{euclid}
+    \caption{Balance a Complete Linear Octree (sequential)}\label{alg:balance}
+    \hspace*{\algorithmicindent} \textbf{Input}: An octant $N$ and a partial list of its descendants $L$ \\
+    \hspace*{\algorithmicindent} \textbf{Output}: A complete balanced octree $R$.
     \begin{algorithmic}[1]
-    \Function{BalanceOctree}{$a,b$}\Comment{The g.c.d. of a and b}
-    \State $r\gets a\bmod b$
-    \While{$r\not=0$}\Comment{We have the answer if r is 0}
-    \State $a\gets b$
-    \State $b\gets r$
-    \State $r\gets a\bmod b$
-    \EndWhile\label{euclidendwhile}
-    \State \textbf{return} $b$\Comment{The gcd is b}
+    \State $W \gets L$, $P \gets \emptyset$, $R \gets \emptyset$
+    \Function{BalanceOctree}{$a,b$}
+        \For{$l \gets D_{\max}$ to ($\mathcal{L}(N)+1$)}
+            \State $Q \gets \{x \in W | \mathcal{L}(x)=l\}$
+            \State Sort($Q$)
+            \State $T \gets \{x \in Q | \mathcal{S}(x) \notin T\}$
+            \For{each $t \in T$}
+               \State $R \gets t + \mathcal{S}(t)$
+               \State $P \gets P + \{\mathcal{N}(\mathcal{P}(t), l-1) \cap \{\mathcal{D}(N)\}\}$
+            \EndFor
+            \State $P \gets P + \{x \in W | \mathcal{L}(x) = l-1\}$
+            \State $W \gets \{x \in W | \mathcal{L}(x) \neq l-1\}$
+            \State RemoveDuplicates($P$)
+            \State $W \gets W + P, \> P \gets \emptyset$
+        \EndFor
+        \State Sort($R$)
+        \State $R \gets \text{Linearise}(R)$ \Comment{Remove overlaps}
     \EndFunction
     \end{algorithmic}
  \end{algorithm}
 
+
 \section*{AdaptOctree Software}
 
+Foo Bar
 
+
+\newpage
 \printbibliography
 
 \end{document}
