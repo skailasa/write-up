@@ -106,15 +106,73 @@ The strategy can be discretised into the following steps
 
 Blocks can then be assigned a weight, corresponding to particles they contain, ready to be distributed to each processor node.
 
-\subsubsection*{2. \textit{Balance Subtrees}}
 
-The balancing algorithm is simple,
-
+In order to construct a complete linear octree from a set of octants, you just have to complete the region between all subsequent pairs of octants (see alg. \ref{alg:complete}),
 
 \begin{algorithm}
-    \caption{Euclid’s algorithm}\label{euclid}
+    \caption{Construct Complete Linear Octree From a Set of Octants (Sequential)}\label{alg:complete}
+    \hspace*{\algorithmicindent} \textbf{Input}: A list of Octants $L$ \\
+    \hspace*{\algorithmicindent} \textbf{Output}: $R$ the sorted linear octree encompassing those octants.
     \begin{algorithmic}[1]
-    \Function{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+    \Function{CompleteOctree}{$L$} \\
+
+    RemoveDuplicates($L$) \Comment{Can be achieved with set-like data structure} \\
+
+    $L \gets \text{Linearise}(L)$ \Comment{Remove all overlaps} \\
+    $L$.pushback$(\mathcal{FC}$$(\mathcal{A}_{finest}(\mathcal{DFD}(\text{root}, L[1])) ))$ \\
+    $L$.pushfront$(\mathcal{LC}$$(\mathcal{A}_{finest}(\mathcal{DLD}(\text{root}, L[\text{len}(L)])) ))$
+    \For{$i \gets 1$ to $\text{len}(L)-1$}
+        \State $A \gets \text{CompleteRegion}(L[i], L[i+1])$
+        \State $R \gets R + L[i] + A$
+    \EndFor
+    \EndFunction
+    \end{algorithmic}
+ \end{algorithm}
+
+ Algorithm \ref{alg:overlaps} works by checking sequentially whether a given octant is contained within the ancestors of it's adjacent octant, if not then it is appended to the final non-overlapping octree. The octants are sorted by Morton id, which allows this strategy to work.
+
+ \begin{algorithm}
+    \caption{Remove Overlaps from a Sorted List of Octants}\label{alg:overlaps}
+    \hspace*{\algorithmicindent} \textbf{Input}: A sorted list of Octants $W$ \\
+    \hspace*{\algorithmicindent} \textbf{Output}: $R$, an Octree with no overlaps
+    \begin{algorithmic}[1]
+    \Function{Linearise}{$W$}
+    \For{$i \gets 1$ to (len($W$)-1)}
+        \If{$W[i] \notin {\mathcal{A}(W[i+1])}$}
+            \State $R \gets R + W[i]$
+        \EndIf
+    \EndFor
+        \State $R \gets R + W$[len($W$)]
+    \EndFunction
+    \end{algorithmic}
+ \end{algorithm}
+
+ Finally to ensure that the condition of having fewer than $S$ particles per leaf octant is met, we iterate through the resulting linear octree, and split octants wherever this condition is not met.
+
+ \begin{algorithm}
+    \caption{Construct Linear Octree From a Set of Points (sequential)}\label{alg:points2octree}
+    \hspace*{\algorithmicindent} \textbf{Input}: A list of points $L$ over a 3D domain, and a parameter for the maximum number of points per leaf octant $S$. \\
+    \hspace*{\algorithmicindent} \textbf{Output}: A complete linear Octree, $B$.
+    \begin{algorithmic}[1]
+    \Function{PointsToOctree}{$L$}
+    \State $F \gets$ [Octant($p, \> D_{\max}$), $\forall p \in L$]
+    \For{each $b \in B$}
+        \If{NumberOfPoints($b$) $> N_{\max}^p$}
+            \State $B \gets B - b + \mathcal{C}(b)$
+        \EndIf
+    \EndFor
+    \EndFunction
+    \end{algorithmic}
+ \end{algorithm}
+
+\subsubsection*{2. \textit{Balance Subtrees}}
+
+The balancing strategy is simple,
+
+\begin{algorithm}
+    \caption{Balance a Complete Linear Octree}\label{euclid}
+    \begin{algorithmic}[1]
+    \Function{BalanceOctree}{$a,b$}\Comment{The g.c.d. of a and b}
     \State $r\gets a\bmod b$
     \While{$r\not=0$}\Comment{We have the answer if r is 0}
     \State $a\gets b$
