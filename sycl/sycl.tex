@@ -1,0 +1,43 @@
+\documentclass[12pt, a4, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{sycl.bib}
+
+\title{Heterogenous Programming With SYCL}
+\author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+
+\begin{itemize}
+    \item Host and Kernel code in same source file
+    \item SYCL Compiler for OpenCL, accelerated code passed onto device specific OpenCL compilers.
+    \item Allows for programming across a range of vendor's hardware.
+    \item Originally developed for use with OpenCL and SPIR, now a more general heterogenous framework
+\end{itemize}
+
+
+
+\end{document}
