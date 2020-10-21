@@ -20,7 +20,7 @@
 \usepackage[backend=bibtex]{biblatex}
 \addbibresource{adaptive-octrees.bib}
 
-\title{Adaptive Octrees, Algorithms and Implementations}
+\title{A Review of Methods for Balancing and Refining Adaptive Octrees}
 \author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
 
 \date{\today}
@@ -31,7 +31,7 @@
 
 \section*{Abstract}
 
-Octrees find a wide variety of applications across computational science as they allow for the spatial decomposition of a three dimensional domain. The adaptivity of an octree refers to the potential to have neighbouring tree nodes of non-uniform size at a given level of the octree. This allows for a better description of non-uniformly distributed data, allowing the octree to `adapt' to the data. In this document we describe the main theoretical underpinnings of adaptive octrees, with special reference to their application in Fast Multipole Methods. We move on to a description of major sequential and parallel implementations of adaptive octrees, and describe the strategy being undertaken by the new Python/SYCL implementation being developed as a part of the Excalibur exascale software collaboration, \href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree}  \cite{excalibur}.
+Octrees find a wide variety of applications across computational science as they allow for the spatial decomposition of a three dimensional domain. The adaptivity of an octree refers to the potential to have neighbouring tree nodes of non-uniform size at a given level of the octree. This allows for a better description of non-uniformly distributed data, allowing the octree to `adapt' to the data. This is usually done while maintaining a `balance constraint', this refers to the attempt to keep the sizes of adjacent nodes approximately uniform within some tolerance. The reasons one may want to adopt balance constraints are largely practical, pre-computations of interaction of interaction matrices between octree nodes are often geometry dependent, and therefore having arbitrary geometries within close proximity may lead to large runtime overheads in computing pre-computations. In this document we describe the main theoretical underpinnings of constructing and balancing adaptive octrees and, with special reference to their application in Fast Multipole Methods. We move on to a description of the strategy being undertaken by the new Python/SYCL implementation being developed as a part of the Excalibur exascale software collaboration, \href{https://github.com/Excalibur-SLE/AdaptOctree}{AdaptOctree}  \cite{excalibur}.
 
 \section*{Motivation}
 
@@ -43,7 +43,11 @@ The motivation behind the \href{https://github.com/Excalibur-SLE/AdaptOctree}{Ad
     \item MPI acceleration for process parallelism.
 \end{itemize}
 
-Few generic oct/quadtree implementations seem to exist in the open source. A cursory google search found a single example of a well maintained library, that makes use of shared memory parallelism via OpenMP and OpenCL acceleration for data parallelism maintained by the Klöckner group at UIUC \cite{boxtree} - the home of PyOpenCL. The overarching goal in creating this software is a further modularity and acceleration of PyExaFMM.
+Few generic oct/quadtree implementations seem to exist in the open source. A cursory google search found a single example of a well maintained library, `boxtree', that makes use of shared memory parallelism via OpenMP and OpenCL acceleration for data parallelism maintained by the Klöckner group at UIUC \cite{boxtree} - the home of PyOpenCL.
+
+This software allows users to adaptively refine and balance two and three dimensional domains, as well as compute interaction lists for fast multipole methods.
+
+The overarching goal in creating this software is a further modularity and acceleration of PyExaFMM.
 
 \section*{Octrees}
 
@@ -200,7 +204,7 @@ Once we've obtained a balanced linear octree, balancing it is done via algorithm
 
 \section*{AdaptOctree Software}
 
-Foo Bar
+\subsection*{SYCL}
 
 
 \newpage
