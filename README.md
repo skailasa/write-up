@@ -1,6 +1,6 @@
 # Write Up
 
-Academic write-ups encompassing different topics.
+Academic write-ups encompassing different topics, mainly on mathematics and computer science.
 
 ## Citation
 
