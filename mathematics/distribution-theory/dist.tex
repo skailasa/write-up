@@ -1,4 +1,4 @@
-\documentclass[12pt, a4, twoside]{article}
+\documentclass[12pt, a4]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{algorithm}
@@ -20,10 +20,23 @@
 \usepackage[backend=bibtex]{biblatex}
 \addbibresource{dist.bib}
 
-\title{Distribution Theory Applied to the Solution of Partial Differential Equations}
+\title{Linear Partial Differential Equations: Introduction to Distribution Theory}
 \author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
 
 \date{\today}
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{notation}{Notation}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\DeclareMathOperator\supp{supp}
+\DeclareMathOperator\reals{\mathbb{R}}
+\DeclareMathOperator\complexes{\mathbb{C}}
+\DeclareMathOperator\tfspace{C_0^\infty}
+\DeclareMathOperator\tfspaceD{\mathcal{D}}
 
 \begin{document}
 
@@ -33,8 +46,105 @@
 
 In this document I summarise some of the main applications of the theory of distributions for the solution of partial differential equations via the method of `fundamental solutions'. I begin by introducing the key concepts behind the idea of the method of distributions, with the goal of solving the Laplace and Heat equations using these ideas. Furthermore, this document also includes a `scratch pad' section, in which I provide further examples and proofs of the applications of these ideas.
 
-
 \section{Distributions and Test Functions}
+
+\subsection{Motivation}
+
+Consider the wave equation in 1D,
+
+\begin{equation}
+    \frac{\partial^2u(x, t)}{\partial t^2} = \frac{\partial^2u(x, t)}{\partial x^2}
+    \label{eq:wave_eq_1d}
+\end{equation}
+
+Any twice continuosly differentiable function $f \in C^2(\mathcal{R})$ of the form $u(x, t) = f(x-t)$ satisfies the wave equation. However, we face difficulties if the solution is admissable in a physical sense, but has mathematical problems such as being non-continuous, e.g. $u(x, t) = |x-t|$. This is the motivation behind seeking a new theory, a theory of distributions, which allow us to generalise notions of derivatives and solve problems with solutions that may not not be mathematicallly particlarly `nice' as they may be required by the physics of the problem. These generalisations are known as distributions.
+
+\subsection{Defining Test Functions}
+
+A few basic definitions will serve us well for the remainder of these notes. Firstly,
+
+\begin{definition}[Classes of Continuous Functions]
+Let $\Omega^N$ be an open subset and let $m$ be a non-negative integer. The class $C^m(\Omega)$ consists of functions on $\Omega$ which have continuous derivatives of order less than or equal to $m$. Furthermore (1) $C^0(\Omega) = C(\Omega)$  is simply the class of all continuous functions on $\Omega$ and (2) $C^\infty (\Omega)$ is the class of functions with derivatives of all orders.
+\label{def:c_m_functions}
+\end{definition}
+
+\begin{definition}[Support of Functions]
+The support of a function $f : \Omega \rightarrow \mathbb{C}$ is the closure of the set $\{x \in \Omega | f(x) \neq 0\}$
+\[ \supp f = \overline{\{x \in \Omega | f(x) \neq 0\}}\]
+\label{def:support_of_functions}
+\end{definition}
+
+Examples in $\Omega = \reals$
+
+\begin{itemize}
+    \item $f(x) = 0$, then  $\supp f = \emptyset$
+    \item $f(x) = x$, then $\supp f = \reals$
+\end{itemize}
+
+\begin{definition}
+    $C_0^\infty(\reals^N)$ is the subset of $C^\infty(\reals^N)$ consisting of functions with \textbf{compact} support.
+\end{definition}
+
+\begin{definition}[Compact]
+    Compact in this context means a \textbf{closed} and \textbf{bounded} set.
+    \[ \Omega \subset \reals^N\]
+    is bounded if $\exists R > 0$ such that
+    \[\Omega \subset B_R = \{ x : |x| < R\}\]
+    and $|x|$ can be understood as a length in $\reals^N$.
+\end{definition}
+
+Now we list some of the basic properties of the function space described by $\tfspace$, as this is the space from which we seek our coveted test functions. We can think of it as a linear vector space, with the usual properties. That is, for $\phi_1, \phi_2 \in \tfspace$ and $\alpha_1, \alpha_2 \in \complexes$,
+
+\begin{eqnarray}
+    \alpha_1\phi_1 + \alpha_2\phi_2  \in \tfspace
+\end{eqnarray}
+
+Before arriving at the final definition of test functions, we must also introduce the concept of the multi-index. This has a familiar whiff about if for those who are familiar with vector-calculus.
+
+\begin{notation}[Multi-Index]
+    A multi-index is a vector with $N$ components, \[ \alpha=(\alpha_1,...,\alpha_N) \] where each component is a non-negative integer. It has an \textbf{order}, described by the sum of all components $|\alpha| = \alpha_1+...+\alpha_N$. If $\beta$ is also a multi-index, then $\alpha+\beta$ is a component-wise sum.
+\end{notation}
+
+Using multi-indices we can denote the derivative of a function $f(x_1,x_2,...)$ with respect to a multi-index as,
+
+\begin{eqnarray}
+    \partial^\alpha f = \frac{\partial^{|\alpha|}}{\partial x_1^{\alpha_1}, \partial x_2^{\alpha_2}, ..., \partial x_N^{\alpha_N}}
+\end{eqnarray}
+
+Furthermore, for $\phi \in \tfspace$ any $\partial^\alpha \phi \in \tfspace$. If $a \in C^\infty$ i.e. a doesn't have compact support, $a\phi \in \tfspace$ - its product with a function with compact support will also have compact support. Finally changes of variables, will also leave us within $\tfspace$ i.e. for an arbitrary vector $b \in \reals^N$ and an $N \times N$ matrix $A$, $\phi(Ax+b) \in \tfspace$.
+
+Now we have a promising vector space, with useful properties for it's members such as compactness and boundedness. Thhere is however one more thing we need to consider, which is the idea of convergece within the vector space.
+
+\begin{definition}
+    A sequence $\{\phi_i\}^\infty_{i=1} \in \tfspace $ is said to converge to zero if
+    \begin{enumerate}
+        \item There exists a compact set $K \subset \reals^N$ such that $\supp \phi_j \subset K$ for all $i=1,2,....$
+        \item For each multi-index $\alpha$ the derivative $\partial^\alpha \phi_j$ converges to zero uniformly as $j \rightarrow \infty$. That is, for all $\alpha$, $\underset{x \in \reals^N}{\supp} |\partial^\alpha \phi_j(x)|\rightarrow 0$
+    \end{enumerate}
+\end{definition}
+
+
+The set $\tfspace$ with the above convergence properties is called the \textbf{space of test functions}, and denoted by $\tfspaceD$. We remark that the convergence property is often denoted with respect to $\tfspaceD$ in the literature as,
+
+\begin{eqnarray}
+    \phi_N \overset{\tfspaceD}{\rightarrow} \phi
+\end{eqnarray}
+
+which further implies,
+
+\begin{eqnarray}
+    \phi_N - \phi \overset{\tfspaceD}{\rightarrow} 0
+\end{eqnarray}
+
+\subsection{Defining Distributions}
+
+\subsection{Basic Operations on Distributions}
+
+\subsection{The Support of Distributions}
+
+\subsection{The Convergence of Distributions}
+
+\subsection{Equivalent Definition of Distributions}
 
 
 \section{Fundamental Solutions}
