@@ -37,6 +37,7 @@
 \DeclareMathOperator\complexes{\mathbb{C}}
 \DeclareMathOperator\tfspace{C_0^\infty}
 \DeclareMathOperator\tfspaceD{\mathcal{D}}
+\DeclareMathOperator\dist{\mathcal{D'}}
 
 \begin{document}
 
@@ -57,7 +58,7 @@ Consider the wave equation in 1D,
     \label{eq:wave_eq_1d}
 \end{equation}
 
-Any twice continuosly differentiable function $f \in C^2(\mathcal{R})$ of the form $u(x, t) = f(x-t)$ satisfies the wave equation. However, we face difficulties if the solution is admissable in a physical sense, but has mathematical problems such as being non-continuous, e.g. $u(x, t) = |x-t|$. This is the motivation behind seeking a new theory, a theory of distributions, which allow us to generalise notions of derivatives and solve problems with solutions that may not not be mathematicallly particlarly `nice' as they may be required by the physics of the problem. These generalisations are known as distributions.
+Any twice continuosly differentiable function $f \in C^2(\reals)$ of the form $u(x, t) = f(x-t)$ satisfies the wave equation. However, we face difficulties if the solution is admissable in a physical sense, but has mathematical problems such as being non-continuous, e.g. $u(x, t) = |x-t|$. This is the motivation behind seeking a new theory, a theory of distributions, which allow us to generalise notions of derivatives and solve problems with solutions that may not not be mathematicallly particlarly `nice' as they may be required by the physics of the problem. These generalisations are known as distributions.
 
 \subsection{Defining Test Functions}
 
@@ -91,6 +92,7 @@ Examples in $\Omega = \reals$
     is bounded if $\exists R > 0$ such that
     \[\Omega \subset B_R = \{ x : |x| < R\}\]
     and $|x|$ can be understood as a length in $\reals^N$.
+    \label{def:compact_function}
 \end{definition}
 
 Now we list some of the basic properties of the function space described by $\tfspace$, as this is the space from which we seek our coveted test functions. We can think of it as a linear vector space, with the usual properties. That is, for $\phi_1, \phi_2 \in \tfspace$ and $\alpha_1, \alpha_2 \in \complexes$,
@@ -113,7 +115,7 @@ Using multi-indices we can denote the derivative of a function $f(x_1,x_2,...)$ 
 
 Furthermore, for $\phi \in \tfspace$ any $\partial^\alpha \phi \in \tfspace$. If $a \in C^\infty$ i.e. a doesn't have compact support, $a\phi \in \tfspace$ - its product with a function with compact support will also have compact support. Finally changes of variables, will also leave us within $\tfspace$ i.e. for an arbitrary vector $b \in \reals^N$ and an $N \times N$ matrix $A$, $\phi(Ax+b) \in \tfspace$.
 
-Now we have a promising vector space, with useful properties for it's members such as compactness and boundedness. Thhere is however one more thing we need to consider, which is the idea of convergece within the vector space.
+Now we have a promising vector space, with useful properties for it's members such as compactness and boundedness. There is however one more thing we need to consider, which is the idea of convergence within the vector space.
 
 \begin{definition}
     A sequence $\{\phi_i\}^\infty_{i=1} \in \tfspace $ is said to converge to zero if
@@ -121,6 +123,8 @@ Now we have a promising vector space, with useful properties for it's members su
         \item There exists a compact set $K \subset \reals^N$ such that $\supp \phi_j \subset K$ for all $i=1,2,....$
         \item For each multi-index $\alpha$ the derivative $\partial^\alpha \phi_j$ converges to zero uniformly as $j \rightarrow \infty$. That is, for all $\alpha$, $\underset{x \in \reals^N}{\supp} |\partial^\alpha \phi_j(x)|\rightarrow 0$
     \end{enumerate}
+
+    \label{def:convergence_of_tf}
 \end{definition}
 
 
@@ -137,6 +141,27 @@ which further implies,
 \end{eqnarray}
 
 \subsection{Defining Distributions}
+
+Consider two abstract sets $A$ and $B$, the map between them $f : A \rightarrow B$ defines a \textbf{functional}. The map $f$ is considered to be continuous if $a_n \overset{A}{\rightarrow} a$ implies that $f(a_n) \overset{B}{\rightarrow} f(a)$. Strictly, this is `sequential continuity'.
+
+\begin{definition}
+    The set of distributions, $\dist$, is the set of all \textbf{linear} and \textbf{ (sequentially) continuous} functionals that map $f : \tfspaceD \rightarrow \complexes$
+\label{def:distribution}
+\end{definition}
+
+We see that the distributions are defined by mapping from the space of test functions to (potentially complex) numbers. This concept will allow us to generalise notions of differentiability.
+
+If $f$ is a functional, then
+
+\begin{enumerate}
+    \item For each $\phi \in \tfspaceD$, the functional associates a number denoted by the following Bra-Ket notation $\langle f, \phi \rangle \in \complexes$
+    \item The functional is linear such that for $\alpha_1, \alpha_2 \in \complexes$ and $\phi_1, \phi_2 \in \tfspaceD$, $\langle f, \alpha_1\phi_1, \alpha_2\phi_2 \rangle = \alpha_1\langle f, \phi_1 \rangle + \alpha_2\langle f, \phi_2 \rangle $
+    \item A distribution $f$ is called (sequntially) continuous on $\tfspaceD$ if $\langle f, \phi_k \rangle \rightarrow \langle f, \phi \rangle$ where $\phi_k \overset{\tfspaceD}{\rightarrow} \phi$ as $k \rightarrow \infty$
+\end{enumerate}
+
+Let us illustrate the concept of functionals which satisfy the definition of distributions by going through a series of examples.
+
+
 
 \subsection{Basic Operations on Distributions}
 
