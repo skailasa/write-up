@@ -20,7 +20,7 @@
 \usepackage[backend=bibtex]{biblatex}
 \addbibresource{dist.bib}
 
-\title{Linear Partial Differential Equations: Introduction to Distribution Theory}
+\title{Linear Partial Differential Equations}
 \author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
 
 \date{\today}
@@ -30,6 +30,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{definition}{Definition}[section]
 \newtheorem{notation}{Notation}[section]
+\newtheorem{remark}{Remark}[section]
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{problem}[theorem]{Problem}
@@ -47,7 +48,7 @@
 
 \section*{Abstract}
 
-In this document I summarise some of the main applications of the theory of distributions for the solution of partial differential equations via the method of `fundamental solutions'. I begin by introducing the key concepts behind the idea of the method of distributions, with the goal of solving the Laplace and Heat equations using these ideas. Furthermore, this document also includes a `scratch pad' section, in which I provide further examples and proofs of the applications of these ideas.
+In this document I summarise some of the main applications of the theory of distributions for the solution of partial differential equations via the method of `fundamental solutions'. I begin by introducing the key concepts behind the idea of the method of distributions, with the goal of solving the Laplace and Heat equations using these ideas. We proceed to an overview of the Fourier transform, and its usage for solving PDEs, and its description within the theory of distributions. We conclude with a soujourn on Sobolev spaces, and a short description of their utility in extending weak solutions, derived using distribution theory, to full classical solutions of PDEs. Furthermore, this document also includes a `scratch pad' section, in which I provide further examples and proofs of the applications of these ideas.
 
 \section{Distributions and Test Functions}
 
@@ -280,7 +281,59 @@ This also defines a distribution, giving us our final definition in this section
 
 \subsection{The Support of Distributions}
 
+Distributions do not take `values' in a domain like a function would, but we define an equivalent statement by using their action. For example for a distribution $f$, the statement $f=0$ is read to mean that $\langle f, \phi \rangle = 0, \> \> \forall \phi \in \Omega, \> \> s.t. \> \> \supp \phi \subset \Omega$.
+
+\begin{remark}
+    For $f, g \in \dist$, then $f=g$ in $\Omega$ means that, \[ \langle f, \phi \rangle = \langle g, \phi \rangle, \> \> \forall \phi \in \tfspaceD(\Omega)\]
+\end{remark}
+
+We can now use this technology to define the support of a distribution.
+
+\begin{definition}
+    Let $f \in \dist(\reals^N)$. Then $\supp f$ is the complement of the set \[ O_f = \left \{ x \in \reals^n : f = 0 \> \> \text{on a neighbourhood of x}  \right \} \] This $O_f$ is known as the zero-set of $f$.
+\end{definition}
+
 \subsection{The Convergence of Distributions}
+
+Recalling our sequential continuity condition, let $\{f_j\}_{j=1}^\infty$ be a sequence of distributions on $\reals^N$ where $f \in \dist(\reals^N)$.
+
+\begin{definition}
+    We say that $f_n$ converges to $f$ in $\dist$, and write $f_n \overset{\dist}{\rightarrow} f$, if \[ \langle f_n, \phi \rangle \rightarrow \langle f, \phi \rangle, \> \> \forall \phi \in \tfspaceD \] as $n \rightarrow \infty$
+\end{definition}
+
+Consider $f_n(x) = \frac{1}{n} \sin(nx)$. Clearly $f_n \in \lone(\reals)$, therefore $f_n$ defines a distribution, with the action
+
+\begin{equation}
+    \langle f_n, \phi \rangle = \int_{\reals} f_n(x) \phi(x) dx
+\end{equation}
+
+Indeed it's obvious that $f_n \rightarrow 0$ in the sense of $\dist$, noticing that
+
+\begin{equation}
+    | \langle f_n, \phi \rangle | = \left | \int_{\reals} \frac{1}{n} \sin(nx) \phi(x) dx\right | \leq \frac{1}{n} \left | \int_{\reals}\phi(x) \right |
+\end{equation}
+
+This leads to the following proposition. If $f_n \overset{\dist}{\rightarrow} f$, then $\partial^\alpha f_n \overset{\dist}{\rightarrow} \partial^\alpha f$ for all multi-indices $\alpha$. Consider a corollary example, where $g_n(x) = \cos(nx)$, then $g_n \overset{\dist}{\rightarrow} 0 $ as $\frac{d}{dx}(\frac{1}{n}\sin(nx)) = g_n$ and therefore we can apply the above result.
+
+\vspace{5pt}
+
+For a more involved example, consider $f \in \lone(\reals)$ and let $\supp f \in [-1, 1]$ with $\int_{-1}^1 f(x) dx = 1$ and consider the sequence defined by $f_k(x) = kf(kx)$ where $k=1,2,3...$ . Let us show that $f_k \overset{\dist}{\rightarrow} \dist$. Equivalently we can show that there is no difference between the actions of both functionals.
+
+\begin{flalign}
+    &\left | \langle f_k, \phi \rangle - \langle \delta, \phi \rangle \right | \\
+    &= \left | \int_{-\infty}^\infty f_k(x)\phi(x)dx - \phi(0) \right | \\
+    &= \left | \int_{-\infty}^\infty kf(kx)\phi(x)dx - \phi(0)\int_{-\infty}^\infty f(x)dx \right | \\
+    &= \left | \int_{-1}^{1}f(x) ( \phi(\frac{x}{k}) - \phi(0) ) dx \right| \\
+    &\leq \max_{x \in [-1, 1]} | \phi(\frac{x}{k}) - \phi(0)| = \max_{t \in [-1/k, 1/k]} | \phi(t) - \phi(0)| \rightarrow 0
+\end{flalign}
+
+These examples lead us to the final theorem of this section,
+
+\begin{theorem}[Completeness of $\dist$]
+    Consider the sequence of distributions $f_1,...,f_n,...$ such that for all $\phi \in \tfspaceD$ the sequence $\langle f_k, \phi \rangle$ converges as $k \rightarrow \infty$. Then the functional defined by, \[ \langle f, \phi \rangle = \lim_{k \rightarrow \infty} \langle f_k, \phi \rangle \] is linear and continuous, i.e it defines a distribution $f \in \dist$.
+\end{theorem}
+
+The intuitive interpretation of this theorem is basically that we can't leave the space of distributions by summing distributions.
 
 \subsection{Equivalent Definition of Distributions}
 
