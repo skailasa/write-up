@@ -64,7 +64,7 @@ Any twice continuosly differentiable function $f \in C^2(\reals)$ of the form $u
 
 \subsection{Defining Test Functions}
 
-A few basic definitions will serve us well for the remainder of these notes. Firstly,
+A few basic definitions will serve us well for the remainder of these notes.
 
 \begin{definition}[Classes of Continuous Functions]
 Let $\Omega^N$ be an open subset and let $m$ be a non-negative integer. The class $C^m(\Omega)$ consists of functions on $\Omega$ which have continuous derivatives of order less than or equal to $m$. Furthermore (1) $C^0(\Omega) = C(\Omega)$  is simply the class of all continuous functions on $\Omega$ and (2) $C^\infty (\Omega)$ is the class of functions with derivatives of all orders.
@@ -203,6 +203,80 @@ As a final example of this section, consider the Dirac $\delta$-function, define
 The functional is clearly in $\lone$, thefore satisfies sequential continuity, with linearity obvious by inspection. Therefore we see that it satisfies the properties required of a distribution.
 
 \subsection{Basic Operations on Distributions}
+
+Here, we state some basic facts about operations on distributions largely without proof.
+
+\subsubsection{Multiplication by a $C^\infty$ function}
+For example, If $a \in C^\infty(\reals^N)$ and $f \in C(\reals^N)$ then $f \in \dist$ then,
+
+\begin{equation}
+    \langle af, \phi\rangle = \int_{\reals^N}(a(x)f(x))\phi(x)dx = \int_{\reals^N}f(x) (a(x)\phi(x))dx = \langle f, a\phi \rangle
+\end{equation}
+
+Implying that $a\phi \in \tfspace$. This identity can be extended to all distributions.
+
+\begin{definition}
+    If $a \in C^\infty$ and $f \in \dist$ then, $af \in \dist$ defined by \[
+        \langle af, \phi \rangle = \langle f, a\phi \rangle, \>\> \forall \phi \in \tfspaceD\]
+\end{definition}
+
+One can check that the above does define a distribution through an example. Consider $f = \delta \in \dist$ and $a \in \tfspace$, then
+
+\begin{eqnarray}
+    \langle a\delta, \phi \rangle = \langle \delta, a \phi \rangle = a(0)\phi(0) = a(0) \langle \delta, \phi \rangle \> \> \forall \phi \in \tfspaceD
+\end{eqnarray}
+
+This implies that $a\delta = a(0) \delta$ and does define a distribution.
+
+\subsubsection{Differentiation}
+
+Differentiation for distributions uses a form of Green's identity. Consider the one dimensional case, $f \in C(\reals)$ and $\phi \in \tfspaceD(\reals)$ and has compact support, then
+
+\begin{equation}
+    \int_{-\infty}^{\infty} f'(x) \phi(x) dx = \int_a^b f'(x)\phi(x)dx = \left [ f \phi \right ]_a^b - \int_a^b f\phi' dx = -\int_a^b f\phi' dx
+\end{equation}
+
+The boundary term vanishes due to the compact support of $\phi$. Generalising the above identity for higher order derivatives, we see that,
+
+\begin{equation}
+    \int_{-\infty}^{\infty} \frac{d^m}{dx^m} f(x) \phi(x) dx = (-1)^m \int_{-infty}^{\infty} f(x) \frac{d^m}{dx^m}\phi(x) dx
+\end{equation}
+
+In the language of actions this goes to,
+
+\begin{eqnarray}
+    \langle \frac{d^m}{dx^m}f, \phi \rangle = \langle f, \frac{d^m}{dx^m} \phi \rangle
+\end{eqnarray}
+
+Furthermore, we state that this differentiated object defines a distribution too.
+
+\begin{definition}
+    Let $f \in \dist(\reals^N)$. Then for any multi-index $\alpha$ the distribution $\partial^\alpha f$ is defined to be, \[ \langle \partial^\alpha f, \phi \rangle = (-1)^{|\alpha|} \langle f, \partial^\alpha \phi \rangle, \> \> \forall \phi \in \tfspaceD(\reals^N) \]
+    \label{def:differentiate_distribution}
+\end{definition}
+
+Let's consider some simple corollary examples,
+
+\begin{enumerate}
+    \item Consider a one dimensional problem in $\reals$ where $\delta \in \dist$. What is $\frac{d}{dx}\delta$? From the above definition, \[
+        \langle \frac{d}{dx} \delta, \phi\rangle = - \langle \delta, \frac{d}{dx}\phi \rangle = -\phi'(0)\]
+    \item Consider again a one dimension problem with the Heaviside function $H \in \dist$. What is $\frac{d}{dx}H$? Using the same procedure, \[
+        \langle \frac{d}{dx}H, \phi \rangle = -\langle H, \frac{d}{dx} \phi \rangle = \int_0^\infty \frac{d\phi}{dx}dx = -[\phi]_0^\infty = \phi(0) = \langle \delta, \phi \rangle, \> \> \forall \phi \in \tfspaceD \]. This implies that $\frac{dH}{dx} = \delta$, in a distributional sense.
+\end{enumerate}
+
+\subsubsection{Change of Variables ($x = Ay + b$)}
+
+Finally let's consider a linear transformation, corresponding to a change of variables. Here $A$ is a non-singular $N \times N$ matrix and $b \in \reals^N$. If $f \in C^\infty(\reals^N)$ and $\phi \in \tfspaceD(\reals^N)$, then
+
+\begin{equation}
+    \int_{\reals^N}f(Ay+b)\phi(y)dy = \int_{\reals^N}f(x)\phi(A^{-1}(x-b))\frac{1}{\text{det}(A)}dx
+\end{equation}
+
+This also defines a distribution, giving us our final definition in this section,
+
+\begin{definition}
+    Let $f \in \dist(\reals^N)$, with $A$ and $b$ as above, then $f(Ay+b) \in \dist$ is defined by \[\langle f(Ay+b), \phi(y)\rangle = \langle f(x), \phi(A^{-1}(x-b))\frac{1}{|A|}\rangle, \> \> \forall \phi \in \tfspaceD(\reals^N)\]
+\end{definition}
 
 \subsection{The Support of Distributions}
 

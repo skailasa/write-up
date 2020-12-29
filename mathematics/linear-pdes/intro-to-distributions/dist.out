@@ -3,8 +3,11 @@
 \BOOKMARK [2][-]{subsection.1.2}{Defining Test Functions}{section.1}% 3
 \BOOKMARK [2][-]{subsection.1.3}{Defining Distributions}{section.1}% 4
 \BOOKMARK [2][-]{subsection.1.4}{Basic Operations on Distributions}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{The Support of Distributions}{section.1}% 6
-\BOOKMARK [2][-]{subsection.1.6}{The Convergence of Distributions}{section.1}% 7
-\BOOKMARK [2][-]{subsection.1.7}{Equivalent Definition of Distributions}{section.1}% 8
-\BOOKMARK [1][-]{section.2}{Fundamental Solutions}{}% 9
-\BOOKMARK [1][-]{section.3}{Scratch Pad}{}% 10
+\BOOKMARK [3][-]{subsubsection.1.4.1}{Multiplication by a C function}{subsection.1.4}% 6
+\BOOKMARK [3][-]{subsubsection.1.4.2}{Differentiation}{subsection.1.4}% 7
+\BOOKMARK [3][-]{subsubsection.1.4.3}{Change of Variables \(x = Ay + b\)}{subsection.1.4}% 8
+\BOOKMARK [2][-]{subsection.1.5}{The Support of Distributions}{section.1}% 9
+\BOOKMARK [2][-]{subsection.1.6}{The Convergence of Distributions}{section.1}% 10
+\BOOKMARK [2][-]{subsection.1.7}{Equivalent Definition of Distributions}{section.1}% 11
+\BOOKMARK [1][-]{section.2}{Fundamental Solutions}{}% 12
+\BOOKMARK [1][-]{section.3}{Scratch Pad}{}% 13
