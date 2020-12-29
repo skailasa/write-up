@@ -337,8 +337,38 @@ The intuitive interpretation of this theorem is basically that we can't leave th
 
 \subsection{Equivalent Definition of Distributions}
 
+\begin{notation}
+    If $\Omega$ is an open set in $\reals^N$ and $K$ is a compact subset of $\Omega$ and $u \in C^m(\Omega)$ then \[ \| u \|_{C^m(K)} = \max_{x \in K, \> |\alpha| \leq m} |\partial^\alpha u| \]
+\end{notation}
+
+This allows us to write down our equivalent formulation of distributions.
+
+\begin{definition}
+    A linear functional $f$ on $\tfspaceD(\reals^N)$ is a distribution iff for all compact sets $K$ in $\reals^N$ there exist $C$ and $m$ such that,
+    \[ |\langle f, \phi \rangle| \leq C \| \phi \|_{C^m(k)}\] For all $\phi \in \tfspaceD$ such that $\supp \phi \subset K$.
+\end{definition}
+
+Proving the reverse implication. We have the above definition, and we need to show that it satisfies sequential continuity. That is if $\phi_n \overset{\tfspaceD}{\rightarrow} \phi$, then $\langle f, \phi_n \rangle \overset{\dist}{\rightarrow} 0$
+
+\vspace{5pt}
+
+Proving the forward implication. Assume that $f \in \dist$, then let's prove by contradiction. Assume the alternative definition doesn't hold,
+
+\begin{eqnarray}
+    | \langle f, \phi_m \rangle | > m \| \phi_m \|_{C^m(K)}
+\end{eqnarray}
+
+Define $\psi_m = \frac{\phi_m}{m \| \phi_m \|_{C^m(K)}}$. Then $\psi_m \in \tfspaceD$, $\supp \psi_m \subset K$ and for any multi-index $\beta$ such that $m \geq |\beta|$, we have,
+
+\begin{eqnarray}
+    \| \psi_m \|_{C^{|\beta|}(K)} = \frac{\|\phi_m\|_{C^{|B|}(K)}}{m \|\phi_m\|_{C^m(K)}} \leq \frac{1}{m}
+\end{eqnarray}
+
+Consequently $\psi_m \overset{\tfspaceD}{\rightarrow} 0$. However, this contradicts our initial assumption.
 
 \section{Fundamental Solutions}
+
+
 
 
 \section{Scratch Pad}
