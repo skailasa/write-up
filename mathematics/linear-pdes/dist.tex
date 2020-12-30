@@ -376,7 +376,7 @@ For a linear partial differential equation with linear operator $L$,
 
 the fundamental solution, $F$,  is defined as that which yields the $\delta$-function up to a constant, and is therefore defined as the solution of the above equation.
 
-Consider the Laplace problem,
+Consider the Poisson problem,
 
 \begin{eqnarray}
     \Delta u = f
@@ -462,6 +462,169 @@ Consider the first one of these,
     & \leq \| \phi \|_{C^1(\reals^3)} \oint_{S_\epsilon} \frac{1}{|x|} ds \\
     & = \| \phi \|_{C^1(\reals^3)} \frac{1}{\epsilon} \oint_{S_\epsilon} ds = \| \phi \|_{C^1(\reals^3)} 4\pi \epsilon \overset{\epsilon \rightarrow 0}{\rightarrow} 0
 \end{flalign}
+
+Now the second, using the fact that the unit normal vector over the inner surface (pointing towards the origin) is $\hat{n}= -\frac{x}{|x|}$ and therefore that $\partial_n = -\partial_r$
+
+\begin{flalign}
+    &\oint_{S_\epsilon} \phi \partial_r \frac{1}{r} ds = - \oint_{S_\epsilon} \phi \frac{1}{r^2}ds = -\frac{1}{\epsilon^2} \oint_{S_\epsilon} \phi(x)ds \\
+    & = -\frac{1}{\epsilon^2} \oint_{S_\epsilon} \phi(x) - \phi(0) ds - \frac{1}{\epsilon^2} \oint_{S_\epsilon} \phi(0) ds \\
+    & = -\frac{1}{\epsilon^2} \oint_{S_\epsilon} \phi(x) - \phi(0) ds - 4\pi \phi(0)
+\end{flalign}
+
+All that remains is to show that the first integral converges to 0 and we'll have our result,
+
+\begin{flalign}
+    &\left | \frac{1}{\epsilon^2} \int_{S_\epsilon} \phi(x) - \phi(0) ds \right | \\
+    & \leq \frac{1}{\epsilon^2} \int_{S_\epsilon} \left | \phi(x) - \phi(0)\right | ds \leq 4\pi \max_{x \in S_\epsilon} | \phi(x) - \phi(0) | \rightarrow 0
+\end{flalign}
+
+Therefore we see,
+
+\begin{flalign}
+    \langle \Delta \frac{1}{|x|}, \phi \rangle = -4\pi \phi(0) = -4\pi \langle\delta, \phi \rangle
+\end{flalign}
+
+for all $\phi \in \tfspaceD$, and that $\Delta \frac{1}{|x|} = -4\pi \delta$. Note that the fundamental solution is a family of solutions, and is not unique up to a constant.
+
+The name `fundamental solution' seems very important, and as we shall see we will be able to write general solutions of PDEs using knowledge of them. However, in order to get to that point we need to have a few more operations on distributions up our sleeves.
+
+\section{Direct Product of Distributions}
+
+Let's take a series of steps which are as of yet poorly defined, but motivate the need for more operations on distributions. Consider again the Poisson problem in $\reals^3$, we now know the fundamental solution for this problem,
+
+\begin{flalign}
+E(x) = -\frac{1}{4\pi}\frac{1}{|x|}
+\end{flalign}
+
+Let's displace the solution by some fixed vector $y$, the Poisson problem then goes to,
+
+\begin{flalign}
+    \Delta_xE(x-y) = \delta(x-y)
+\end{flalign}
+
+Now, for our first poorly defined operation, multiplication by a distribution,
+
+\begin{flalign}
+    f(y)\Delta_xE(x-y) = f(y)\delta(x-y)
+\end{flalign}
+
+And then our second poorly defined operation, integration over the domain with respect to this fixed vector $y$
+
+\begin{flalign}
+    \int f(y)\Delta_xE(x-y) dy = \int f(y)\delta(x-y) dy
+\end{flalign}
+
+By linearity, and using the properties of the $\delta$-function,
+
+\begin{flalign}
+    \Delta_x \int f(y)E(x-y) dy = f(x)
+\end{flalign}
+
+We see that our Poisson problem is `solved' by,
+
+\begin{flalign}
+    u(x) = \int f(y)E(x-y) dy
+\end{flalign}
+
+meaning that we can derive a weak solution of the Poisson problem with knowledge of just the fundamental solution - a hint as to why these objects are so fundamental, they are in some way atomistically tied to a more general solution of the differential equation. As we shall see they can do even better than define weak solutions. However, in order to rigorously use this intuition, we need to first learn how distributions can be in a sense `multiplied' by each other. This motivates the desire to define a `direct product' between distributions, which generalise notions of multiplications to distributions.
+
+Let us start with defining direct products with respect to test functions in $\reals^N$. Consider $f,g \in \tfspaceD(\reals^N)$ where the product $fg \in \tfspaceD(\reals^N)$. We define the tensor or direct product as $f \otimes g \in \tfspaceD(\reals^{N+N})$ in some `dual' space. As we can describe continuous functions as distributions, it is possible to write,
+
+\begin{flalign}
+    \langle f(x)g(y), \phi(x, y) \rangle &= \int_{\reals^{N+N}} f(x)g(y)\phi(x,y)dxdy \\
+    &= \int_{\reals^N} f(x) \left( \int_{\reals^N} g(y) \phi(x, y) dy\right) dx \\
+    &= \langle f(x), \langle g(y), \phi(x, y) \rangle_y \rangle_x
+\end{flalign}
+
+Now we can write down the definition of direct products between distributions,
+
+\begin{definition}[Direct Product of Distributions]
+    Let $f \in \dist(\reals^N)$ and $g \in \dist(\reals^M)$. Then $f \otimes g \in \dist(\reals^{N+M})$ defined by \[ \langle f \otimes g, \phi \rangle= \langle f(x), \langle g(y), \phi(x, y) \rangle \rangle \] valid for all $\phi \in \tfspaceD(\reals^{N+M})$
+    \label{def:direct_product}
+\end{definition}
+
+If we check that the RHS of the above identity defines a linear and continuous functional, and therefore a valid distribution, then it is valid. Let's write it down in a lemma,
+
+\begin{lemma}
+    Let $g \in \dist(\reals^M)$ and $\phi \in \tfspaceD(\reals^{N+M})$ then $\psi(x) = \langle g(y), \phi(x, y) \rangle \in \tfspaceD(\reals^N)$ additionally \[ \partial^\alpha \psi(x) = \langle g(y), \partial^\alpha_x\phi(x, y)\rangle\] Furthermore, if $\phi_k \rightarrow 0$, then \[ \psi_k(x) = \langle g(y), \phi_k(x, y) \rangle \rightarrow 0\] in the space $\tfspaceD(\reals^N)$
+\end{lemma}
+
+All this is basically saying is that the inner action describes a valid test function for the outer action.
+
+\vspace{5pt}
+
+Let's begin by showing that $\psi$ is continuous. It is enough to show this in one direction, as the same technique can be used in turn to show it for other dimensions too. Let's fix $x_0 \in \reals^N$, and consider a sequence such that $x_k \rightarrow x_0$ with $x_k \in \reals^N$. The support of the test function can be seen to be fixed within some ball $\supp \phi(x_k, y) \subset B_b$ and from linearity, we know that for any multi-index $\beta$ that $\partial_y^\beta \phi(x_k, y) \rightarrow \partial_y^\beta\phi(x_0, y)$ uniformly in $y$. Which, due to the continuity of $g(y)$ gives,
+
+\begin{eqnarray}
+    \psi(x_k) = \langle g(y), \phi(x_k, y)\rangle \rightarrow \langle g(y), \phi(x_0, y) \rangle
+\end{eqnarray}
+
+Thus $\psi$ is sequentially continuous. All that remains is to show the two properties of the lemma.
+
+To prove the first property, let's fix $x_0 \in \reals^N$ and take the derivative along just a single axis $e_1 = (1,0,0,...,0)$, then from the fundamental theorem of calculus,
+
+\begin{flalign}
+    \frac{\partial}{\partial x_1}\psi(x_0) &=\lim_{\epsilon \rightarrow 0} (\psi(x_0 + \epsilon e_1) - \psi(x_0)) \\
+    & =\lim_{\epsilon \rightarrow 0} \left(\langle g(y), \frac{\psi(x_0 + \epsilon e_1) - \psi(x_0)}{\epsilon} \rangle \right)\\
+    & = \lim_{\epsilon \rightarrow 0} \left( \langle g(y), \mu_\epsilon(y) \rangle \right)
+\end{flalign}
+
+We notice that $\mu_\epsilon(y) \rightarrow \frac{\partial \phi}{\partial x_1}(x_0, y)$ in $\tfspaceD(\reals^M)$, thus validating the first property in the lemma in a single dimension - this can be repeated for any dimension or set of dimensions.
+
+\vspace{5pt}
+
+Finally, let's show the second statement in the above lemma. If $\phi \rightarrow 0$ in $\tfspaceD(\reals^{N+M})$ then $\exists a, b$ such that $\supp \phi_k \subset B_a \times B_b$ then $\supp \psi_k(x) = \supp \psi(x_k, \cdot) \subset B_a$. We need to show that $\forall \alpha$
+
+\begin{eqnarray}
+    \sup_{x \in \reals^N} |\partial_x^\alpha \psi_k(x) | \rightarrow 0
+\end{eqnarray}
+
+Let's prove by contradiction. If it's not true, then $\exists \alpha_0, x_k, \epsilon_0 > 0$ such that,
+
+\begin{eqnarray}
+    |\partial_x^{\alpha_0} \psi_k(x) | \geq \epsilon_0
+\end{eqnarray}
+
+Consider a function $f_k(y) = (\partial_x^{\alpha_0}\phi_k)(x_k, y)$ for any multi-index $\beta$ we know that ,
+
+\begin{eqnarray}
+    \partial_x^{\alpha_0} \partial_y^\beta \phi_k (x, y) \rightarrow 0
+\end{eqnarray}
+
+uniformly in $x$ and $y$ simply from the peroperties of test functions. We can parametrize for a sequence $x_k$,
+
+\begin{eqnarray}
+    \partial_x^{\alpha_0} \partial_y^\beta \phi_k (x_k, y) \rightarrow 0
+\end{eqnarray}
+
+uniformly in $y$ as $k \rightarrow \infty$. By linearity, we can swap the order of the differential operators,
+
+\begin{flalign}
+    &\partial_y^\beta f_k(y) \rightarrow 0 \\
+    & f_k \rightarrow 0
+\end{flalign}
+
+in the sense of $\tfspaceD(\reals^M)$. This implies that,
+
+\begin{flalign}
+    \langle g(y), f_k(y) \rangle \rightarrow 0
+\end{flalign}
+
+which leads to a contradiction, thereby proving our lemma.
+
+\begin{corollary}[The Map A]
+    $\phi \in \tfspaceD(\reals^{N+M})$ mapped by $A\phi = \psi(x) = \langle g(y), \phi(x, y) \rangle$ is linear and continuous from $\tfspaceD(\reals^{N+M})$ to $\tfspaceD({\reals^N})$.
+\end{corollary}
+
+\section{Convolution of Distributions}
+
+\section{Fundamentality of Fundamental Solutions}
+
+\section{The Fourier Transform}
+
+
+
+
 
 \section{Scratch Pad}
 
