@@ -366,10 +366,102 @@ Define $\psi_m = \frac{\phi_m}{m \| \phi_m \|_{C^m(K)}}$. Then $\psi_m \in \tfsp
 
 Consequently $\psi_m \overset{\tfspaceD}{\rightarrow} 0$. However, this contradicts our initial assumption.
 
-\section{Fundamental Solutions}
+\section{Fundamental Solution of Laplacian in $\reals^3$}
 
+For a linear partial differential equation with linear operator $L$,
 
+\begin{eqnarray}
+    LF = \delta(x)
+\end{eqnarray}
 
+the fundamental solution, $F$,  is defined as that which yields the $\delta$-function up to a constant, and is therefore defined as the solution of the above equation.
+
+Consider the Laplace problem,
+
+\begin{eqnarray}
+    \Delta u = f
+    \label{eq:laplace}
+\end{eqnarray}
+
+Where the linear partial differential operator, the Laplace operator, is given by
+
+\begin{eqnarray}
+    \Delta = \sum_{i=1}^N \frac{\partial^2}{\partial x_i^2}
+\end{eqnarray}
+
+Let's check that the fundamental solution in $\reals^3$ is described by the following relation,
+
+\begin{equation}
+    \Delta \frac{1}{|x|} = -4\pi \delta(x)
+\end{equation}
+
+where as usual $|x| = \sqrt{x_1^2+x_2^2+x_3^2}$. We can check that the Laplacian of the fundamental solution is 0 in $\reals^3 \backslash \{ 0\}$ using our ordinary notions of derivative,
+
+\begin{eqnarray}
+    \frac{\partial}{\partial x_1} \frac{1}{|x|} = -\frac{x_1}{(x_1^2+x_2^2+x_3^2)^{\frac{3}{2}}}
+\end{eqnarray}
+
+and,
+
+\begin{eqnarray}
+    \frac{\partial^2}{\partial x_1 ^2} \frac{1}{|x|} = \frac{3x_1^2}{(x_1^2+x_2^2+x_3^2)^{\frac{5}{2}}}-\frac{1}{(x_1^2+x_2^2+x_3^2)^{\frac{3}{2}}}
+\end{eqnarray}
+
+from which the result follows. It's not really possible to define derivatives at the origin for our fundamental soltuion in the usual sense, however we can show that $1/|x| \in \lone$ - this would allow us to define it as a distribution with all of the useful properties that they have. To see that the statement is true, we simply have to observe that the integral,
+
+\begin{eqnarray}
+    \int_{K} \frac{1}{|x|} dx < +\infty
+\end{eqnarray}
+
+for all compact subsets $K \subset \reals^3$. If this is the case, then let's take a ball such that $K \subset B_R = \{ x | x < R\}$. Then,
+
+\begin{flalign}
+    \int_K |f| dx \leq \int_{B_R} |f| dx \leq \int_0^R \int_{S_r} |f| d\omega dr
+\end{flalign}
+
+where we've switched to using spherical coordinates defined by the surface of a sphere $\omega \in S_r = \{\ x: \sqrt{x_1^2 + x_2^2 + x_3^2}\}$, and the radial coordinate $r \in [0, R]$
+
+\begin{flalign}
+    &\int_0^R \frac{1}{r} \int_{S_r} d\omega dr \\
+    &\int_0^R \frac{1}{r} r^2 dr = \int_0^R r dr < +\infty
+\end{flalign}
+
+This result extends to $\reals^N$ too, and allows to say that $1/|x| \in \lone$ and therefore that $1/|x| \in \dist$ and is a regular distribution.
+Therefore, let's now take derivaitives of the fundamental solution in a distributional sense,
+
+\begin{equation}
+\langle \Delta \frac{1}{|x|}, \phi \rangle = \langle \frac{1}{|x|}, \Delta \phi \rangle = \int_{\reals^3} \frac{1}{|x|} \Delta \phi dx
+\end{equation}
+
+This is of course for any $\phi \in \tfspaceD(\reals^3)$. We note that the test functions have a finite support, $\supp \phi \subset B_R$, where we've drawn a ball around the compact subset $K$ in which they are supported to help our integral evaluation,
+
+\begin{flalign}
+ \int_{B_R} \frac{1}{|x|} \Delta \phi dx = \lim_{\epsilon \rightarrow 0} \int_{B_R \backslash \bar{B_\epsilon}} \frac{1}{|x|} \Delta \phi dx
+\end{flalign}
+
+Here we're taking the integral over the ball, and excluding an ever decreasing ball that is centered over the origin of radius $\epsilon$. Let's now integrate using Green's second identity,
+
+\begin{flalign}
+    \lim_{\epsilon \rightarrow 0} \left( \int_{B_R \backslash \bar{B}_\epsilon} \Delta \frac{1}{|x|} \phi dx + \oint_{S_\epsilon} \partial_n \phi \frac{1}{|x|} ds  - \oint_{S_\epsilon} \phi \partial_n \frac{1}{|x|} ds \right)
+\end{flalign}
+
+Here we've skipped some steps in the surface integrals, specifically we note that they will be zero over the outer surface due to the compact support of the test functions, and therefore exclude them from the integral. Furthermore, the first integral is zero by definition as we've shown that the Laplacian of the fundamental solution is 0 when excluding the origin.
+
+\vspace{5pt}
+
+We are then left with the two surface integrals,
+
+\begin{flalign}
+    \lim_{\epsilon \rightarrow 0} \left( \oint_{S_\epsilon} \partial_n \phi \frac{1}{|x|} ds  - \oint_{S_\epsilon} \phi \partial_n \frac{1}{|x|} ds \right)
+\end{flalign}
+
+Consider the first one of these,
+
+\begin{flalign}
+    \left | \oint_{S_\epsilon} \partial_n \phi \frac{1}{|x|} ds \right | &\leq \oint_{S_\epsilon} \max_{S_\epsilon}  | \nabla \phi| \frac{1}{|x|} ds \\
+    & \leq \| \phi \|_{C^1(\reals^3)} \oint_{S_\epsilon} \frac{1}{|x|} ds \\
+    & = \| \phi \|_{C^1(\reals^3)} \frac{1}{\epsilon} \oint_{S_\epsilon} ds = \| \phi \|_{C^1(\reals^3)} 4\pi \epsilon \overset{\epsilon \rightarrow 0}{\rightarrow} 0
+\end{flalign}
 
 \section{Scratch Pad}
 
