@@ -713,13 +713,190 @@ We say that the above distribution is  `independent' of $y$, allowing one to `pi
 
 \section{Convolution of Distributions}
 
+We need one more property defined on distributions before we can rigorously define the operations we used in order to solve the Poisson problem using the knowledge of the fundamental solution. This final property is a `convolution',
+
+\begin{definition}
+If $f, g \in \tfspaceD(\reals^N)$ then the convolution of $f$ and $g$ is defined as \[ (f*g) (x) = \int_{\reals^N} f(x-y) g(y) dy \] The convolution $f*g$ defines a regular distribution on $\tfspaceD(\reals^N)$ via the rule,
+\[ \langle f * g, \phi \rangle = \int (f * g) (x) \phi(x) dx =  \int \phi(x) \left(\int f(x-y) g(y) dy\right) dx\]
+By a version of Fubini's theorem (see below) we can swap the integral order, giving \[ \int \int \phi(x) f(x-y) g(y) dx dy\] Using a change of variables \[ \int \int f(x) g(y) \phi(x+y) dx dy = \langle f(x) \otimes g(y), \phi(x+y) \rangle \] where $\phi \in \tfspaceD(\reals^N)$
+\end{definition}
+
+\begin{theorem}[Fubini's Theorem]
+    Let $F \in \tfspaceD(\underset{x}{\reals^N} \times \underset{y}{\reals^N})$.
+    Then \[ \int_{\reals^{N+N}} F(x, y) dx, dy  = \int_{\reals^N} \left(\int_{\reals^N} F(x, y) dy\right) dx\] or equivalently due to linearity,
+    \[ \int_{\reals^N} \left(\int_{\reals^N} F(x, y) dx\right) dy\]
+
+\end{theorem}
+
+Let's prove that convolution of distributions also exists, and does indeed define a valid functional. We begin in a slightly abstract manner, consider $\eta_k \in \tfspaceD(\reals^N)$ and say that it converges to 1 in $\reals^N$ if :
+
+\begin{enumerate}
+    \item $\forall K$ - compact sets $\exists$ a number $N=N(k)$ such that $\eta_k(x) = 1$ for $x \in K$, where $k \geq N$
+    \item $|\partial^{\alpha}\eta_k(x)| < C_\alpha$, $x \in \reals^N$, $k = 1, 2, ...$
+\end{enumerate}
+
+
+Such a sequence exists, e.g. $\eta_k(x) = \eta(x/k)$, where $\eta \in \tfspaceD, \> \eta(x) = 1, \> |x| < 1$.
+
+Let's show that the convolution of two test functions can be rewritten as,
+
+\begin{eqnarray}
+    \langle f * g, \phi \rangle = \lim_{k \rightarrow \infty} \langle f(x) \otimes g(y), \phi(x+y)\eta_k(x, y) \rangle
+\end{eqnarray}
+
+where $\phi \in \tfspaceD(\reals^N)$ and $\eta_k(x, y) \in \tfspaceD(\reals^{2N})$ such that $\eta_k \rightarrow 1$ in $\tfspaceD(\reals^{2N})$. Then the product, $\phi \eta \in \tfspaceD(\reals^{2N}) $. Now consider again the convolution definition,
+we notice that $\supp f(x) g(y) \subset \bar{B_R} \subset \reals^{2N}$, therefore by the above theorem $\exists N, \> \> \forall k > N$ such that $\eta_k = 1$ in $\bar{B_R}$ such that $f(x)g(y)\eta_k(x, y) = f(x)g(y)$ for sufficiently large $k$. Therefore, we can write,
+
+\begin{equation}
+    \langle f(x) \otimes g(y), \eta_k(x, y)\phi(x+y) \rangle
+\end{equation}
+
+for our convolution of two test functions. Now we are ready to define the convolution of distributions
+
+\begin{definition}[Convolution of Distributions]
+    Suppose $f, g \in \dist(\reals^N)$ are such that $f \otimes g$ admits, \[ \langle f \otimes g, \phi(x+y) \rangle \] For test functions of the form $\phi(x+y) \in \tfspaceD(\reals^N)$, $\forall$ sequences $\{\eta_k\} \in \tfspaceD(\reals^{2N})$ such that $\eta_k \rightarrow 1$ in $\reals^{2N}$ there exists a limit \[ \lim_{k\rightarrow \infty} \langle f(x) \otimes g(y), \eta_k(x, y)\phi(x+y) \rangle \] And the limit does not depend on the specific sequence, but only on the convergence properties. Then the convolution $f*g$ is the functional,
+    \[ \langle f*g, \phi \rangle =  \lim_{k\rightarrow \infty} \langle f(x) \otimes g(y), \eta_k(x, y)\phi(x+y) \rangle\ \]
+\end{definition}
+
+Let's now show that the convolution of two distributions is in fact a valid functional in $\dist(\reals^N)$ by checking the continuity of linear functionals.
+
+Consider,
+
+\begin{equation}
+    \langle f(x) \otimes g(y), \eta_k(x, y)\phi(x+y) \rangle
+\end{equation}
+
+
+Let $\phi_j \overset{\tfspaceD(\reals^N)}{\rightarrow} 0$, then $\eta_k(x, y)\phi_j(x+y) \overset{\tfspaceD(\reals^{2N})}{\rightarrow} 0$ as $j \rightarrow \infty$ ($k$ is fixed). And, since $ f otimes g$ is continuous on the dual space, we see that,
+
+\begin{eqnarray}
+    \langle f \otimes g, \eta_k \phi(x+y) \rangle \rightarrow 0
+\end{eqnarray}
+
+Therefore the convolution of two distributions is continuous, and can be seen to be a distribution itself.
+
+\subsection{Example of Convolution}
+
+$f \in \dist(\reals^N)$, $\delta \in \dist(\reals^N)$, what is $f * \delta$?
+Take a test function $\phi \in \tfspaceD(\reals^N)$, then
+
+\begin{flalign}
+    \langle f*\delta, \phi \rangle = \lim_{k \rightarrow \infty} \langle f(x) \otimes \delta(y), \phi(x+y)\eta_k(x,y) \rangle \\
+    \implies \langle f(x), \langle \delta(y), \phi(x+y) \eta_k(x, y) \rangle \rangle \\
+     = \langle f(x), \phi(x) \eta_k(x, 0) \rangle
+\end{flalign}
+
+We know that $\eta_k \rightarrow 0$ in $\reals^{2N}$ implies that $\exists N$ such that $\eta_k(x, 0) = 1$ on $\supp \phi$ for $k > N$,
+
+\begin{flalign}
+    = \langle f(x), \phi(x) \rangle \\
+    \implies f* \delta = f
+\end{flalign}
+
+\begin{theorem}
+    Let $f, g \in \dist(\reals^N)$ and $\supp g$ is bounded, then $f * g$ exists and can be written as \[ \langle f*g, \phi \rangle = \langle f(x) \otimes g(y), \eta(y) \phi(x+y) \rangle \] $\forall \phi \in \tfspaceD(\reals^N)$ where $\eta \in \tfspaceD(\reals^N)$ such that $\eta \equiv 1$ on a neighbourhood of $\supp g$
+\end{theorem}
+
+\subsection{Properties of Convolution}
+
+\subsubsection*{1. Commutativity}
+
+Let $f, g \in \dist$, then if $f*g$ exists, then $g*f$ exists and $f*g = g*f$. To prove this statement, consider the action of the convolution,
+
+\begin{eqnarray}
+    \langle f*g, \phi \rangle = \lim_{k\rightarrow \infty} \langle f(x) \otimes g(y), \eta_k (x, y)\phi(x+y) \rangle
+\end{eqnarray}
+
+From the commutativity of the direct product,
+
+\begin{flalign}
+    &= \lim_{k\rightarrow \infty} \langle g(y) \otimes f(x), \eta_k (x,y)\phi(x+y) \rangle \\
+    &=\lim_{k\rightarrow \infty} \langle g(y) \otimes f(x), \eta_k (y, x)\phi(x+y) \rangle \\
+    & = \langle g * f, \phi \rangle
+\end{flalign}
+
+we're allowed to `swap' arguments of $\eta_k$ since $\eta_k(x, y) \rightarrow 1$ implies that $\eta_k(y, x) \rightarrow 1$ in $\reals^{2N}$
+
+\subsubsection*{2. Translation}
+
+If $f*g$ exists then so does $f(x+h)*g(x)$ where $h \in \reals^N$ and
+
+\begin{eqnarray}
+    f(x+h)*g(x) = (f*g) (x+h)
+\end{eqnarray}
+
+\subsubsection*{3. Reflection}
+
+If $f*g$ exists then so does $f(-x)*g(-x)$ and,
+
+\begin{equation}
+    f(-x)*g(-x) = (f*g)(-x)
+\end{equation}
+
+\subsubsection*{4. Differentiation}
+
+If $f*g$ exists then so does $\partial^\alpha f * g$ and $f * \partial^\alpha g$ and
+
+\begin{equation}
+    (\partial^\alpha f) * g = \partial^\alpha (f * g)  = f * \partial^\alpha g
+\end{equation}
+
+
 \section{Fundamentality of Fundamental Solutions}
+
+We are finally equipped with the tools to understand \textit{why} fundamental solutions are so important. Consider a linear differential operator with constant coefficients,
+
+\begin{equation}
+    L = \sum_{|\alpha| \leq m } a_\alpha \partial^\alpha
+\end{equation}
+
+where $a_\alpha \in \complexes$, and as before the fundamental solution is defined by the solution of the equation,
+
+\begin{equation}
+    LE = \delta
+\end{equation}
+
+Consider the general partial differential equation,
+
+\begin{equation}
+    L u = f
+\end{equation}
+
+where $f$ is a distribution with compact support. Then $E*f$ exists and therefore,
+
+\begin{equation}
+    L(E*f) = \sum_{|\alpha| \leq m} a_\alpha \partial^\alpha (E*f) = \left(\sum a_\alpha \partial^\alpha E \right) * f = \delta * f = f
+\end{equation}
+
+Thus we observe that if we know the fundamental solution, we can find a weak solution for arbitrary right hand sides by using a convolution. Of course there are the usual conditions on the right hand side, such as compact support and continuity.
+
+\subsubsection*{Example}
+
+Consider the Poisson problem in $\reals^3$
+
+\begin{equation}
+    \Delta u = f
+\end{equation}
+
+with $f \in \tfspaceD$, we know that $u = -\frac{1}{4\pi}\frac{1}{|x|} * f \in \dist$ solves the problem for $\forall f \in \tfspaceD$. We can actually go further, as we know that $\frac{1}{|x|} \in \lone$ and $f \in \dist$ therefore the convolution is also in $\lone$, and is a regular distribution. In fact we will soon see that it is also a $C^\infty$ function, and thus is not only a weak solution - but a solution in the classical sense too. Fundamental solutions offer us a way of generating general solutions to linear partial differential equations.
+
+\section{Schwartz Kernel and the Kernel Theorem}
 
 \section{The Fourier Transform}
 
+\section{Schwartz Space}
 
+\section{Fourier Transform in Schwartz Space}
 
+\section{Fourier Inversion Theorem}
 
+\section{Tempered Distributions}
+
+\section{Fourier Transform on Tempered Distributions}
+
+\section{Invertibility of FT on S', \& Operational Rules}
+
+\section{Fourier Transform of Distributions with Compact Support}
 
 \section{Scratch Pad}
 
