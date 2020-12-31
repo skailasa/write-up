@@ -616,6 +616,101 @@ which leads to a contradiction, thereby proving our lemma.
     $\phi \in \tfspaceD(\reals^{N+M})$ mapped by $A\phi = \psi(x) = \langle g(y), \phi(x, y) \rangle$ is linear and continuous from $\tfspaceD(\reals^{N+M})$ to $\tfspaceD({\reals^N})$.
 \end{corollary}
 
+Now that we've defined products on distributions, let's examine some basic properties that will be useful for us,
+
+\subsubsection*{1. Commutativity}
+
+If $f \in \dist(\reals^N)$ and $g \in \dist(\reals^M)$ then $f(x) \otimes g(y) = g(y) \otimes f(x)$. Let's show this by considering the following dual test function $\phi(x, y) = \underset{1 \leq j \leq T}{\sum}u_j(x)v_j(y)$ where $u_j \in \tfspaceD(\reals^N)$ and $v_j \in \tfspaceD(\reals^M)$. Then using linearity and the properties of the direct product,
+
+
+\begin{flalign}
+    \langle f(x) \otimes g(y), \phi \rangle &= \underset{1 \leq j \leq T}{\sum} \langle f(x), \langle g(y), u_j(x)v_j(y) \rangle_y \rangle_x \\
+    &= \underset{1 \leq j \leq T}{\sum} \langle f(x), u_j(x) \langle g(y), v_j(y) \rangle \rangle \\
+    &= \underset{1 \leq j \leq T}{\sum} \langle f(x) , u_j(x) \rangle\langle g(y) , v_j(y) \rangle \\
+    &= \underset{1 \leq j \leq T}{\sum} \langle g(y), \langle f(x), u_j(x) \rangle_x v_j(y) \rangle_y \\
+    &= \underset{1 \leq j \leq T}{\sum} \langle g(y), \langle f(x), u_j(x)v_j(y) \rangle\rangle \\
+    &= \langle g(y) \otimes f(x), \phi \rangle
+\end{flalign}
+
+To extend this to \textbf{any} test functions, and not just those of the special form above, we need to show that the set of test functions of that form are \textbf{dense} in $\tfspaceD(\reals^{N+M})$
+
+\begin{definition}[Dense]
+    $\forall \psi \in \tfspaceD(\reals^{N+M}) \exists \phi_n \in \tfspaceD(\reals^{N+M})$ of the form $\phi_n(x, y) = \underset{1 \leq j \leq T}{\sum}u_{nj}(x)v_{nj}(y)$ such that $\phi_n\overset{\tfspaceD}{\rightarrow}\psi$
+\end{definition}
+
+We basically have to prove that a mapping exists using a sequence of test functions of the special form, to any test function in the space of test functions. If this is the case, then our commutativity result above applies to arbitrary test functions from the space of test functions.
+
+\begin{theorem}[Weierstrass Theorem]
+    If $\tilde{\Omega}$ is a bounded domain and $\bar{\Omega} \subset \tilde{\Omega}$ then $\forall f \in C^m(\tilde{\Omega})$ $\forall \epsilon > 0$ $\exists$ a polynomial $P$ such that \[ \| \partial^\alpha f - \partial^\alpha P\|_{C(\Omega)} < \epsilon\] $\forall |\alpha| \leq m$
+    \label{thm:weierstrass}
+\end{theorem}
+
+The above theorem basically tells us that we can approximate our test functions and their derivatives using polynomials to an arbitrary degree of precision. Why do we need this? Well, it means that if we can approximate our test function as a sequence of polynomials, which can always be written in the nice separable form that allows us to use our commutativity result for arbitrary test functions. Thus we arrive at the following lemma,
+
+\begin{lemma}
+    $\forall \phi \in \tfspaceD(\reals^{N+M})$ there exists a sequence of test functions from $\tfspaceD(\reals^{N+M})$ of the form \[\phi_n(x, y) = \underset{1 \leq j \leq T}{\sum}u_{nj}(x)v_{nj}(y)\]  where $u_{jn} \in \tfspaceD(\reals^N)$ and $v_{jn} \in \tfspaceD(\reals^M)$ which converges to $\phi$ in the sense of $\tfspaceD(\reals^{N+M})$.
+\end{lemma}
+
+Let's now apply it in a proof. Suppose that $\supp \phi \subset B_R \times B_R$. Then by Weierstrass' theorem $\exists$ a sequence of polynomials $P_k(x, y)$ with $k=1,2,...$ such that
+
+\begin{equation}
+    |\partial^\alpha \phi(x, y) - \partial^\alpha P_k(x, y) | < \frac{1}{k}
+\end{equation}
+
+where $|\alpha| \leq k$ in a larger domain, let's say $B_{3R} \times B_{3R}$, let's pick two convenient test functions, $\zeta \in \tfspaceD(\reals^N)$ and $\eta \in \tfspaceD(\reals^M)$ with the properties that they are equal to 1 inside a domain of $B_{2R}$ and equal to 0 outside of it. Then, we obstain a sequence that satisfies the compact support property of test functions, and is separable as required to show our lemma,
+
+\begin{eqnarray}
+    \phi_k(x, y) = \zeta(x)\eta(y)P_k(x, y)
+\end{eqnarray}
+
+as $\supp \phi_k \subset B_{2R} \times B_{2R}$ and $\forall \alpha$ and $k \geq |\alpha|$. We can then say that $\phi_k \overset{\tfspaceD}{\rightarrow} \phi$. So, as we can approximate a test function as a sequence of polynomials, the commutativity property follows for general test functions,
+
+\begin{flalign}
+    \langle f(x) \otimes g(y), \phi \rangle &= \lim_{k \rightarrow \infty}  \langle f(x) \otimes g(y), \phi_k \rangle \\
+    & = \lim_{k \rightarrow \infty}  \langle g(y) \otimes f(x), \phi_k \rangle \\
+    & = \langle g(y) \otimes f(x), \lim_{k \rightarrow \infty} \phi_k \rangle \\
+    & = \langle g(y) \otimes f(x), \phi \rangle
+\end{flalign}
+
+
+\subsubsection*{2. Translation}
+
+For $f \in \dist(\reals^N)$ and $g \in \dist(\reals^M)$ and $h \in \reals^N$ then,
+
+\begin{eqnarray}
+    (f \otimes g) (x+h, y) = f(x+h) \otimes g(y)
+\end{eqnarray}
+
+\subsubsection*{3. Derivatives}
+\begin{eqnarray}
+    \partial_y^\beta\partial_x^\alpha [f(x) \otimes g(y)] = (\partial_x^\alpha f(x)) \otimes (\partial_y^\beta g(y))
+\end{eqnarray}
+
+\subsubsection*{4. Associativity}
+
+\begin{eqnarray}
+    (f \otimes g) \otimes h = f \otimes (g \otimes h)
+\end{eqnarray}
+
+\subsubsection*{5. Multiplication by $C^\infty$ function}
+
+If $a \in C^\infty(\reals^N)$ then
+
+\begin{flalign}
+    a(x) [f(x) \otimes g(y)] = \left(a(x) f(x) \right) \otimes g(y)
+\end{flalign}
+
+\subsubsection*{6. Identity}
+
+Consider the distribution $f(x) \otimes 1(y)$, by commutativity
+
+\begin{flalign}
+    \langle f(x) \otimes 1(y), \phi \rangle &= \langle f(x), \langle 1(y), \phi \rangle \rangle = \langle f(x), \int_{\reals^M} \phi(x, y) dy \rangle \\
+    &\equiv \langle 1(y) \otimes f(x), \phi \rangle = \int_{\reals^M} \langle f(x), \phi(x, y) \rangle dy
+\end{flalign}
+
+We say that the above distribution is  `independent' of $y$, allowing one to `pick out components' of the distribution.
+
 \section{Convolution of Distributions}
 
 \section{Fundamentality of Fundamental Solutions}
