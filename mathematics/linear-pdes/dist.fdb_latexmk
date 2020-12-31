@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex dist"] 1609426553 "dist.aux" "dist.bbl" "dist" 1609426566
+["bibtex dist"] 1609438096 "dist.aux" "dist.bbl" "dist" 1609438415
   "/usr/share/texmf-dist/bibtex/bst/biblatex/biblatex.bst" 1591521742 65050 5c39e6f144c843a658dad8c93d2a6f3c ""
-  "dist-blx.bib" 1609426566 340 f1540d3f2e89ae4d574255b13c3f0b0b "pdflatex"
-  "dist.aux" 1609426566 7195 72acb406aa5d0704308b6c79b5b86a23 "pdflatex"
+  "dist-blx.bib" 1609438415 340 f1540d3f2e89ae4d574255b13c3f0b0b "pdflatex"
+  "dist.aux" 1609438415 7286 d429f00f8af15a6c054ec823a18b9df7 "pdflatex"
   "dist.bib" 1608808448 0 d41d8cd98f00b204e9800998ecf8427e ""
   (generated)
   "dist.blg"
   "dist.bbl"
-["pdflatex"] 1609426566 "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.tex" "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.pdf" "dist" 1609426566
-  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.aux" 1609426566 7195 72acb406aa5d0704308b6c79b5b86a23 ""
-  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.tex" 1609426565 49427 0e0269a6814ba3daaee46ab68b74671d ""
+["pdflatex"] 1609438414 "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.tex" "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.pdf" "dist" 1609438415
+  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.aux" 1609438415 7286 d429f00f8af15a6c054ec823a18b9df7 ""
+  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.tex" 1609438414 53773 e46d4a0eec642d6985e0bf732fd2248f ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1591545468 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1591545468 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm0700.tfm" 1591545468 1536 73da8e8f1d2a4c957d51ca133585586b ""
@@ -134,17 +134,17 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1591545468 33301 a3134070eacafb10b1f371612ce2650d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1608808256 4727905 1b81189106e2406a827797a37162c1c0 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1608808249 2514048 d1b0c43a3f81db5ee0793a7247b8004a ""
-  "dist.aux" 1609426566 7195 72acb406aa5d0704308b6c79b5b86a23 "pdflatex"
-  "dist.bbl" 1609426553 512 da5a5cf020c0fbcb3437098fa3006702 "bibtex dist"
-  "dist.out" 1609426566 1986 8b1e1053f44b1415df74780a8deaa06f "pdflatex"
-  "dist.run.xml" 1609426566 2516 fdab7e49a78fcbc3b323ef97a0e662e6 "pdflatex"
-  "dist.tex" 1609426565 49427 0e0269a6814ba3daaee46ab68b74671d ""
+  "dist.aux" 1609438415 7286 d429f00f8af15a6c054ec823a18b9df7 "pdflatex"
+  "dist.bbl" 1609438096 512 da5a5cf020c0fbcb3437098fa3006702 "bibtex dist"
+  "dist.out" 1609438415 2006 f3708fea2f4edd711925aa7d42b0dd7d "pdflatex"
+  "dist.run.xml" 1609438415 2516 fdab7e49a78fcbc3b323ef97a0e662e6 "pdflatex"
+  "dist.tex" 1609438414 53773 e46d4a0eec642d6985e0bf732fd2248f ""
   (generated)
   "dist.pdf"
-  "dist.out"
-  "dist-blx.bib"
   "dist.run.xml"
   "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.pdf"
-  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.log"
   "dist.aux"
+  "dist.out"
+  "dist-blx.bib"
   "dist.log"
+  "/home/skailasa/Github/write-up/mathematics/linear-pdes/dist.log"
