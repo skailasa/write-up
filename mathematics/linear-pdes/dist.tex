@@ -1113,7 +1113,7 @@ Thus as the Fourier transform has a finite semi-norm, it can be seen to also be 
     $\mathcal{F}e^{-\frac{|x|^2}{2}} = (2\pi)^{\frac{N}{2}}e^{-\frac{|\zeta|^2}{2}}$ where $x, \zeta \in \reals^N$.
 \end{lemma}
 
-We see that the Gaussian function in a Schwartz space is an eigen-funcion of the Fourier transform. Let's show this in the one-dimensional case, where $\phi(x) = e^{-\frac{x^2}{2}}$, clearly this satisfies the property that $\partial_x \phi = -x \phi$
+We see that the Gaussian function in a Schwartz space is an eigen-function of the Fourier transform. Let's show this in the one-dimensional case, where $\phi(x) = e^{-\frac{x^2}{2}}$, clearly this satisfies the property that $\partial_x \phi = -x \phi$
 
 \begin{flalign}
     \widehat{-x\phi} = \widehat{\partial_x \phi} \\
@@ -1128,6 +1128,52 @@ Which implies that $\hat{\phi}(\zeta) = C e^{-\frac{\zeta^2}{2}}$. Let us calcul
 \end{flalign}
 
 \section{Fourier Inversion Theorem}
+
+\begin{theorem}
+    If $\phi \in S$ then, \[ \phi(x) = (2\pi)^{-N} \int_{\reals^N} \hat{\phi}(\zeta) e^{ix\zeta}d\zeta\]
+\end{theorem}
+
+We now that there's a property of Fourier transforms on $\tfspaceD$ such that,
+
+\begin{flalign}
+    \langle \hat{\phi}, \psi \rangle = \langle \phi, \hat{\psi} \rangle
+\end{flalign}
+
+where $\psi, \phi \in \tfspaceD$. However as the argument above was based on Fubini's theorem, the identity still applies in $S$. Let $\epsilon$ be a positive number and take $\psi(\zeta) = e^{-\frac{\epsilon^2}{2}|\zeta|^2}$, then it follows that,
+
+\begin{flalign}
+    \int \hat{\phi}(\zeta) e^{-\frac{\epsilon^2}{2}|\zeta|^2} dz &= \int \phi(x) \widehat{e^{-\frac{\epsilon^2}{2}|\zeta|^2}} d\zeta \\
+    &= (2\pi)^{\frac{N}{2}} \epsilon^{-N} \int \phi(x) e^{-\frac{|x|^2}{2\epsilon^2}}dx \\
+    &= (2\pi)^{\frac{N}{2}} \int \phi(\epsilon x) e^{-\frac{z^2}{2}} dz
+\end{flalign}
+
+The final line works via a change of variables, and shoving the epsilon power into some function $\phi(\epsilon x)$. Using the dominated convergence theorem, as $\epsilon \rightarrow 0$ we get,
+
+\begin{flalign}
+    \int \hat{\phi}(\zeta) d\zeta = (2\pi)^{\frac{N}{2}} \phi(0) \int e^{-\frac{x^2}{2}} dx \\
+    \implies \phi(0) = (2\pi)^{-N} \int \hat{\phi}(\zeta) d\zeta
+\end{flalign}
+
+take $h \in \reals^N$, then
+
+\begin{flalign}
+    \widehat{\phi(x+h)} &= \int e^{-ix\zeta}\phi(x+h) dx \\
+    &= \int e^{i\zeta h - ix \zeta}\phi(x) dx = e^{i\zeta h} \hat{\phi}(\zeta)
+\end{flalign}
+
+Then we see that,
+
+\begin{flalign}
+    \phi(h) = (2\pi)^{-N} \int e^{i\zeta h} \hat{\phi}(\zeta) d\zeta
+\end{flalign}
+
+$\forall h \in \reals^N$.
+
+\vspace{5pt}
+
+\begin{theorem}[Dominated Convergence Theorem]
+    Assume $f_n \in \lone(\reals^N)$ and $ f_n \rightarrow f$ almost everywhere. Then suppose that $\exists g \in \lone(\reals^N)$ such that, \[ |f_n| \leq g\] almost everywhere, then $f \in \lone(\reals^n)$ and \[ \int_{\reals^N} f_n dx \rightarrow \int_{\reals^N} f dx\]
+\end{theorem}
 
 \section{Tempered Distributions}
 
