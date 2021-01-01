@@ -1084,6 +1084,49 @@ In more technical language, we want the Fourier transform to be a structure pres
 
 To prove the above lemma, we can see that (1) is a straightforward application of integration by parts from the definition of the Fourier transform, and (2) follows from the differentiation properties of a distribution under an integral.
 
+\begin{lemma}
+    $\mathcal{F}$ is a continuous map from $S$ to $S$.
+\end{lemma}
+
+Let $\phi \in S$, then $\hat{\phi} \in C^\infty$. We can see this from the fact that $\partial^\alpha \hat{\phi} \sim \widehat{x^\alpha\phi}$, $x^\alpha\phi \in S \subset \lone$, so $\widehat{x^\alpha\phi}$ exists and is continuous as functions in $\lone$ have well defined Fourier transforms. Therefore $\partial^\alpha \hat{\phi} \in C(\reals^N)$, for arbitrary $\alpha$, which implies that $\hat{\phi} \in C^\infty$. Secondly, if $\phi_n \overset{S}{\rightarrow} 0$, we need to show that $\hat{\phi_n} \overset{S}{\rightarrow} 0$, let's take its semi-norm,
+
+\begin{flalign}
+    \|\hat{\phi_n}\|_{\alpha, \beta} &= \sup_{\zeta \in \reals^N} |\zeta^\alpha \partial^\beta\hat{\phi_n}| = \sup_{\zeta \in \reals^N} |\zeta^\alpha \widehat{x^\beta\phi_n}|\\
+\end{flalign}
+
+By the first lemma,
+
+\begin{flalign}
+    =\sup_{\zeta \in \reals^N} |\widehat{\partial^\alpha x^\beta \phi_n}| \leq \|\partial^\alpha x^\beta \phi_n\|_{\lone}
+\end{flalign}
+
+The final inequality can be seen from an application of the definition of a Fourier transform,
+
+\begin{flalign}
+    |\hat{\phi}(\zeta)| = |\int e^{-ix\zeta} \phi(x) dx| &\leq \sup_{x \in \reals^N} |e^{ix\zeta}| \int |\phi | dx =\sup_{x \in \reals^N} |e^{ix\zeta}|\cdot  \|\phi\|_{\lone}  \\
+    &\implies \sup_{\zeta \in \reals^N} |\hat{\phi(\zeta)}| \leq \|\phi\|_{\lone}
+\end{flalign}
+
+Thus as the Fourier transform has a finite semi-norm, it can be seen to also be a member of the Schwartz space.
+
+\begin{lemma}
+    $\mathcal{F}e^{-\frac{|x|^2}{2}} = (2\pi)^{\frac{N}{2}}e^{-\frac{|\zeta|^2}{2}}$ where $x, \zeta \in \reals^N$.
+\end{lemma}
+
+We see that the Gaussian function in a Schwartz space is an eigen-funcion of the Fourier transform. Let's show this in the one-dimensional case, where $\phi(x) = e^{-\frac{x^2}{2}}$, clearly this satisfies the property that $\partial_x \phi = -x \phi$
+
+\begin{flalign}
+    \widehat{-x\phi} = \widehat{\partial_x \phi} \\
+    \implies \frac{1}{i} \partial_z \hat{\phi}= i \zeta \hat{\phi} \\
+\end{flalign}
+
+Which implies that $\hat{\phi}(\zeta) = C e^{-\frac{\zeta^2}{2}}$. Let us calculate $C = \hat{\phi}(0)$, by definition,
+
+\begin{flalign}
+    C = \hat{\phi}(0) &= \left [ \int_{\reals} e^{-ix\zeta} e^{-\frac{x^2}{2}} dx \right]_{\zeta = 0} \\
+    &= \int_{\reals} e^{-\frac{x^2}{2}} dx = (2\pi)^{\frac{1}{2}}
+\end{flalign}
+
 \section{Fourier Inversion Theorem}
 
 \section{Tempered Distributions}
