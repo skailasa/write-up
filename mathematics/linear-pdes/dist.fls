@@ -212,6 +212,8 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
 INPUT /home/skailasa/Github/write-up/mathematics/linear-pdes/dist.aux
 INPUT /home/skailasa/Github/write-up/mathematics/linear-pdes/dist.out
 INPUT /home/skailasa/Github/write-up/mathematics/linear-pdes/dist.out
@@ -219,6 +221,7 @@ INPUT /home/skailasa/Github/write-up/mathematics/linear-pdes/dist.run.xml
 OUTPUT /home/skailasa/Github/write-up/mathematics/linear-pdes/dist.run.xml
 INPUT /usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
