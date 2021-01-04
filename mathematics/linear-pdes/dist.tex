@@ -42,6 +42,18 @@
 \DeclareMathOperator\tfspaceD{\mathcal{D}}
 \DeclareMathOperator\dist{\mathcal{D'}}
 \DeclareMathOperator\lone{L_{\text{loc}}^1}
+\DeclareMathOperator\singsupp{sing supp}
+
+\newcommand{\twopartdef}[4]
+{
+	\left\{
+		\begin{array}{ll}
+			#1 & \mbox{if } #2 \\
+			#3 & \mbox{if } #4
+		\end{array}
+	\right.
+}
+
 \begin{document}
 
 \maketitle
@@ -1177,11 +1189,412 @@ $\forall h \in \reals^N$.
 
 \section{Tempered Distributions}
 
-\section{Fourier Transform on Tempered Distributions}
+\begin{definition}[Tempered Distribution]
+    A tempered distribution is a linear continuous functional on $S$. We denote it by $S'$.
+\end{definition}
+
+\begin{lemma}
+    If $f_k \in S'$ we say $f_k \overset{S'}{\rightarrow} 0$ if, \[ \langle f_k, \phi \rangle \rightarrow 0 \] $\forall \phi \in S$
+\end{lemma}
+
+\begin{lemma}
+    $D \subset S \implies S' \subset D'$
+\end{lemma}
+
+\subsubsection*{1.}
+A function $f$ is called a tempered function in $\reals^N$ if for some $m \geq 0$,
+
+\begin{equation}
+    \int_{\reals^N} |f| (1 + |x|)^{-m} dx < +\infty
+\end{equation}
+
+for example $e^x \in \lone$ but isn't a tempered distribution, as the above integral doesn't converge. A tempered function defines a tempered distribution, in an analogous way to which a regular function defines a regular distribution, with the action
+
+\begin{equation}
+    \langle f, \phi \rangle = \int_{\reals^N} f(x) \phi(x) dx
+\end{equation}
+
+For $\forall \phi \in S$.
+
+\subsubsection*{2.}
+
+If $f \in \dist$ and $f$ has compact support, then $f \in S'$ and,
+
+\begin{equation}
+    \langle f, \phi \rangle_{S'} = \langle f, \eta \phi \rangle_{D'}, \> \> \> \forall \phi \in S
+\end{equation}
+
+where $\eta \in D$ and $\eta = 1$ in a neighbourhood of $\supp f$
+
+If
+
+\begin{equation}
+    \phi_S \implies \langle f, \underset{\in D}{\eta \phi} \rangle
+\end{equation}
+
+and $\phi_k \overset{S}{\rightarrow} 0$ then $\eta \phi_k \rightarrow 0$ implying that $\langle f, \eta \phi_k \rangle \rightarrow 0$, thefore by definition of $S'$ implying that $\langle f, \phi \rangle_{S'}$ does indeed define elements of $S'$. This fact is independent of the choice for $\eta$.
+
+\subsubsection*{3.}
+
+If $f \in S'$, then $\partial^\alpha f \in S'$,
+
+\begin{equation}
+    \langle \partial^\alpha f, \phi \rangle = (-1)^{|\alpha|} \langle f, \partial^\alpha \phi \rangle, \> \> \> \forall \phi \in S
+\end{equation}
+
+This can be seen from the fact that $\partial^\alpha \phi \in S$ and the partial differential operator is a continuous map within $S$.
+
+\subsubsection*{4.}
+
+If $f \in S'$ and $A$ is a real non-singular $N \times N$ matrix, and $b \in \reals^N$, then $f(Ax+b) \in S'$ defined by,
+
+\begin{equation}
+    \langle f(Ax+b), \phi \rangle = \langle f, \frac{1}{|\text{det}(A)|}\phi(A^{-1}(x-b))\rangle, \> \> \> \forall \phi \in S
+\end{equation}
+
+
+\subsubsection*{5.}
+
+If $f \in S'$ and $a \in O_M$ then $af \in S'$ and,
+
+\begin{equation}
+    \langle af, \phi \rangle = \langle f, a\phi \rangle, \> \> \> \forall \phi \in S
+\end{equation}
+
+where $O_M$ is called the set of multipliers in $S$. This means that if $a \in O_M$, $a$ is a $C^\infty$ function and,
+
+\begin{equation}
+    |\partial^\alpha a| \leq C_\alpha (1+|x|)^{m_\alpha}
+\end{equation}
+
+One can check that if $\phi \in S$ and $a \in O_M$, then $a\phi \in S$ and the operation $\phi \mapsto a \phi$ is linear and continuous within $S$, implying that the above identity is well defined.
+
+\subsubsection*{6.}
+
+$e^x \in \lone$ implies that $e^x \in \dist$, but $e^x \notin S'$
+
+\begin{theorem}
+    A linear functional $f$ on $S$ belongs to $S'$ if and only if,
+    \[ \exists C > 0, N \geq 0 \]
+    such that
+    \[ \langle f, \phi \rangle \leq C \sum_{|\alpha|,|\beta| \leq N} \|\phi|\|_{\alpha, \beta}\]
+    $\forall \phi \in S$
+\end{theorem}
+
+\section{Fourier Transform on $S'$}
+
+If $f \in \lone$ then by theorem $\hat{f}$ is a continuous and bounded function, which implies that it defines a regular distribution on $S$ via the formula,
+
+\begin{flalign}
+    \langle \hat{f}, \phi \rangle = \int_{\reals^N} \hat{f}(\zeta)\phi(\zeta)d\zeta = \int_{\reals^N} f(x) \hat{\phi}(x) dx = \langle f, \hat{\phi} \rangle, \> \> \> \forall \phi \in S
+\end{flalign}
+
+we take this identity as the definition of $\hat{f}$.
+
+\begin{definition}
+    The Fourier transform of $f \in S'$ is $\hat{f} \in S'$ given by,
+    \[ \langle \hat{f}, \phi \rangle = \langle f, \hat{\phi} \rangle \]
+    $\forall \phi \in S$. This defines a linear continuous functional on $S$.
+\end{definition}
+
+As usual, the `linearity' refers to the fact that the Fourier transform is a linear map, and the `continuity' within $S$ refers to the fact that $\phi_n \overset{S}{\rightarrow} 0$ implies $\hat{\phi}_n \overset{S}{\rightarrow} 0$, and therefore that $\langle \hat{f}, \phi_n \rangle \rightarrow 0 \implies \langle f, \hat{\phi}_n \rangle \rightarrow 0$.
+
+\subsubsection*{Example 1}
+
+$\delta \in S'$, what is $\hat{\delta}$?
+
+\begin{flalign}
+    \langle \hat{\delta}, \phi \rangle &= \langle \delta, \hat{\phi} \rangle \\
+    &= \hat{\phi}(0) \\
+    &= \left [  \int_{\reals^N} e^{-ix\zeta}\phi(x) dx \right ]_{\zeta = 0} \\
+    & = \int_{\reals^N}\phi(x) dx = \langle 1, \phi \rangle, \> \> \forall \phi \in S \\
+    \implies \hat{\delta} = 1
+\end{flalign}
+
+\subsubsection*{Example 2}
+In $\reals$, what is $\widehat{H(-x)}$?
+
+\begin{equation}
+    H(-x) = \twopartdef{0}{x > 0}{1}{x \leq 0}
+\end{equation}
+
+applying the definition,
+
+\begin{eqnarray}
+    \widehat{H(-x)}(\zeta) = \int_{\reals} e^{-ix\zeta}H(-x)dx = \int_{-\infty}^0e^{-ix\zeta}dx = \infty
+\end{eqnarray}
+
+We see that we get an unbounded integral for the Fourier transform, however we can fix this. Consider $f_t(x) = H(-x)e^{tx}$. $f_t \in \lone$ and $f_t \rightarrow H(-x)$ is continuous in $S'$ by the dominated convergence theorem. Then,
+
+\begin{flalign}
+    \hat{f}_t = \int_{\reals} e^{-ix\zeta}H(-x)e^{tx}dx = \int_{-\infty}^0 e^{-ix\zeta}e^{tx}dx = \frac{1}{t-i\zeta} = \frac{i}{\zeta + it}
+\end{flalign}
+
+See problem sheet two for more information, but it can be shown that as $\hat{f}_t \rightarrow \widehat{H(-x)}$, the Fourier transform is well-defined and converges.
+
+\begin{remark}
+    If $f_t \overset{S'}{\rightarrow} H(-x)$ and $\mathcal{F}$ is continuous from $S'$ to $S'$ \[\implies \hat{f}_t \rightarrow \widehat{H(-x)} \]
+\end{remark}
 
 \section{Invertibility of FT on $S'$, \& Operational Rules}
 
+\begin{theorem}
+    The Fourier transform is an isomorphism from $S'$ to $S'$ $\mathcal{F}$ and $\mathcal{F}^{-1}$ are continuous from $S'$ to $S'$.
+\end{theorem}
+
+\subsubsection*{Proof}
+The fact that the Fourier transform is linear is obvious from its definition. For continuity of the forward transform, consider $f_n \rightarrow 0$ in $S'$ then,
+
+\begin{equation}
+    \langle \mathcal{F} f_n, \phi \rangle \overset{\text{def}}{=} \langle f_n, \mathcal{F} \phi \rangle \rightarrow 0
+\end{equation}
+
+since $\hat{\phi} \in S$ and $f_n \overset{S'}{\rightarrow} 0$, giving our result. For the inverse transform, we start by considering a map $PL S' \mapsto S'$, given By
+
+\begin{equation}
+    P[f(x)](\zeta) = \frac{1}{(2\pi)^N} \mathcal{F}[f(-x)]
+\end{equation}
+
+this is a form of reflection, let's show that
+
+\begin{flalign}
+    P\mathcal{F}[f] = f
+\end{flalign}
+
+and that
+
+\begin{flalign}
+    \mathcal{F}P[f] = f, \> \> \forall f \in S'
+\end{flalign}
+
+if we do this, we can identify $P$ as the inverse Fourier transform. We have $\forall \phi \in S$,
+
+\begin{flalign}
+    \langle P \mathcal{F}[f], \phi \rangle &= \langle P \hat{f}, \phi \rangle \\
+    &= \frac{1}{(2\pi)^N} \langle \mathcal{F}[\hat{f}(-\zeta)], \phi \rangle\\
+    &= \frac{1}{(2\pi)^N} \langle \hat{f}(-\zeta), \hat{\phi}(\zeta)\rangle \\
+    &= \langle \hat{f}(-\zeta), \mathcal{F}^{-1}[\phi](\zeta) \rangle \\
+    &= \langle f, \mathcal{F}\mathcal{F}^{-1}[\phi] \rangle = \langle f, \phi \rangle \implies P \mathcal{F} f = f
+\end{flalign}
+
+similarly, we can also show the other identity $\forall f \in S'$. If $\mathcal{F} f = 0$, then $f=0$, and $\forall f \in S'$ $\exists g = \mathcal{F}^{-1}f$ such that $\mathcal{F}g = f$. This is a one-to-one mapping, an isomorphism, and $\mathcal{F}^{-1}$ is continuous which is obvious as it's the composition of two continuous operations, the forward transform and a reflection.
+
+\begin{lemma}[Operational Rules]
+    $\forall u \in S', \> \> \forall h \in \reals^N$,
+    \[(1) \> \> \> \> \widehat{\partial^\alpha u} = (i \zeta)^\alpha \hat{u}\]
+    \[(2) \> \> \> \> \widehat{x^\alpha u} = (-1)^{-|\alpha|}\partial^\alpha\hat{u} \]
+    \[(3) \> \> \> \> \widehat{u(x+h)} = e^{i\zeta h} \hat{u}(\zeta) \]
+    \[(4) \> \> \> \> \widehat{u(x)e^{ixh}} = \hat{u}(x-h)\]
+
+\end{lemma}
+
+\subsubsection*{Proof of OR1}
+
+$\forall u \in S', \> \> \phi \in S$ we have,
+
+\begin{flalign}
+    \langle \widehat{\partial^\alpha u}, \phi \rangle &= \langle \partial^\alpha u, \hat{\phi} \rangle \\
+    & = (-1)^{|\alpha|} \langle u, \partial^\alpha \hat{\phi}\rangle \\
+    &= (-1)^{|\alpha|} \langle u, (-i)^{|\alpha|} \widehat{x^\alpha\phi}\rangle \\
+    &= i^{|\alpha|} \langle \hat{u}, x^\alpha \phi \rangle = i^{|\alpha|} \langle x^\alpha \hat{u}, \phi \rangle
+\end{flalign}
+
+
+\subsubsection*{Example 1}
+
+$1 \in S'$, what is $\hat{1}$?. We know that $\hat{\delta} =1$
+
+\begin{flalign}
+    \implies \mathcal{F}[1](\zeta) &= \mathcal{F}[\hat{\delta}(x)](\zeta) \\
+    & = (2\pi)^N \frac{1}{(2\pi)^N}\mathcal{F}[\hat{\delta}(-x)](\zeta) \\
+    & = (2\pi)^N \mathcal{F}^{-1} \hat{\delta} = (2\pi)^N \delta
+\end{flalign}
+
+\subsubsection*{Example 2}
+
+\begin{equation}
+    \mathcal{F}(x^\alpha) = (-1)^{-|\alpha|}\partial^\alpha \hat{1} =(-1)^{-|\alpha|}(2\pi)^N \partial^\alpha \delta
+\end{equation}
 
 \section{Fourier Transform of Distributions with Compact Support}
+
+\begin{theorem}
+    If $u \in \dist$ and has compact support then, $\hat{u} \in C^\infty$ and $\hat{u}(\zeta) = \langle u(x), e^{-ix\zeta}\eta(x) \rangle$ where $\eta \in \tfspaceD$ which is equal to 1 in a neighbourhood of $\supp u$.
+\end{theorem}
+
+\subsubsection*{Proof}
+
+We know that $\forall f \in \dist(\reals^N)$ $\forall \phi \in \tfspaceD(\reals^{(N+N)})$ that $\zeta \mapsto \langle f(x), \phi(x, \zeta) \rangle \in C^\infty$, which we proved in the section on direct products,
+
+\begin{flalign}
+    \implies \forall \mu \in \tfspaceD(\reals^N) \\
+    \zeta \mapsto \mu(\zeta)\hat{u}(\zeta) = \langle u(x), \mu(\zeta)e^{-ix\zeta}\eta(x) \rangle \in C^\infty
+\end{flalign}
+
+Therefore,
+
+\begin{flalign}
+    \langle u(x), e^{-ix\zeta}\eta(x) \rangle \in C^\infty
+\end{flalign}
+
+Furthermore, $\phi \in \tfspaceD$, $u \in \dist$ and $\supp u$ is compact implies that $u \in S'$,
+
+\begin{flalign}
+    \langle \hat{u}, \phi \rangle &= \langle u, \underset{\in S}{\hat{\phi}} \rangle = \langle u, \eta \hat{\phi} \rangle \\
+    &= \langle u, \eta(x) \int e^{-ix\zeta} \phi(\zeta) d\zeta \rangle \\
+    &= \langle u, \int \eta(x) e^{-ix\zeta} \phi(\zeta) d\zeta \rangle
+\end{flalign}
+
+Using an analog of Fubini's theorem, we can swap the integrals,
+
+\begin{flalign}
+    = \int \langle u, \eta(x) e^{-ix\zeta} \phi(\zeta) d\zeta \rangle \\
+    = \int \langle u, \eta(x) e^{-ix\zeta} \rangle \phi(\zeta) d\zeta, \> \> \> \forall \phi \in \tfspaceD
+\end{flalign}
+
+Since $\tfspaceD$ is dense in $S$, we have,
+
+\begin{equation}
+    \hat{u} = \langle u, \eta(x)e^{-ix\zeta} \rangle
+\end{equation}
+
+\subsubsection*{Example}
+
+$\delta \in \tfspaceD$, $\supp \delta = 0$,
+
+\begin{flalign}
+    \hat{\delta} = \langle \delta(x), \eta(x)e^{-ix\zeta} \rangle
+\end{flalign}
+
+$\forall \eta \in \tfspaceD$, $\eta = 1$ in neighbourhood of 0,
+
+\begin{flalign}
+    \implies \hat{\delta} = \eta(0) = 1
+\end{flalign}
+
+\section{Fourier Transform and Convolution}
+
+\begin{theorem}
+    If $u, v \in \dist$ and both have compact support then,
+    \[ \widehat{u*v} = \hat{u} \hat{v} \]
+\end{theorem}
+
+\subsubsection*{Proof}
+
+As $u * v \in \dist$ and $\supp (u*v)$ is bounded then $u*v \in S'$, therefore $\widehat{u*v}$ is well defined. For $\forall \phi \in S$,
+
+\begin{flalign}
+    \langle \widehat{u*v}, \phi \rangle & = \langle u*v, \hat{\phi} \rangle \\
+    &= \langle u(x) \otimes v(y), a(x)b(y) \hat{\phi}(x+y) \rangle
+\end{flalign}
+
+where $a, b \in \tfspaceD(\reals^N)$ and both equal 1 in the neighbourhood of $\supp u$ and $\supp v$ respectively.
+
+\begin{flalign}
+    =\langle u(x) \otimes v(y), a(x)b(y) \int \phi(\zeta) e^{-i\zeta(x+y)}d\zeta \rangle
+\end{flalign}
+
+Applying the analog of Fubini's theorem twice, we can re-arrange the integrals,
+
+\begin{flalign}
+    \int \langle u(x), a(x) e^{-ix\zeta} \rangle \langle v(y), b(y) e^{-iy\zeta} \rangle \phi(\zeta) d\zeta
+\end{flalign}
+
+Using the theorem from the previous section, we see that we have our result.
+
+Recall that,
+
+\begin{equation}
+    f \in O_M(\reals^N) \Leftrightarrow \{ f \in C^\infty : |\partial^\alpha f(x)| \leq C_\alpha (1+|x|)^{m_\alpha} \}
+\end{equation}
+
+Then the following lemma holds,
+
+\begin{lemma}
+    If $v \in \dist$ and has compact support then $\hat{v} \in O_M$
+\end{lemma}
+
+\subsubsection*{Proof}
+
+We know that $\hat{v} \in C^{\infty}$, see the previous section, then all we need to do is show that the bound holds.
+
+\begin{flalign}
+    |\partial^\alpha_\zeta \hat{v}(\zeta) | = |\widehat{x^\alpha v(x)}| = |\langle x^\alpha v(x), \eta(x) e^{-ix\zeta} \rangle|
+\end{flalign}
+
+where $\eta \in \tfspaceD$ and $\eta = 1$ in neighbourhood of $\supp v$. Furthermore, $x^\alpha v \in S'$ as $x^\alpha$ is a multiplier, therefore we can take semi-norm estimates in the Schwartz space
+
+\begin{flalign}
+    |\partial^\alpha_\zeta \hat{v}(\zeta)| &= |\langle x^\alpha v(x), \eta(x) e^{-ix\zeta} \rangle| \\
+    \leq C_\alpha \sum_{|\gamma|, |\delta| \leq N_\alpha } \|\eta(x) e^{-ix\zeta}\|_{\gamma, \delta}
+\end{flalign}
+
+where the inequality is with respect to some finite sum of semi-norms. $\eta$ has finite support,
+
+\begin{flalign}
+    \leq C_\alpha \sum_{|\gamma|, |\delta| \leq N_\alpha } \sup_{x \in \supp \eta} |x^\gamma \partial^\delta_x \eta(x) e^{-ix\zeta}| \\
+    \leq \tilde{C}_\alpha \sum_{|\delta| \leq N_\alpha} \tilde{C}_\delta |\zeta^\delta| \leq C'_\alpha(1+|\zeta|^{N_\alpha})
+\end{flalign}
+
+\section{Singular Support}
+
+\begin{definition}
+    Let $u \in \dist$. The singular support of $u$ is the complement of the set,
+    \[ \{ x \in \reals^N | u \in C^\infty \> \> \text{on some neighbourhood of } x\} \]
+\end{definition}
+
+For example $\singsupp \delta = 0$.
+
+\begin{lemma}
+    Let $u,v  \in \dist$ and $v$ has compact support, then
+    \[ \singsupp u*v \subset \singsupp u + \singsupp v \]
+
+\end{lemma}
+
+\begin{remark}
+    \[ A, B \subset \reals^N, \> \> \> A+B = \{ x \in \reals^N | x=a+b, a \in A, b \in B\} \]
+\end{remark}
+
+\begin{remark}
+    $u \in \dist$ and $\rho \in D$ implies that $\rho * u \in C^\infty$, if $u \in \dist$ and $u$ has compact support $\rho \in C^\infty$ implies that $\rho * u \in C^\infty$
+\end{remark}
+
+\subsubsection*{Proof}
+
+Choose $\phi \in C^\infty$ such that $\phi = 1$ on a neighbourhood of $\singsupp u$ and $\psi \in \tfspaceD$ such that $\psi = 1$ on a neighbourhood of $\singsupp v$.
+
+\begin{flalign}
+    u*v &= (\phi u +(1-\phi)u) * (\psi v + (1-\psi)v) \\
+    &= \phi u * \psi v + \phi u * (1-\psi)v + (1-\phi)u * \psi v + (1-\phi)u * (1-\psi)v
+\end{flalign}
+
+All but the first two terms above are $C^\infty$ therefore,
+
+\begin{flalign}
+    \singsupp u*v &= \singsupp \phi u * \psi v \\
+    &\subset \supp \phi u * \psi v \subset \supp \phi u + \supp \psi v \subset \supp \phi + \supp \psi
+\end{flalign}
+
+Now if we consider all admissable $\phi$ and $\psi$,
+
+\begin{flalign}
+    \singsupp u*v \subset \bigcap_{\phi | \phi = 1, \psi | \psi = 1 \text{ on } \singsupp u, v \text{ resp.}} \supp \phi + \supp \psi = \singsupp u + \singsupp v
+\end{flalign}
+
+
+\subsubsection*{Example}
+On $\reals$, $u = \delta(x)$, $v = \delta(x-1)$
+
+\begin{flalign}
+    u*v = \delta(x) *v = v \delta(x-1)
+\end{flalign}
+
+we know $\singsupp \delta = \{ 0 \}$ and $\singsupp \delta(x-1) = \{ 1 \}$, therefore we see that the lemma applies.
+
+\section{Elliptic Differential Operators}
+
+\section{Fourier Transform on $L_2$}
+
+\section{Sobolev Spaces $H^s(\reals^N)$}
 
 \end{document}
