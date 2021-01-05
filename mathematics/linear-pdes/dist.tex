@@ -1593,6 +1593,151 @@ we know $\singsupp \delta = \{ 0 \}$ and $\singsupp \delta(x-1) = \{ 1 \}$, ther
 
 \section{Elliptic Differential Operators}
 
+Let,
+
+\begin{equation}
+    P(-i\partial) = \sum_{|\alpha| \leq m} = a_\alpha (-i\partial)^\alpha
+\end{equation}
+
+be linear differential operator of order $m$, with constant coefficients $a_\alpha \in \complexes$.
+
+\begin{definition}
+    The polynomial,
+    \[ P(\zeta) = \sum_{|\alpha| \leq m} = a_\alpha \zeta^\alpha\]
+    is called the \textbf{symbol} of $P$. The polynomial,
+    \[ \sigma_P(\zeta) = \sum_{|\alpha| = m} a_\alpha \zeta^\alpha \]
+    is called the \textbf{principle symbol} of $P$
+\end{definition}
+
+\begin{definition}
+    $P$ is called elliptic if,
+    \[ \sigma_P (\zeta) \neq 0 \text{ for } \zeta \neq 0 \]
+\end{definition}
+
+\begin{theorem}[Elliptic Regularity Theorem]
+    Let $P$ be an elliptic operator with constant coefficients of order $m$, then,
+    \[ \singsupp u = \singsupp Pu \]
+    $\forall u \in \dist$
+\end{theorem}
+
+This basically says that the singularities are unmoved under the application of an elliptic differentail operator.
+
+\subsubsection*{Proof}
+
+\subsubsection*{1. Forward inclusion}
+
+Consider,
+
+\begin{flalign}
+    \singsupp Pu &\subset \singsupp u \Leftrightarrow \\
+    \overline{\singsupp u}^c &\subset \overline{\singsupp Pu}^c
+\end{flalign}
+
+This statement must be true, and is obvious, since if $u \in C^\infty(B_R(x_0))$  then $Pu \in  C^\infty(B_R(x_0))$ also.
+
+
+\subsubsection*{2. Reverse inclusion}
+
+Let's now show that,
+
+\begin{equation}
+    \singsupp u \subset \singsupp Pu
+\end{equation}
+
+thus verifying our theorem. From the elliptic nature of $P$, we have that,
+
+\begin{flalign}
+    \sigma_P (\zeta) \neq 0 \text{ for } \zeta \neq 0
+\end{flalign}
+
+Therefore, $|\sigma_P(\zeta) | > 0$ for some set $\zeta \in S^1$. Furthermore,  $|\sigma_P(\zeta) | > C > 0$ for the unit sphere $\zeta \in S^1$. The unit sphere is a compacy set, the principle symbol is a homogenous function of order $N$, therefore
+
+\begin{flalign}
+    |\sigma_P(\zeta) | > C |\zeta|^m, \> \> \> \forall \zeta \in \reals^N
+\end{flalign}
+
+in this context homogenous means that $\sigma_P(t_\zeta) = t^m \sigma_P(\zeta)$ where $t \geq 0$. Therefore,
+
+\begin{flalign}
+    |P(\zeta)| \geq C |\zeta|^m - C_1 |\zeta|^{m-1} - .... C_m
+\end{flalign}
+
+with some some constants $C_j$. Therefore, for constant $\forall M > 0 $ one can find $R$ such that $|P(\zeta)| > M$ for $|\zeta| > R$. Let $\xi \in D$ such that $0 \leq \xi 1$ and $\xi = 1$ for $|\zeta| < R$, then $\frac{1-\xi(\zeta)}{|P(\zeta|} \leq \frac{1}{M}$ $\forall \zeta$. Therefore we can say that $\frac{1-\xi(\zeta)}{P(\zeta)} \in S'$ as it is a continuous function, and bounded. Denote its inverse Fourier transform by $E$. Thus,
+
+\begin{flalign}
+    \hat{E} = \frac{1- \xi(\zeta)}{P(\zeta)}
+\end{flalign}
+
+Asssume for the moment that $E \in C^\infty(\reals^N \backslash 0)$. Then as $E \in S'$ one has the following identities,
+
+\begin{flalign}
+    \widehat{P(-i\partial)E} \overset{\text{op. rules}}{=} P(\zeta) \hat{E} = P(\zeta)\frac{1-\xi(\zeta)}{P(\zeta)} = 1-\xi(\zeta) \\
+    \implies P(-i\partial)E = \delta(x) - \mathcal{F}^{-1}\xi(\zeta)
+\end{flalign}
+
+The point is that $\mathcal{F}^{-1}\xi(\zeta) \in C^\infty$ as $\xi \in D \subset S$, and except for this final term we see that $E$ is almost a fundamental solution. Let $\Omega$ be a compact set in $\reals^N$. Choose $\psi \in \tfspaceD$ such that $\psi = 1$ on $\Omega$ then $\forall u \in \dist$
+
+\begin{flalign}
+    \psi u &= \delta * \psi u = \left [ P(-i\partial) + \mathcal{F}^{-1}\xi \right] * \psi u \\
+    & =  P(-i\partial) *\psi u+ \mathcal{F}^{-1}\xi * \psi u \\
+    &\overset{\text{diff. of conv.}}{=} E* [ P(-i\delta)\psi u] + \underset{\in C^\infty}{\mathcal{F}^{-1}\xi} * \underset{\in \dist, \text{ compact supp. so } \in C^\infty}{\psi u}
+\end{flalign}
+
+Therefore,
+
+\begin{flalign}
+    \singsupp \psi u = \singsupp E *  [P(-i\partial) \psi u]
+\end{flalign}
+
+By lemma of singular support of convolution,
+
+\begin{flalign}
+    \singsupp \psi u \subset \singsupp E + \singsupp P\psi u
+\end{flalign}
+
+By assumption, $\singsupp E = \{0\}$, consequently
+
+\begin{flalign}
+    \singsupp{ \psi u} \subset \singsupp P\psi u
+\end{flalign}
+
+Since $\Omega$ is any compact set in $\reals^N$, we get,
+
+\begin{flalign}
+    \singsupp u \subset \singsupp P u
+\end{flalign}
+
+Finally check our assumption about the $\singsupp E = \{ 0\}$. Indeed,
+
+\begin{flalign}
+    | \mathcal{F} [x^\beta \partial^\alpha E] | \overset{\text{op. rules}}{=} |\partial^\beta \zeta^\alpha \hat{E}|, \> \> \> \forall \alpha, \beta
+\end{flalign}
+
+by calculate we see that,
+
+\begin{flalign}
+    |\partial^{\beta} (\zeta^\alpha \hat{E})| = O(|\zeta|^{-M+|\alpha|-|\beta|})
+\end{flalign}
+
+as $|\zeta| \rightarrow +\infty$. Choosing $|\beta| = |\alpha| + N -M+1$, we get,
+
+\begin{flalign}
+    \mathcal{F} [x^\beta \partial^\alpha E] \in \lone
+\end{flalign}
+
+Therefore,
+
+\begin{flalign}
+    x^\beta \partial^\alpha E \in C(\reals^N)
+\end{flalign}
+
+if $|\beta| = |\alpha| + N -M+1$, indeed,
+
+\begin{flalign}
+    \partial^\alpha E \in C(\reals^N \backslash 0), \> \> \forall \alpha \\
+    \implies E \in C(\reals^N \backslash 0)
+\end{flalign}
+
 \section{Fourier Transform on $L_2$}
 
 \section{Sobolev Spaces $H^s(\reals^N)$}
