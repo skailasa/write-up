@@ -1740,6 +1740,104 @@ if $|\beta| = |\alpha| + N -M+1$, indeed,
 
 \section{Fourier Transform on $L_2$}
 
+
+Our motivation is to solve the Laplace problem,
+
+\begin{flalign}
+    \Delta u = f, \> \> \> f \in C^\infty \implies u \in C^\infty
+\end{flalign}
+
+But what about if $f \in C(\reals^N)$? In the one-dimensional case, we can say that $u'' = f$ therefore $u \in C^2(\reals)$. However, this won't generalise to the $N$ dimensional case. For this we introduce the $L_2$ space,
+
+\begin{definition}[$L_2$ Space]
+    $L_2(\reals^N)$ consists of (the equivalence classes of) square integrable functions where the norm is given by,
+    \[ \|u\|_{L_2(\reals^N)} = \sqrt{\int_{\reals^N} |u|^2}dx\]
+\end{definition}
+
+$L_2$ is a linear space. Convergence in $L_2$ is such that $u_n \overset{L_2}{\rightarrow} 0 \Leftrightarrow \|u\|_{L_2} \rightarrow 0$.
+
+\begin{lemma}[Cauchy-Schwarz Inequality]
+    Let $u, v \in L_2(\reals^N)$ then,
+    \[ |\int_{\reals^N} uv dx | \leq \|u\|_{L_2} +\|v\|_{L_2}\]
+\end{lemma}
+
+\subsubsection*{1.}
+$L_2$ is a complete space. This means that for a Cauchy sequence $\{u_n\}$ then $\exists u \in L_2 | u_n \overset{L_2}{\rightarrow} u$. Remember that a Cauchy sequence means that $\|u_n - u_m \| \rightarrow 0$ as $n,m \rightarrow \infty$
+
+\subsubsection*{2.}
+Riesz representation theorem applies. Let $f$ be a linear continuous functional on $L_2$. Then $\exists ! u \in L_2$ such that,
+
+\begin{flalign}
+    \langle f, \phi \rangle = \int_{\reals^N} \bar{u} \phi dx, \> \> \> \forall \phi \in L_2
+\end{flalign}
+
+\subsubsection*{3.}
+The space of distibutions is equal to the space of functions $L_2' = L_2$.
+
+\begin{flalign}
+    \tfspaceD \subset S \subset L_2 = L_2' \subset S' \subset \dist
+\end{flalign}
+
+Indeed if $f \in L_2 \implies f$ is a tempered function, since by Cauchy-Schwarz,
+
+\begin{flalign}
+    \int |f| (1+|x|)^{-m}dx \leq \left(\int |f|^2\right)^{1/2}\left(\int (1+|x|)^{-2m}\right)^{1/2} \leq C \|f\|_{L_2}
+\end{flalign}
+
+for $m \geq N/2$. This implies that $f \in S'$, $\langle f, \phi \rangle = \int f\phi dx$ for $\forall \phi \in S$. Furthermore, if $f_n \overset{L_2}{\rightarrow} 0$ then $\forall \phi \in S$,
+
+\begin{flalign}
+    |\langle f_n, \phi \rangle| = |\int f_n \phi dx | \leq \|f_n\|_{L_2} \|\phi\|_{L_2} \rightarrow 0
+\end{flalign}
+
+means that $f_n \overset{S'}{\rightarrow} 0$
+
+\subsubsection*{4.}
+
+$S \subset L_2$ and if $\phi_n \overset{S}{\rightarrow} 0$ then $\phi_n \overset{L_2}{\rightarrow} 0$. Indeed, $\forall \phi \in S$,
+
+\begin{flalign}
+    \|\phi\|_{L_2} &= \int_{\reals^N} |\phi|^2dx \\
+    &= \int |\phi|^2 (1+|x|)^{N+1}(1+|x|)^{-N-1} dx\\
+    &\leq \sup_{y \in \reals^N} (|\phi(y)|^2 (1+|y|)^{N+1}) \int (1+|x|)^{-N-1}dx \\
+    &\leq C \sup_{y \in \reals^N} \left(|\phi(y)|^2\tilde{C}(1+|y|^{2N})\right) \\
+    &\leq C \tilde{C} \left(\|\phi\|^2_{0,0} + \|\phi\|^2_{N, 0}\right)
+\end{flalign}
+
+
+\subsubsection*{5.}
+$S$ is dense in $L_2$, $\forall u \in L_2 \exists u_n \in S | u_n \overset{L_2}{\rightarrow} u$.
+
+\begin{theorem}[Parseval's Identity]
+    If $u \in L_2$ then $\hat{u} \in L_2$ then,
+    \[\|\hat{u}\|_{L_2}^2 = (2\pi)^N\|u\|^2_{L_2}\]
+\end{theorem}
+
+\subsubsection*{1.}
+
+Let $\phi, \phi \in S$ then $\int \phi \hat{\psi} = \int \hat{\phi} \psi$. Let's take $\psi(\zeta) = \hat{\phi}(\zeta) = \int e^{-ix\zeta} \phi(x)dx = \int e^{ix\zeta}\bar{\phi}(x)dx = (2\pi)^N  \left(\mathcal{F}^{-1 \hat{}} \bar{\phi}\right)(\zeta) $.
+
+Then $\hat{\psi}(x) = (2\pi)^N \bar{\phi}(x)$, which means,
+
+\begin{flalign}
+    (2\pi)^N  \int \phi \bar{\phi}(x) = \int \hat{\phi}(\zeta) \overline{\hat{\phi}(\zeta)} d\zeta
+\end{flalign}
+
+Which proves the theorem for functions from the Schwartz space.
+
+\subsubsection*{2.}
+
+$S$ is dense in $L_2$, that is $\forall u \in L_2$ $\exists u_n \in S$ such that $u_n \overset{L_2}{\rightarrow} u$. Consider, $\hat{u_n}$ it is a Cauchy sequence, indeed,
+\begin{flalign}
+    \|\hat{u}_n - \hat{u}_m \| = (2\pi)^{N/2}\|u_n-u_m\|_{L_2} \rightarrow 0
+\end{flalign}
+
+as $n,m \rightarrow \infty$, since $u_n \overset{L_2}{\rightarrow} u$. $L_2$ is a complete space consequently $\exists v \in L_2$ such that $\hat{u}_n \overset{L_2}{\rightarrow} v$. But $u_n \overset{L_2}{\rightarrow} u$ consequently, $u_n \overset{S'}{\rightarrow} u$ therefore $\hat{u}_n \overset{S'}{\rightarrow} \hat{u} \implies \hat{u} = v \in L_2$. Therefore Parseval's identity on elements of the sequence implies that,
+
+\begin{flalign}
+    \| \hat{u} \|_{L_2}^2 = (2\pi)^N\|u\|_{L_2}^2
+\end{flalign}
+
 \section{Sobolev Spaces $H^s(\reals^N)$}
 
 \end{document}
