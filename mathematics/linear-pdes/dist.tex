@@ -1840,4 +1840,77 @@ as $n,m \rightarrow \infty$, since $u_n \overset{L_2}{\rightarrow} u$. $L_2$ is 
 
 \section{Sobolev Spaces $H^s(\reals^N)$}
 
+We begin with definition of the Sobolev space,
+
+\begin{definition}
+    Let $s \in \reals$ The Sobolev space $H^s(\reals^N)$ consists of all the $u \in S'$ such that $(1+|\zeta|^2)^{s/2}\hat{u}(\zeta) \in L_2(\reals^N)$ and,
+
+    \[ \|u\|_{H^s} = (2\pi)^{-N/2} \|(1+|\zeta|^2)^{s/2} \hat{u} \|_{L_2(\reals^N)}\]
+\end{definition}
+
+\begin{remark}
+    $H^s = L_2$ for $s=0$
+\end{remark}
+
+
+\begin{definition}
+    Let $m$ be a positive integer, then
+    \[ H^m(\reals^N) = \{ u \in S' | \partial^\alpha u \in L_2, \text{ for } |\alpha| \leq m \}\]
+\end{definition}
+
+\begin{theorem}
+    If $P$ is a linear differential operator with constant coefficients of order $m$ and $u \in H^s(\reals^N)$ then $Pu \in H^{s-m}(\reals^M)$
+\end{theorem}
+
+\begin{theorem}[Sobolev Embedding Theorem]
+If $s > \frac{N}{2}$ and $u \in H^s(\reals^N)$ then $u \in C(\reals^N)$
+\end{theorem}
+
+\subsubsection*{Proof}
+Assume that $\hat{u} \in \lone(\reals^N)$, then $u \in C(\reals^N)$. Let's show that $\hat{u} \in \lone$. By definition,
+
+\begin{flalign}
+    \|\hat{u}\|_{\lone} &= \int_{\reals^N} |\hat{u}(\zeta)| d\zeta = \int|\hat{u}(\zeta)| (1+|\zeta|^2)^{s/2}(1+|\zeta|^2)^{-s/2} d\zeta \\
+    &\overset{\text{Cauchy Schwarz}}{\leq} \left(\int_{\reals^N} |\hat{u}|^2(1+|\zeta|^2)^s d\zeta \right)^{1/2} \left( \int_{\reals^N} (1+|\zeta|^2)^{-s}\right)^{1/2} \\
+    &\leq C \|u\|_{H^s}
+\end{flalign}
+
+The second integral is finite for $s > N/2$, and encapsulated in $C$. Giving our result.
+
+\subsubsection*{Example}
+
+Consider,
+
+\begin{flalign}
+    -\Delta u + 5u = f, \> \> \> f \in S'(\reals^N)
+\end{flalign}
+
+Let's show that $u = \mathcal{F}^{-1} \left[ \frac{\hat{f}(\zeta)}{|\zeta|^2+5} \right ]$ solves the above second order problem. Note that $f$ is just a tempered distribution, and has no assumptions about being infinitely differentiable placed upon it. As $f \in S' \implies \hat{f} \in S'$ and $\frac{1}{|\zeta|^2+5} \in C^\infty$ and is bounded then it is also a tempered function therefore $\frac{\hat{f}(\zeta)}{|\zeta|^2+5} \in S'$, which implies that $u \in S'$.
+
+Let's calculate the RHS, we want to show that it's equal to $f$. Since $f$ is one-to-one in $S'$ it is equivalent to,
+
+\begin{flalign}
+    \hat{f} = \widehat{-\Delta u + 5u}
+\end{flalign}
+
+By operation rules,
+
+\begin{flalign}
+    = |\zeta|^2 \hat{u} + 5\hat{u} = (|\zeta|^2+5) \frac{\hat{f}(\zeta)}{|\zeta|^2+5} = \hat{f}(\zeta)
+\end{flalign}
+
+So we see that $u = \mathcal{F}^{-1}\frac{\hat{f}}{|\zeta|^2+5 \in S'}$ solves the differential equation. If $f \in L_2$, then $u \in H^2$. Let's check it,
+
+\begin{flalign}
+    u \in H^2 \Leftrightarrow (1+|\zeta|^2)\hat{u} \in L_2 \Leftrightarrow \frac{\hat{f}(\zeta)}{1+|\zeta|^1}(1+|\zeta|^2) \in L_2 \Leftrightarrow \hat{f}(\zeta) \in L_2 \Leftrightarrow f \in L_2
+\end{flalign}
+
+Thus, if $f \in H^s$ then $u \in H^{2+s}$, indeed $u \in H^{2+s} \implies \partial^\alpha u \in H^s$ for $|\alpha| \leq 2$. By Sobolev embedding theorem $\implies \partial^\alpha u \in C(\reals^N)$ for $|\alpha| \leq 2$ $\Leftrightarrow u \in C^2(\reals^N)$. Thus,
+
+\begin{flalign}
+    u = \mathcal{F}^{-1}\left[ \frac{\hat{f}(\zeta)}{|\zeta|^2 + 5} \right] \in C^2(\reals^N)
+\end{flalign}
+
+solves the differential equation not just in a weak sense, but in the classical sense.
+
 \end{document}
