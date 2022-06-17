@@ -1,0 +1,36 @@
+\documentclass[12pt, a4, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{fast-direct-solvers.bib}
+
+\title{Fast Direct Solvers}
+\author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London, \small Flatiron Institute}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+So called `fast direct solvers' offer an $O(N)$ alternative to iterative methods ($O(n_{iter} \cdot n)$) for the solution of integral equations, and therefore are a rapidly developing field of research. In this document, I summarise the recent research in this direction in the context of computing the solution of acoustic and electromagnetic scattering problems. These notes were written up during my visit to the Flatiron Institute in New York City in the Summer of 2022.
+\end{document}
+
+
