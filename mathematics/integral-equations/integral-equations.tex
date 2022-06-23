@@ -1,0 +1,63 @@
+\documentclass[12pt, a4, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{integral-equations.bib}
+
+\title{Integral Equation Methods for Problems In Scientific Computing}
+\author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+
+Integral equations are an invaluable tool in scientific computing for formulating and solving scattering problems. This is because they allow for a reduction in problem dimension, by discretising and solving a problem over the surface of the scatterer to find a solution over the whole domain. The focus of this document is to summarise the main aspects of integral equations as they relate to scattering problems. The notes are written for my own selfish clarity of mathematical arguments rather than neatness, or succinctness, of proof. 
+
+These notes were written up during my visit to the Flatiron Institute in New York City in the Summer of 2022. A wonderful experience for which I am extremely grateful. The visit gave me both the impetus and the time to study some truly interesting and beautiful concepts.
+
+\tableofcontents
+
+
+\section{Mathematical Background}\label{sec:mathematical_background}
+
+Some facts from functional and real analysis are unavoidable. Though I will try and keep them as wordy as possible. The main theory we rely on is that of Fredholm and Riesz. In terms of function spaces, we're going to assume that the only spaces I will ever see are nice and smooth, with no cracks or edges, and will therefore ignore much of the function-space formalism for the time being. I \textit{might} return to this later, if I really must. I have found some excellent lecture notes \cite{moiola2022} which give an overview of this type of formalism with application to boundary integral equations. I'm following along with the presentation in \cite{coltonkress2013,kress2012}, in addition to my own expository notes.
+
+
+\section{Potential Theory}
+
+
+\section{Boundary Value Problems}
+
+\subsection{Laplace}
+
+
+\subsection{Helmholtz}
+
+\subsection{Maxwell}
+
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
+
+

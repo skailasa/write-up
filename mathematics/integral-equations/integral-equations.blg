@@ -1,0 +1,65 @@
+This is BibTeX, Version 0.99d (TeX Live 2020)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: integral-equations.aux
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: integral-equations-blx.bib
+Database file #2: integral-equations.bib
+Biblatex version: 3.13
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 4 entries,
+            6365 wiz_defined-function locations,
+            1209 strings with 9359 characters,
+and the built_in function-call counts, 16468 in all, are:
+= -- 1067
+> -- 421
+< -- 164
++ -- 367
+- -- 122
+* -- 867
+:= -- 1560
+add.period$ -- 0
+call.type$ -- 4
+change.case$ -- 113
+chr.to.int$ -- 42
+cite$ -- 6
+duplicate$ -- 1700
+empty$ -- 1464
+format.name$ -- 164
+if$ -- 3652
+int.to.chr$ -- 0
+int.to.str$ -- 9
+missing$ -- 0
+newline$ -- 97
+num.names$ -- 215
+pop$ -- 1053
+preamble$ -- 1
+purify$ -- 122
+quote$ -- 0
+skip$ -- 821
+stack$ -- 0
+substring$ -- 1431
+swap$ -- 455
+text.length$ -- 101
+text.prefix$ -- 3
+top$ -- 1
+type$ -- 124
+warning$ -- 0
+while$ -- 228
+width$ -- 0
+write$ -- 94
