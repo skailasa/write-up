@@ -1,7 +1,10 @@
 \BOOKMARK [1][-]{section.1}{Mathematical Background}{}% 1
-\BOOKMARK [1][-]{section.2}{Potential Theory}{}% 2
-\BOOKMARK [1][-]{section.3}{Boundary Value Problems}{}% 3
-\BOOKMARK [2][-]{subsection.3.1}{Laplace}{section.3}% 4
-\BOOKMARK [2][-]{subsection.3.2}{Helmholtz}{section.3}% 5
-\BOOKMARK [2][-]{subsection.3.3}{Maxwell}{section.3}% 6
-\BOOKMARK [1][-]{section*.3}{References}{}% 7
+\BOOKMARK [2][-]{subsection.1.1}{Riesz Theory}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Fredholm Theory}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Potential Theory}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{Surface Potentials}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Boundary Value Problems}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Laplace}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{Helmholtz}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.3}{Maxwell}{section.3}% 9
+\BOOKMARK [1][-]{section*.3}{References}{}% 10

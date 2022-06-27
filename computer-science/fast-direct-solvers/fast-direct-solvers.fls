@@ -200,10 +200,10 @@ INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT /usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.toc
 INPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.toc
 OUTPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.toc
-INPUT /usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.aux
 INPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.out
 INPUT /Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.out
@@ -216,6 +216,8 @@ INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pf
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
