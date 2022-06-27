@@ -465,8 +465,8 @@ The single-layer potential for some density $\psi$ supported on the surface of s
 
 \begin{flalign}
     \label{eq:single_layer}
-    s(x) &= \mathcal{S}[\psi(y)](x) \\
-    s(x) &= \int_{\partial \Omega} \Phi_0 \psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \Omega
+    u(x) &= \mathcal{S}[\psi(y)](x) \\
+    u(x) &= \int_{\partial \Omega} \Phi_0 \psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \Omega
 \end{flalign}
 
 where $y$ is a variable discretising the boundary (`sources'), and $x$ is a variable discretising the region of analyticity of the potential (`targets').
@@ -577,7 +577,7 @@ We want to establish well-posedness, i.e. uniqueness, in the solution of each of
 
 \end{theorem}
 
-\subsubsection{Surface Potentials}
+\subsection{Jump Relations}
 
 There is a discontinuity in the double layer potential for Laplace as you pass from the interior of a domain to its exterior. This is the famous `jump relation', and is easiest to see for the Laplace case with a constant density $\psi =1$ in 2D, 
 
@@ -617,9 +617,48 @@ We see that we get something of the form,
 
 in the limit that $r \rightarrow 0$. The plus sign signifies that we approach the boundary from outside of the domain.
 
-This is a bit of a hop skip and jump, but this is just to intuit where this could come from. This does in fact generalize to the Helmholtz case too, and to higher dimensions.
+If we instead approached from the interior, we get,
 
-I'm fairly certain that this reasoning is invalid mathematically, as the the second integral above in the principal value sense (I still need to look up what this actually is).
+\begin{flalign}
+    v^-(x) = (-\frac{1}{2} + \mathcal{D})[\psi(y)](x)
+\end{flalign}
+
+And we can summarise both relations with,
+
+\begin{flalign}
+    v^+(x)-v^-(x) = \psi(x), \> \> x \in \Gamma
+\end{flalign}
+
+This is an example of a \textbf{Boundary Integral Equation}. The reasoning above isn't complete, mainly because integrals on the boundary are valid in the principle value sense, but it helps to intuit where these jumps come from. This does in fact generalize to the Helmholtz case too, and to higher dimensions. We get a similar discontinuity in the normal derivative of the single-layer potential from almost identitical mathematical reasoning to above,
+
+\begin{flalign}
+    \frac{\partial u}{\partial n(x)} &= \frac{\partial}{\partial n (x)} \int_\Gamma \psi(y) \Phi(x, y) ds(y) \\
+    \frac{\partial u}{\partial n(x)} &= \int_\Gamma \psi(y) \frac{\partial \Phi(x, y)}{\partial n(x)} ds(y)
+\end{flalign}
+
+We're allowed to move the normal derivative into the integral, as it's operating on $x$, not $y$. Then the analysis is the same as above, we get the jump relation,
+
+\begin{flalign}
+    \frac{\partial u^-}{\partial n(x)} - \frac{\partial u^+}{\partial n(x)} = \psi
+\end{flalign}
+
+
+The dual of both these jumps, i.e. the value of the single-layer potential, and the derivative of the double-layer potential, \textit{do not} jump on the boundary. Why? Well it's basically because the integral doesn't contain a singularity. To see what I mean, consider the test case of (\ref{fig:laplace_double_jr}) i.e. 2D, with unit density $\psi = 1$, except this time we're examining the single layer potential on the boundary,
+
+\begin{flalign}
+    &\int_\Gamma \log(\frac{1}{|x-y|})ds(y) \\
+    &= -\int_\Gamma \log(|x-y|) \\
+    &\stackrel{ibp}{=} - \left [ [x \log |x-y|]_{\Gamma} - \int_\Gamma \frac{x}{|x-y|} \right ]
+\end{flalign}
+
+This integral is well defined, and converges to something over $\Gamma$, so we're all good. Similarly, for the normal derivative of the double layer potential we get,
+
+\begin{flalign}
+    \lim_{h \rightarrow +0} \left \{ \frac{\partial v}{\partial n}(x + hn(x)) - \frac{\partial v}{\partial n}(x - hn(x)) \right \} = 0, \> \> x \in \Gamma
+\end{flalign}
+
+
+
 
 \subsection{Helmholtz}
 

@@ -12,10 +12,10 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Boundary Value Problems}{13}{section.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.0.1}Surface Potentials}{16}{subsubsection.3.0.1}%
+\contentsline {subsection}{\numberline {3.1}Jump Relations}{16}{subsection.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Helmholtz}{18}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Helmholtz}{19}{subsection.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Maxwell}{18}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Maxwell}{19}{subsection.3.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{References}{18}{section*.3}%
+\contentsline {section}{References}{19}{section*.3}%
