@@ -6,16 +6,16 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.2}Fredholm Theory}{7}{subsection.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Potential Theory}{9}{section.2}%
+\contentsline {section}{\numberline {2}Potential Theory}{10}{section.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Surface Potentials}{9}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.1}Surface Potentials}{13}{subsection.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Boundary Value Problems}{9}{section.3}%
+\contentsline {section}{\numberline {3}Boundary Value Problems}{13}{section.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Laplace}{9}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.0.1}Surface Potentials}{16}{subsubsection.3.0.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Helmholtz}{11}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.1}Helmholtz}{18}{subsection.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Maxwell}{11}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.2}Maxwell}{18}{subsection.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{References}{11}{section*.3}%
+\contentsline {section}{References}{18}{section*.3}%
