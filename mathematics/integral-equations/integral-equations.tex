@@ -241,7 +241,7 @@ Fredholm theory picks up where Riesz' theory tails off. We answer solvability fo
     for all $\phi_1, \phi_2, \phi \in X$, $\psi_1, \psi_2, \psi \in Y$, and coefficients in $\mathbb{C}$. The bilinear form is non-degenerate if for every $\phi \in X, \phi \neq 0$ there exists $\psi \in Y$ s.t. $\langle \phi, \psi \rangle \neq 0$ and for every $\psi \in Y$ s.t.   $\langle \phi, \psi \rangle \neq 0$  there exists $\phi \in X$ s.t. $\langle \phi, \psi \rangle \neq 0$
 \end{definition}
 
-Two normed spaces + a non-degenerate bilinear form are called a \textbf{Dual System}, and denoted with $\langle X, Y \rangle$. eThe most common dual system I'll be concerned with is $\langle C(G), C(G) \rangle$ where $G \subset \mathbb{R}^n$, with the bilinear form,
+Two normed spaces + a non-degenerate bilinear form are called a \textbf{Dual System}, and denoted with $\langle X, Y \rangle$. The most common dual system I'll be concerned with is $\langle C(G), C(G) \rangle$ where $G \subset \mathbb{R}^n$, with the bilinear form,
 
 \begin{flalign}
     \langle \phi, \psi \rangle := \int_{G} \phi(x) \psi(x) dx, \> \> \phi, \psi \in C(G)
@@ -647,8 +647,9 @@ The dual of both these jumps, i.e. the value of the single-layer potential, and 
 
 \begin{flalign}
     &\int_\Gamma \log(\frac{1}{|x-y|})ds(y) \\
-    &= -\int_\Gamma \log(|x-y|) \\
-    &\stackrel{ibp}{=} - \left [ [x \log |x-y|]_{\Gamma} - \int_\Gamma \frac{x}{|x-y|} \right ]
+    &=\int_{\Gamma(\xi)} \log(\frac{1}{\xi})ds(\xi) \\
+    &= -\int_{\Gamma(\xi)} \log(|\xi|) ds(\xi) \\
+    &\stackrel{ibp}{=} - \left [\xi \log |\xi| - \xi \right ]_{\Gamma(\xi)}
 \end{flalign}
 
 This integral is well defined, and converges to something over $\Gamma$, so we're all good. Similarly, for the normal derivative of the double layer potential we get,
@@ -657,6 +658,94 @@ This integral is well defined, and converges to something over $\Gamma$, so we'r
     \lim_{h \rightarrow +0} \left \{ \frac{\partial v}{\partial n}(x + hn(x)) - \frac{\partial v}{\partial n}(x - hn(x)) \right \} = 0, \> \> x \in \Gamma
 \end{flalign}
 
+We define the adjoint pair of integral operators,
+
+\begin{theorem}
+
+    Consider some domain $\Omega$, with a boundary $\Gamma$.
+    
+    \begin{flalign}
+    (K\phi)(x) &:= 2 \int_\Gamma \phi(y) \frac{\partial \Phi(x,y)}{\partial n(y)}ds(y), \> \> x \in \Gamma \\
+    (K'\psi)(x) &:= 2\int_\Gamma \psi(y) \frac{\partial \Phi(x, y)}{\partial n(x)}ds(y), \> \> x \in \Gamma        
+    \end{flalign}
+
+    adjoint with respect to the dual system $\langle C(\Gamma), C(\Gamma) \rangle$, defined by, 
+
+    \begin{flalign}
+        \langle \phi, \psi \rangle := \int_\Gamma \phi \psi ds, \> \> \phi, \psi \in C(\Gamma)
+    \end{flalign}
+
+    These kernels can be shown to be weakly singular (see p 69 \cite*[]{kress2012}), and hence are compact.
+\end{theorem}
+
+This dual system is important as we'll be using operators of this form when we form integral equations, the goal being to apply the Riesz-Fredholm theory developed previously to say something about the solvability of these equations. We've already shown uniqueness for the prototypical problems we're interested in which comes from the radiation and boundary conditions, what's left is to show existence - which is where the previously developed theory fits in.
+
+The following theorem is critical to proving existence, and in fact gets us most of the way there. Afterwards, all that we'll need to do is form our \textbf{boundary integral equations}, and show that the theorem applies.
+
+\begin{theorem}
+    The operators $I-K$ and $I-K'$ have trivial nullspaces,
+
+    $$N(I-K)=N(I-K') = \{ 0 \}$$
+
+    The null spaces of the operators $I+K$ and $I+K'$ have dimension 1,
+
+    $$N(I+K) = span \{ 1 \}, \> \>  N(I-K') = span \{ \psi_0 \}$$
+
+    with 
+
+    $$ \langle 1, \psi_0 \rangle = \int_\Gamma \psi_0 ds \neq 0 $$
+    
+    where $\psi_0 \in C(\Gamma)$.
+
+    \hspace{0.7pt}
+
+    \textbf{Proof}:
+
+    Consider the homogenous interior Dirichlet problem.
+
+    $$ \phi - K \phi = 0$$
+
+    The jump relations show that on the boundary,
+
+    $$-2v_- = \phi-K\phi = 0, \implies v_- = 0$$ 
+
+    The uniqueness of the interior Dirichlet problem allows us to say that $v = 0$ in the whole of the interior $\Omega_-$. From the continuity of the normal derivative of the double-layer potential as one crosses the boundary, we get,
+
+    $$\frac{\partial v_+}{\partial n} = 0$$
+
+    This is now a homogeneous exterior Neumann problem, which our previously developed uniqueness proof demonstrated is unique (when we also have a radiation condition!) Therefore, we arrive at,
+
+    $$ v = 0$$
+
+    in $\Omega_+$. From the jump relation, we find that the density $\phi = v_+ - v_- \equiv 0$ on $\Gamma$. What does this mean? it means that our homogenous integral equation for the interior Dirichlet problem that we started with \textit{only} has trivial solutions, and therefore that $N(I-K) = \{ 0 \}$. By the Fredholm alternative, we can also say something about the adjoint - and find that $N(I-K') = \{ 0 \}$.
+
+    Ok, what about the adjoint problem? We now start with an homogenous exterior Dirichlet problem,
+
+    $$\phi + K\phi = 0$$
+
+    Again, the jump relations show us that on the boundary,
+
+    $$ 2v_+ = K\phi + \phi = 0 $$
+
+    We again rely on the theory we developed earlier, which demonstrated the uniqueness of the exterior Dirichlet problem, to say that,
+
+    $$ v = 0$$
+
+    in $\Omega_+$. What about the interior problem? Well, following the reasoning we used before about the continuity of the normal derivative of the double-layer potential, we arrive at
+
+    $$ \frac{\partial v_-}{ \partial n} = 0 $$
+
+    on the boundary. This is nothing more than an interior Nuemann problem with homogeneous boundary conditions. We have no equivalent to the radiation condition in the interior, therefore all we can say is that $v_- = const$, and hence
+
+    $$ \phi = v_+-v_- = const$$
+
+    on $\Gamma$. So we now know that $N(I+K) \subset span \{ 1 \}$. Can we say more? Yes! Using 6.18 in \cite*[]{kress2012}, we can show that 1 + K 1 = 0. This means that the null space of this operator is equivalently the span of 1, $N(I+K) = span \{ 1 \}$. What about $N(I+K')$, to round off our theorem? Well we can't say something so specific about it. By the Fredholm alternative, we know that it must also have dimension one, so we can choose some arbitrary non-zero function $\psi_0 \in C(\Gamma)$ which doesn't vanish. The final claim is also provable, but I defer to p70 in \cite*[]{kress2012} for the details.
+\end{theorem}
+
+In the previous theorem, we used the uniqueness of solutions to the four prototypical problems we considered to reason for their existence via the Fredholm alternative! This is strange, and a little counter-intuitive.
+
+
+Our layer-potentials are very useful. We have now seen how we can form well-defined integral equations with them, and how the solutions of these integral equations can be plugged into a representation to find the general solution in the domain of interest. The layer potentials are also pretty benign, in the sense that we can form them with fundamental solutions of the PDE that we're interested in. We now have the machinery we need to tackle PDE problems reformulated as integral equations. Let's spell it out a little bit further, by considering the four prototypical problems I introduced above.
 
 
 
