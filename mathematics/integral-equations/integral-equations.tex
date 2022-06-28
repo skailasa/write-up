@@ -483,8 +483,11 @@ The unit normal $n(y)$ is directed to into the exterior domain.
 
 The single and double layer potentials are solutions of the PDE, so is analytic in the domain of excluding the boundary. Physically, think of a sheet of monopoles (single-layer) or dipoles (double-layer) supported on the boundary sheet. Though, this also applies in acoustics and other physical settings too, not just electromagnetics  ... (how does that physical picture work? Is this even a physical description, or a mathematical one?).
 
-
 \section{Boundary Value Problems}
+
+\subsection{Laplace}
+
+We introduce boundary value problems in the context of solving the Laplace equation. This is the easiest setting, and is essentially a special case of the Helmholtz equation (and hence also of the time-harmonic Maxwell equations). Much of the machinery developed here will work with a few tweaks in the Helmholtz/Maxwell case.
 
 Green's representation formula (\ref{eq:greens_repr}) uses the so called `Cauchy data', the boundary values and their normal derivative to represent any harmonic function. Denote $\Omega_- \subset \mathbb{R}^m$ a bounded domain of class $C^2$, with a boundary $\partial \Omega_-$, and $\Omega_+ := \mathbb{R}^m \setminus \bar{\Omega}_-$ its open complement, with a unit normal $n$ defined into the exterior $\Omega_+$. We can define four protypical problems that we aim to solve with integral equations and their Cauchy data.
 
@@ -577,7 +580,7 @@ We want to establish well-posedness, i.e. uniqueness, in the solution of each of
 
 \end{theorem}
 
-\subsection{Jump Relations}
+\subsubsection{Jump Relations}
 
 There is a discontinuity in the double layer potential for Laplace as you pass from the interior of a domain to its exterior. This is the famous `jump relation', and is easiest to see for the Laplace case with a constant density $\psi =1$ in 2D, 
 
@@ -657,6 +660,8 @@ This integral is well defined, and converges to something over $\Gamma$, so we'r
 \begin{flalign}
     \lim_{h \rightarrow +0} \left \{ \frac{\partial v}{\partial n}(x + hn(x)) - \frac{\partial v}{\partial n}(x - hn(x)) \right \} = 0, \> \> x \in \Gamma
 \end{flalign}
+
+\subsubsection{Boundary Integral Equations}
 
 We define the adjoint pair of integral operators,
 
@@ -745,14 +750,134 @@ The following theorem is critical to proving existence, and in fact gets us most
 In the previous theorem, we used the uniqueness of solutions to the four prototypical problems we considered to reason for their existence via the Fredholm alternative! This is strange, and a little counter-intuitive.
 
 
-Our layer-potentials are very useful. We have now seen how we can form well-defined integral equations with them, and how the solutions of these integral equations can be plugged into a representation to find the general solution in the domain of interest. The layer potentials are also pretty benign, in the sense that we can form them with fundamental solutions of the PDE that we're interested in. We now have the machinery we need to tackle PDE problems reformulated as integral equations. Let's spell it out a little bit further, by considering the four prototypical problems I introduced above.
+Our layer-potentials are very useful. We have now seen how we can form well-defined integral equations with them, and how the solutions of these integral equations can be plugged into a representation formed using Green's representation formula (\ref{eq:greens_repr}) to find the general solution in the domain of interest. The layer potentials are also pretty benign, in the sense that we can form them with fundamental solutions of the PDE that we're interested in. We can also use our layer-potentials together, or separately. The integral equations that arise out of different formulation choices and representations have different computational and mathematical trade-offs. But, this is by-the-by.We essentially have the mathematical machinery in place to tackle unbounded PDE problems via a transformation into an integral equation setting. We automatically incorporate boundary conditions, as well as a reduction in problem dimension! This is exactly what we initially sought in order to tackle scattering problems over unbounded domains. Let's spell it out a little bit further, by considering the four prototypical problems I introduced above.
+
+Let's only consider the solution formed using a double-layer potential for an interior Dirichlet problem.
+
+\begin{flalign}
+    u(x) = \int_\Gamma \phi(y)\frac{\partial \Phi(x, y)}{\partial n(y)} ds(y), \> \> x \in \Omega_-
+\end{flalign}
+
+Using the jump relations we arrive at our boundary integral equation,
+
+\begin{flalign}
+    &\phi(x)  - 2 \int_\Gamma \phi(y) \frac{\partial \Phi(x, y)}{\partial n(y)} ds(y) = -2 f(x), \> \> x \in \Gamma \\ 
+    &\textrm{operator form:  } \phi - K \phi = f
+\end{flalign}
+
+The solution of this boundary integral equation $\phi$ is unique, as we know from the previous theorem that $N(I-K) = \{ 0 \}$. Therefore, the solution, $u(x)$, formed with our representation in terms of the density $\phi$ is also unique.
+
+We see that if we instead chose to represent our solution in terms of a pure single-layer potential,
+
+\begin{flalign}
+    u(x) = \int_\Gamma \phi(y) \Phi(x, y) ds(y), \> \> x \in \Omega_-
+\end{flalign}
+
+we'd arrive at a first kind integral equation instead,
+
+\begin{flalign}
+    \int_\Gamma \phi(y) \Phi(x, y) ds(y) = f(x), \> \> x \in \Gamma
+\end{flalign}
+
+This has poor conditioning properties ... (?)
+
+\begin{theorem}
+    The interior Dirichlet problem as a unique solution.
+
+    \textbf{Proof}:
+
+    The representation, and integral equation above, are uniquely solvable as $N(I-K) = \{ 0 \}$ as we showed in the previous theorem.
+\end{theorem}
+
+Using a double-layer potential for the exterior Dirichlet problem leads to an integral equation $\phi + K\phi = 2f$, by the Fredholm alternative we found that $N(I+K') = span \{ \psi_0 \}$ for its adjoint problem, meaning that we can only get a unique solution if we satisfy the Fredholm solvability condition $\langle f, \psi_0\rangle$ = 0. We can't guarantee this for arbitrary data, $f$. To fix this the approach is to consider a modified double-layer potential,
+
+\begin{flalign}
+    u(x) = \int_\Gamma \phi(x) \left \{ \frac{\partial \Phi(x, y)}{\partial n (y)} + \frac{1}{|x|^{m-2}} \right \} ds(y), \> \> x \in \Omega_+
+\end{flalign}
+
+This leads to a modified boundary integral equation.
+
+\begin{flalign}
+    \phi(x) + 2 \int_\Gamma \left \{ \frac{\partial \Phi(x, y)}{\partial n(y)} + \frac{1}{|x|^{m-2}} \right \}ds(y) = 2f(x), \> \> x \in \Gamma
+\end{flalign}
+
+We observe that this is indeed a solution, as it has the required decay behaviour at infinity. Is it unique? Well, writing the integral operator of the above equation as $\tilde{K}$, let's consider a solution of the homogenous exterior Dirichlet problem $\phi$, $\phi + \tilde{K}\phi = 0$. From the representation we have chosen, we know that $2u = \tilde{K}\phi + \phi = 0$. Therefore, and from the uniqueness of the exterior problem we have it that $u \equiv 0$ in $\Omega_+$. Noticing the asymptotic behaviour of the kernel,
+
+$$ \frac{\partial \Phi(x,y)}{\partial n(y)}  = O(\frac{1}{|x|^{m-1}}), \> \> y \in \Gamma, \> \> |x| \rightarrow \infty $$
+
+We observe that as $|x| \rightarrow \infty$
+
+$$ |x|^{m-2} u(x) = \int_\Gamma \phi ds + O(\frac{1}{|x|})$$
+
+but we know that $u$ is 0 in the exterior, so the integral,
+
+$$\int_\Gamma \phi ds = 0$$
+
+Therefore, $\phi$ also satisfies the homogeneous un-modified exterior Dirichlet boundary integral equation $\phi + K\phi = 0$. You can see this by examining the asymptotic behaviour of the un-modified representation. Thus, we find that $\phi \in N(I+K) = span \{ 1 \}$, which by the above constraint on $\phi$, we see that $\phi \equiv 0$. As the homogeneous equation has only trivial solutions for our modified problem, we can conclude that for general inhomogeneities our solution is unique - we don't even need Fredholm, as this just uses Riesz.
 
 
+\begin{theorem}
+    The single-layer potential,
+
+    \begin{flalign}
+        u(x) = \int_\Gamma \psi(y) \Phi(x, y) ds(y), \> \> x \in \Omega_-
+    \end{flalign}
+    is a solution of the interior Nuemann problem provided $\psi$ solves the integral equation,
+
+    \begin{flalign}
+        \psi + 2 \int_\Gamma \psi(y) \frac{\partial \Phi(x, y)}{\partial n(x)} ds(y) = 2g(x), \> \> x \in \Gamma
+    \end{flalign}
+
+    \textbf{Proof}:
+    This just comes from the discontinuity in the derivative of the single-layer potential.
+\end{theorem}
+
+
+\begin{theorem}
+    The interior Neumann problem is only solvable if,
+
+    \begin{flalign}
+        \int_\Gamma g ds = 0        
+    \end{flalign}
+
+    \textbf{Proof}: The necessity can be seen as a result of the corollary we found for Green's theorem, $\int_\Gamma \partial u / \partial n ds = 0$. The sufficiency comes from the fact that it coincides with the solvability criteria of Fredholm's alternative with $\psi + K' \psi = 2g$ for the interior Neumann problem. i.e with 1 as a solution of the homogenous adjoint equation $1 + K 1 = 0$.
+\end{theorem}
+
+We can do something similar for the exterior Neumann problem, finding,
+
+\begin{theorem}
+    The single-layer potential,
+
+    \begin{flalign}
+        u(x) = \int_\Gamma \psi(y) \Phi(x, y) ds(y), \> \> x \in \Omega_+
+    \end{flalign}
+    is a solution of the exterior Nuemann problem provided $\psi$ solves the integral equation,
+
+    \begin{flalign}
+        \psi - 2 \int_\Gamma \psi(y) \frac{\partial \Phi(x, y)}{\partial n(x)} ds(y) = -2g(x), \> \> x \in \Gamma
+    \end{flalign}
+
+    if $m=2$, $\int_\Gamma \psi ds = 0$ is required for correct asymptotic behaviour.
+\end{theorem}
+
+\begin{theorem}
+    The exterior Neumann problem is only solvable if,
+
+    \begin{flalign}
+        \int_\Gamma g ds = 0        
+    \end{flalign}
+
+\end{theorem}
+
+\subsubsection{Direct Representations}
+
+The approach above is often called \textbf{indirect}, in the sense that we form boundary integral equations using surface potentials, solve for some unknown charge/dipole density, and then plug back into the representation formula to find our desired solution. Instead, boundary integral equations can be formed using (\ref{eq:greens_repr}) \textbf{directly}.
+
+The major advantage of the direct representation is that we're solving for the Cauchy data itself, without additional computations. Though as shown on p74-76 of \cite{kress2012} the inhomogeneities involved are harder to compute.
 
 \subsection{Helmholtz}
 
 \subsection{Maxwell}
-
 
 \printbibliography[heading=bibintoc]
 
