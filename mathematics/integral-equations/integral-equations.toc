@@ -6,22 +6,28 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.2}Fredholm Theory}{7}{subsection.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Potential Theory}{10}{section.2}%
+\contentsline {section}{\numberline {2}Potential Theory}{11}{section.2}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1}Surface Potentials}{13}{subsection.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Boundary Value Problems}{13}{section.3}%
+\contentsline {section}{\numberline {3}Boundary Value Problems}{14}{section.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Laplace}{13}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.1}Laplace}{14}{subsection.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.1.1}Jump Relations}{16}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Jump Relations}{17}{subsubsection.3.1.1}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {3.1.2}Boundary Integral Equations}{19}{subsubsection.3.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\numberline {3.1.3}Direct Representations}{25}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.3}Direct Representations}{26}{subsubsection.3.1.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Helmholtz}{26}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.2}Scalar Helmholtz}{26}{subsection.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Maxwell}{26}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.2.1}Resonances}{28}{subsubsection.3.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{References}{26}{section*.3}%
+\contentsline {subsubsection}{\numberline {3.2.2}Boundary Integral Equations}{29}{subsubsection.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.2.3}Boundary Integral Equations of the First Kind}{30}{subsubsection.3.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3}Vector Helmholtz (Maxwell)}{32}{subsection.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{References}{32}{section*.3}%

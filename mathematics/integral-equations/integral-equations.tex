@@ -875,9 +875,212 @@ The approach above is often called \textbf{indirect}, in the sense that we form 
 
 The major advantage of the direct representation is that we're solving for the Cauchy data itself, without additional computations. Though as shown on p74-76 of \cite{kress2012} the inhomogeneities involved are harder to compute.
 
-\subsection{Helmholtz}
+\subsection{Scalar Helmholtz}
 
-\subsection{Maxwell}
+The Helmholtz equation naturally arises from the wave equation describing the motion of acoustic waves. Consider damped wave motion, arriving from linearized theory,
+
+\begin{flalign}
+    \frac{\partial^2U}{\partial dt^2} + \gamma \frac{\partial U}{\partial t} - c^2 \Delta U = 0
+\end{flalign}
+
+where $U(x, t)$ describes the velocity potential of a wave, with an associated velocity field,
+
+\begin{flalign}
+    v = \frac{1}{\rho} \text{grad} (U)
+\end{flalign}
+
+where $\rho$ is the density of the medium. 
+
+Considering time-harmonic waves, where we're able to write $U(x,t) = u(x)e^{-i\omega t}$, with frequency $\omega > 0$, we can separate out the time dependence as the Helmholtz equation.
+
+\begin{flalign}
+    (\Delta  + k^2)u = 0
+\end{flalign}
+
+where the \textit{wave number}, $k \neq 0$, is given by,
+
+\begin{flalign}
+    k^2 = \frac{\omega (\omega + i \gamma)}{c^2}
+\end{flalign}
+
+We see that the Laplace equation is just a special case of the Helmholtz equation with $k = 0$. If we can solve the Helmholtz equation for the spatial dependence of time-harmonic waves, we can track-back to find their time dependence too. Solving the Helmholtz equation is crucial for our target application of Maxwell. As we'll see later the Maxwell equations can be broken down into Helmholtz style problems in some circumstances.
+
+Much of the previous analysis about the uniqueness and existence of solutions to the four prototypical problems still applies in the Helmholtz case. However, the straightforward application of potential theory as before to formulate boundary-integral equations for scattering leads to equations that don't have unique solutions for wave-numbers that correspond to eigenvalues of certain interior boundary value problems. These are known as spurious resonances, and are an artifact of the solution formulation rather than something that's necessarily physical. A major field of research is the elimination or minimisation of these artifacts.
+
+\begin{theorem}
+    Let $\text{Im } k > 0$. Then the interior Dirichlet and Neumann problems have at most one solution - i.e. they are unique.
+
+    \textbf{Proof}:
+
+    Once again the proof rests on showing that the solution of the homogeneous problems are identically 0, that is that the nullspace of the operators for these problems is $\{0 \}$.
+
+    From Green's first theorem,
+
+    $$ \int_\Omega u \Delta v dx  = \int_{\partial \Omega} u \frac{\partial v}{\partial n} ds - \int_\Omega (\nabla u, \nabla v) dx$$
+
+    Subbing in the homogeneous Helmholtz equation.
+
+    $$ -\int_\Omega k^2 |u|^2 dx = \int_{\partial \Omega} u \frac{\partial u}{\partial n} ds - \int_\Omega |\nabla u|^2 dx $$
+
+    $$  \int_{\partial \Omega} u \frac{\partial u}{\partial n} ds =  \int_\Omega |\nabla u|^2 - k^2 |u|^2 dx $$
+
+    The lhs vanishes for the homogeneous Dirichlet or Neumann boundary conditions, and $\text{Im }k > 0$, wlog consider $\text{Re }k = 0$, you can see that,
+
+    $$ \int_\Omega |\nabla u|^2 dx = 0 $$
+
+    so that the integral on the rhs can vanish. This implies that $u \equiv 0$ inside $\Omega$.
+
+\end{theorem}
+
+\subsubsection{Resonances}
+
+We lose uniqueness for interior problems if $\text{Im } k = 0$. By separation of variables in spherical polar coordinates, one can write decompose the solution of the Helmholtz equation as,
+
+\begin{flalign}
+    u_n^m(x) = j_n(kr)Y_n^m(\theta, \phi)
+\end{flalign}
+
+where $j_n(.)$ are the spherical Bessel functions and $Y_n^m$ are the spherical harmonics. We observe like the authors of \cite{coltonkress2013} that if $\Omega$ is taken to be a unit ball (we can then consider the radial component in isolation), when $k$ is at a resonant frequency, i.e. a zero of the spherical Bessel function, we can't distinguish $u_n^m = 0$ from solutions at other resonant frequencies for the homogeneous interior Dirichlet problems.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{bessel_zeros.png}
+    \caption{Zeros of the first order spherical Bessel function for $k = 1$.}
+    \label{fig:bessel_zeros}
+\end{figure}
+
+
+Similarly for interior Neumann problems the same effect can be observed where we instead consider the zeros of the first derivative of the spherical Bessel function. 
+
+This can be shown for \textit{any bounded domain}, using variational methods or Hilbert-Schmidt theory of symmetric integral operators \cite{coltonkress2013}. The set of these numbers are countably infinite. $\mathcal{D}(\Omega)$  are called the set of interior Dirichlet eigenvalues, and $\mathcal{N}(\Omega)$ are called the set of interior Neumann eigenvalues.
+
+In general, for a real $k$ we do not have guaranteed uniquess for interior problems. This is a serious issue, and does cause problems as we formulate our boundary integral equations.
+
+\subsubsection{Boundary Integral Equations}
+
+As we did for Laplace, we can again formulate boundary integral equations based on the representation of our solution as as a double-layer potential.
+
+\begin{flalign}
+    u(x) = \int_{\partial \Omega} \frac{\partial \Phi(x, y)}{\partial n(y)}\psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \partial \Omega
+\end{flalign}
+
+with a continuous density $\psi$ that solves the boundary integral equation derived from the interior Dirichlet problem,
+
+\begin{flalign}
+    &\psi(x) - 2 \int_{\partial D} \frac{\partial \Phi(x, y)}{\partial n (y)}\psi(y) ds(y) = -2f(x), \> \> x \in \partial \Omega \\
+    &\psi - K \psi = -2 f
+\end{flalign}
+
+For the interior Neumann problem, we wisely (as will be apparent) start of by representing our solution as a single-layer potential instead,
+
+\begin{flalign}
+    u(x) = \int_{\partial \Omega} \Phi(x, y) \psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \partial \Omega
+\end{flalign}
+
+Taking the normal derivative at the targets,
+
+\begin{flalign}
+    \frac{\partial u(x)}{\partial n (x)} = \int_{\partial \Omega} \frac{\partial \Phi(x, y)}{\partial n (x)} \psi(y) ds(y)
+\end{flalign}
+
+and applying the jump relation to get our integral equation in terms of Neumann data and the single layer acoustic density,
+
+\begin{flalign}
+    &\int_{\partial \Omega} \frac{\partial \Phi(x, y)}{\partial n (x)} \psi(y) ds(y) + \frac{1}{2}\phi(x) = g(x), \> \> x \in \partial \Omega \\
+    &\phi + K'\phi = 2g
+\end{flalign}
+
+Repeating this trick for the exterior Neumann and Dirichlet problems, we get a set of integral equations. For the interior and exterior Dirichlet problems,
+
+\begin{flalign}
+    \psi - K\psi = -2f \\ 
+    \psi + K \psi = 2f
+\end{flalign}
+
+and for the interior and exterior Neumann problems,
+
+\begin{flalign}
+    \phi + K'\phi = 2g \\
+    \phi - K'\phi = -2g
+\end{flalign}
+
+We observe the duality between the interior Dirichlet / exterior Neumann problem, and vice versa. This basically means, going back to our preliminary theory, that the nullspace of $(I+K)$ corresponds to the solution space of the homogenous interior Neumann problem. They prove this on p81 of \cite{coltonkress2013}. Ok, why does this matter? Well, it matters because our solution space for the homogeneous interior Neumann problem is degenerate at the values of Neumann eigenvalues, so we lose uniqueness for the exterior Dirichlet problem by our choice of formulation! This is annoying, as we know that the exterior Dirichlet problem is uniquely determined, due to Rellich's famous lemma p78 \cite{coltonkress2013}. This is true also for the adjoint problem, where the exterior Neumann problem fails to be uniquely resolvable in our formulation at wave numbers corresponding to Dirichlet eigenvalues.
+
+\subsubsection{Boundary Integral Equations of the First Kind}
+
+Let's now try to formulate first kind equations, we'll see that this approach is still fraught with difficulties.
+
+For the Dirichlet problem, we get a first-kind equation by representing the solution as a single-layer potential,
+
+\begin{flalign}
+    u(x) = \int_{\Omega} \Phi(x, y)\phi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \partial D
+\end{flalign}
+
+This solves the interior and exterior Dirichlet problem, as long as the density satisfies the boundary integral equation,
+
+\begin{flalign}
+    \int_{\partial \Omega} \Phi(x, y) \phi(y) ds(y), \> \> x \in \partial \Omega
+\end{flalign}
+
+or 
+
+\begin{flalign}
+    \mathcal{S}\phi = f
+\end{flalign}
+
+This is a first-kind equation, and falls out of the realm of our well-developed Riesz-Fredholm theory. We can still try and solve it with some trickery to force it back into our theoretical framework. From the definition of the single-layer jump relation,
+
+\begin{flalign}
+    \phi := \frac{\partial u_-}{\partial n} -  \frac{\partial u_+}{\partial n}, \> \> \text{on } \partial \Omega
+\end{flalign}
+
+Consider a representation in terms of a double layer potential to solve the interior Dirichlet problem,
+
+\begin{flalign}
+    \psi = -2(I-K)^{-1}f
+\end{flalign}
+
+similarly, for the exterior Dirichlet problem,
+
+\begin{flalign}
+    \psi = 2(I+K)^{-1}f
+\end{flalign}
+
+Now, let us try and solve the Neumann problems using our hypyersingular operator and a double layer potential,
+
+\begin{flalign}
+    u(x) = \int_{\partial \Omega} \frac{\partial \Phi(x, y)}{\partial n (y)} \psi(y) ds(y), \> \> x \in \mathbb{R} \setminus \partial D
+\end{flalign}
+
+we get the boundary integral equation,
+
+\begin{flalign}
+    \frac{\partial}{\partial n (x)} \int_{\partial \Omega} \frac{\partial \Phi(x, y)}{\partial n (y)} \psi(y) ds(y) = g(x), \> \> x \in  \partial D
+\end{flalign}
+
+which is `hypersingular', we can write it in operator form as,
+
+\begin{flalign}
+    T \psi = 2g = 2 \frac{\partial u}{\partial n}
+\end{flalign}
+
+Therefore, we can now see that,
+
+\begin{flalign}
+    u &:= T\psi_- - T\psi_+ \\
+    u &= -2 T((I-K)^{-1} - (I+K)^{-1})f\\
+    u &= -2T(I-K)^{-1}(I+K)^{-1}f
+\end{flalign}
+
+where the last line follows by identity. So we identify the solution operator with,
+
+\begin{flalign}
+    S^{-1} = -2T(I-K)^{-1}(I+K)^{-1}
+\end{flalign}
+
+This allows us to solve the first-kind equation, which we've craftily embedded into our second-kind framework. $T$ is not bounded, so the system is very ill-conditioned and subject to large perturbations with small perturbations in the input.
+
+\subsection{Vector Helmholtz (Maxwell)}
 
 \printbibliography[heading=bibintoc]
 
