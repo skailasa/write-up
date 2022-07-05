@@ -16,5 +16,30 @@
   {}
 \endgroup
 
-\datalist[entry]{nty/global//global/global}\enddatalist
+\datalist[entry]{nty/global//global/global}
+  \entry{Ambikasaran2013}{thesis}{}
+    \name{author}{1}{}{%
+      {{hash=AS}{%
+         family={Ambikasaran},
+         familyi={A\bibinitperiod},
+         given={Sivaram},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AS1}
+    \strng{fullhash}{AS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{number}{August}
+    \field{title}{{Fast Algorithms for Dense Numerical Linear Algebra and
+  Applications}}
+    \list{institution}{1}{%
+      {Stanford University}%
+    }
+    \field{type}{phdthesis}
+    \field{year}{2013}
+  \endentry
+\enddatalist
 \endinput
