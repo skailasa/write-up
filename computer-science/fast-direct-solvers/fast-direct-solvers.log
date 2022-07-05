@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  5 JUL 2022 18:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  5 JUL 2022 18:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -619,7 +619,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <outgoing_proxy.jpg, id=74, 2860.6875pt x 2770.35pt>
 File: outgoing_proxy.jpg Graphic file (type jpg)
 <use outgoing_proxy.jpg>
-Package pdftex.def Info: outgoing_proxy.jpg  used on input line 69.
+Package pdftex.def Info: outgoing_proxy.jpg  used on input line 71.
 (pdftex.def)             Requested size: 234.00238pt x 226.57835pt.
 [2]
 
@@ -628,38 +628,38 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [3 </Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/euler.png> </Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/table.png>] [4 </Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/outgoing_proxy.jpg>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 131.
+(hyperref)                removing `math shift' on input line 133.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 131.
+(hyperref)                removing `math shift' on input line 133.
 
 [5] [6]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 211.
+(hyperref)                removing `math shift' on input line 213.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 211.
+(hyperref)                removing `math shift' on input line 213.
 
 [7]
-Overfull \hbox (7.30324pt too wide) in paragraph at lines 233--234
+Overfull \hbox (7.30324pt too wide) in paragraph at lines 235--236
 \OT1/cmr/m/n/12 po-nents we must com-press are $\OML/cmm/m/it/12 C[] \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 r[]S[]$\OT1/cmr/m/n/12 , giv-ing us $[\OMS/cmsy/m/n/12 r[]S[]\OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 r[]S[]\OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 r[]S[]\OT1/cmr/m/n/12 ]$
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 246.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 248.
 [8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 246.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 248.
  (/Users/sri/Documents/Papers/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 246.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 246.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 248.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 248.
 Package rerunfilecheck Info: File `fast-direct-solvers.out' has not changed.
 (rerunfilecheck)             Checksum: 96D7574DA50A74FDDD912017CE452E25;618.
 Package logreq Info: Writing requests to 'fast-direct-solvers.run.xml'.
 \openout1 = `fast-direct-solvers.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 246.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 248.
  ) 
 Here is how much of TeX's memory you used:
  14223 strings out of 480608
