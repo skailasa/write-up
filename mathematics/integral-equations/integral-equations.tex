@@ -466,7 +466,7 @@ The single-layer potential for some density $\psi$ supported on the surface of s
 \begin{flalign}
     \label{eq:single_layer}
     u(x) &= \mathcal{S}[\psi(y)](x) \\
-    u(x) &= \int_{\partial \Omega} \Phi_0 \psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \Omega
+    u(x) &= \int_{\partial \Omega} \Phi_0 \psi(y) ds(y), \> \> x \in \mathbb{R}^3 \setminus \partial \Omega
 \end{flalign}
 
 where $y$ is a variable discretising the boundary (`sources'), and $x$ is a variable discretising the region of analyticity of the potential (`targets').
@@ -632,7 +632,7 @@ And we can summarise both relations with,
     v^+(x)-v^-(x) = \psi(x), \> \> x \in \Gamma
 \end{flalign}
 
-This is an example of a \textbf{Boundary Integral Equation}. The reasoning above isn't complete, mainly because integrals on the boundary are valid in the principle value sense, but it helps to intuit where these jumps come from. This does in fact generalize to the Helmholtz case too, and to higher dimensions. We get a similar discontinuity in the normal derivative of the single-layer potential from almost identitical mathematical reasoning to above,
+This is an example of a \textbf{Boundary Integral Equation}. The reasoning above isn't complete, mainly because integrals on the boundary are valid in the principle value sense, but it helps to intuit where these jumps come from. This does in fact generalize to the Helmholtz case too, and to higher dimensions. We get a similar discontinuity in the normal derivative of the single-layer potential from almost identical mathematical reasoning to above,
 
 \begin{flalign}
     \frac{\partial u}{\partial n(x)} &= \frac{\partial}{\partial n (x)} \int_\Gamma \psi(y) \Phi(x, y) ds(y) \\
