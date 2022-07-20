@@ -76,7 +76,7 @@ Proxy compression is necessary in order to achieve the linear complexity bound o
 
 For a given box $B$, a proxy surface $D$ and its boundary $\gamma$ are chosen such that $B \subset D$. The far-field points of $B$, $\mathcal{F}$ is partitioned such that $\mathcal{F} = \mathcal{Q} \cup \mathcal{P}$, where $\mathcal{Q}$ contains $O(1)$ points. $\Gamma$ is the boundary of the entire scatterer, and $\tau = \Gamma \cap B$ is the portion of the scatterer boundary contained in $B$. The situation is sketched in figure (\ref{fig:outgoing_proxy}) in 2D.
 
-We can choose to represent our solution due to the charge in $B$ in $\mathcal{F}$ however we wish. However, our choice will lead to different matrices that we must compress. 
+We can choose to represent our solution due to the charge in $B$ in $\mathcal{F}$ however we wish. However, our choice will lead to different matrices that we must compress.
 
 Generally, we'll end up with a solution matrix of the form $A_{\mathcal{F}B}$ that maps between $B$ and points in its far-field that can be split up as,
 
@@ -114,16 +114,16 @@ Where $S$ and $R$ are the skeleton and redundant points respectively. Plugging b
 
 \begin{flalign}
     \label{eq:compressed}
-    A_{\mathcal{F}B} &= 
+    A_{\mathcal{F}B} &=
         \begin{bmatrix}
-            I & 0\\ 0 & B_{\mathcal{P}\gamma} 
-        \end{bmatrix}    
+            I & 0\\ 0 & B_{\mathcal{P}\gamma}
+        \end{bmatrix}
         \begin{bmatrix}
              A_{\mathcal{Q}S}\\ C_{\gamma S}
         \end{bmatrix}
         \begin{bmatrix}T_{SR}  & 1 \end{bmatrix} \\
         &=\begin{bmatrix}
-            A_{\mathcal{Q}S}\\ B_{\mathcal{P} \gamma}C_{\gamma S} 
+            A_{\mathcal{Q}S}\\ B_{\mathcal{P} \gamma}C_{\gamma S}
        \end{bmatrix} \begin{bmatrix}T_{SR}  & 1 \end{bmatrix} \\
        &=  A_{\mathcal{F}S} \begin{bmatrix}T_{SR}  & 1 \end{bmatrix}
 \end{flalign}
@@ -137,7 +137,7 @@ Therefore, we see that we can get away with a cheap ID to reconstruct the far-fi
 A double-layer potential, due to some unknown density $\psi$, supported on $\tau$,
 
 \begin{flalign}
-    v(x) = \int_{\Gamma \cap B} \frac{\partial \Phi(x, y)}{\partial n(y)} \psi(y) ds(y) := \mathcal{D}\psi, \> \> x \in \mathbb{R}^m \setminus \tau 
+    v(x) = \int_{\Gamma \cap B} \frac{\partial \Phi(x, y)}{\partial n(y)} \psi(y) ds(y) := \mathcal{D}\psi, \> \> x \in \mathbb{R}^m \setminus \tau
 \end{flalign}
 
 solves the Helmholtz equation everywhere it's valid. Here, $\Phi(x, y)$ is the fundamental solution of the Helmholtz equation. However, its normal derivative evaluated at the target points, which we'll need for deriving boundary integral equations for Maxwell problems, does not,
@@ -186,14 +186,14 @@ where $\mu$ is some unknown density supported on the proxy surface $\gamma$. For
 
 \begin{flalign}
     \tilde{w} &=  (\mathcal{D} - ik \mathcal{S})_{\mathcal{F} \gamma}(\frac{1}{2}\mathcal{I} + \mathcal{D} - ik \mathcal{S})_{\gamma \gamma}^{-1}w_1 \\
-    &= (\mathcal{D} - ik \mathcal{S})_{\mathcal{F} \gamma}(\frac{1}{2}\mathcal{I} + \mathcal{D} - ik \mathcal{S})_{\gamma \gamma}^{-1} \nabla_1 \mathcal{D}_{\gamma B} \psi_\gamma \\ 
+    &= (\mathcal{D} - ik \mathcal{S})_{\mathcal{F} \gamma}(\frac{1}{2}\mathcal{I} + \mathcal{D} - ik \mathcal{S})_{\gamma \gamma}^{-1} \nabla_1 \mathcal{D}_{\gamma B} \psi_\gamma \\
     &\equiv B_{\mathcal{F}\gamma} C_{\gamma B} \psi_\gamma
 \end{flalign}
 
 where we identify,
 
 \begin{flalign}
-    C_{\gamma B} = \nabla_1 \mathcal{D}_{\gamma B} 
+    C_{\gamma B} = \nabla_1 \mathcal{D}_{\gamma B}
 \end{flalign}
 
 This is the matrix we will attempt to compress. Similar analysis follows for the other two components of $w(x)$. Meaning that we end up having to compress $[\nabla_1 \mathcal{D}_{\gamma B} , \nabla_2 \mathcal{D}_{\gamma B} , \nabla_3 \mathcal{D}_{\gamma B}]$ for the outgoing problem.
@@ -244,6 +244,105 @@ Noticing that,
 
 already satisfies our PDE without any further work, we can save a lot of work, and simply use it as our Dirichlet data in the associated boundary value problem. The matrix to compress being $C_{\gamma B} = \mathcal{D}_{\gamma B}$.
 
+\section{Example Problems}
+
+Let's now apply our fast direct solver framework, with proxy compression to some example problems. We begin with acoustic sound-hard scattering, which is a didactic example.
+
+\subsection{Acoustic Sound Hard Scattering}
+
+Consider a scattered field $u^s$, that bounces off an object $\Omega$ and satisfies the Helmholtz equation in the exterior,
+
+\begin{flalign}
+    (\Delta + k^2)u^s = 0, \> \> \> \text{in  } \mathbb{R}^3 \setminus \Omega
+\end{flalign}
+
+The `sound hard' boundary condition on the surfae $\Gamma$ is
+\begin{flalign}
+    \frac{\partial u^s}{\partial n} = \frac{\partial u^{i}}{\partial n}, \> \> \> \text{in  } \Gamma
+\end{flalign}
+
+where $u^i$ is the incident wave. Using the analysis in \cite{Bruno2012}, we write down a `regularised' representation formula for our solution. This regularisation can be shown to have better spectral properties.
+
+\begin{flalign}
+    u^s =(\mathcal{K}_k \circ \mathcal{S}_K - i\eta \mathcal{S}_k)
+\end{flalign}
+
+where $k$ and $K$ are complex wave numbers, that may not be the same. We can take the trace of this representation, and its normal derivative at the targets, and find a boundary integral equation for the exterior problem,
+
+\begin{flalign}
+    (\frac{i \eta}{2} \mathcal{I}- i \eta \mathcal{K}'_k + \mathcal{T}_k \circ \mathcal{S}_K )\mu = g
+\end{flalign}
+
+using the Calder\'{o}n identity,
+
+\begin{flalign}
+    \mathcal{T}_k\circ \mathcal{S}_k = -\frac{1}{4}\mathcal{I} + \mathcal({K}_k')^2
+\end{flalign}
+
+which is true for any $k$, we arrive at a boundary integral equation,
+
+\begin{flalign}
+    \left ( i \eta(\frac{1}{2}\mathcal{I}  - \mathcal{K}'_k) - \frac{1}{4}I+ \mathcal({K}_k')^2 \right ) \mu = g
+\end{flalign}
+
+by defining $\theta := \mathcal{K}'_k \mu$, we can write the boundary integral equation as a system,
+
+\begin{flalign}
+\begin{pmatrix}
+(\frac{i\eta}{2} - \frac{1}{4})\mathcal{I} - i \eta \mathcal{K}'_k & \mathcal{K}'_k  \\
+ \mathcal{K}'_k & - \mathcal{I}
+\end{pmatrix}
+\begin{pmatrix} \mu \\ \theta \end{pmatrix} = \begin{pmatrix}
+    g \\ 0
+\end{pmatrix}
+\end{flalign}
+
+We can then place this system into our fast direct solver framework. Despite not knowing how to compress the system matrix altogether, we do know how to compress each block, as they each correspond to displacements of $\mathcal{K}'_k$.
+
+Consider writing out our block matrix as,
+
+
+\begin{flalign}
+    \begin{pmatrix}
+        A & B \\ C & D
+    \end{pmatrix}
+    \begin{pmatrix}
+        \mu\\\theta
+    \end{pmatrix}
+   = \begin{pmatrix}
+        g\\ 0
+    \end{pmatrix}
+\end{flalign}
+
+and re-writing as,
+
+\begin{flalign}
+    \begin{pmatrix}
+        \begin{pmatrix}
+            A_{11} & B_{11} \\ C_{11} & D_{11}
+        \end{pmatrix} & . & .\\
+        . & . & \\
+        . & &     \begin{pmatrix}
+            A_{NN} & B_{NN} \\ C_{NN} & D_{NN}
+        \end{pmatrix}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \mu_1 \\ \theta_1 \\ . \\ . \\ \mu_n \\ \theta_n
+    \end{pmatrix} =
+    \begin{pmatrix}
+        g_1 \\ 0 \\ . \\ . \\ g_N \\ 0
+    \end{pmatrix}
+\end{flalign}
+
+This system matrix remains numerically low-rank, and therefore can fit into our FDS framework. Indeed, we now have to compress a system of matrix operators in order to capture its row space via the proxy trick,
+
+\begin{flalign}
+    f
+\end{flalign}
+
+\subsection{Acoustic Transmission}
+
+\subsection{Maxwell Scattering}
 
 \end{document}
 

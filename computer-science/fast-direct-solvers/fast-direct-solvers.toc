@@ -2,9 +2,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {1}A Hierarchical Matrix Zoo}{2}{section.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Strong Recursive Skeletonization: RS-S}{2}{section.2}%
+\contentsline {section}{\numberline {2}Strong Recursive Skeletonization: RS-S}{3}{section.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Proxy Compression}{2}{section.3}%
+\contentsline {section}{\numberline {3}Proxy Compression}{3}{section.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1}$\mathcal {T}$}{5}{subsection.3.1}%
 \defcounter {refsection}{0}\relax 
@@ -17,3 +17,11 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Outgoing Skeletonization}{8}{subsubsection.3.2.1}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{\numberline {3.2.2}Incoming Skeletonization}{8}{subsubsection.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Example Problems}{9}{section.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1}Acoustic Sound Hard Scattering}{9}{subsection.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Acoustic Transmission}{10}{subsection.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Maxwell Scattering}{10}{subsection.4.3}%

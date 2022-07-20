@@ -41,5 +41,73 @@
     \field{type}{phdthesis}
     \field{year}{2013}
   \endentry
+
+  \entry{Bruno2012}{article}{}
+    \name{author}{3}{}{%
+      {{hash=BO}{%
+         family={Bruno},
+         familyi={B\bibinitperiod},
+         given={Oscar},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=ET}{%
+         family={Elling},
+         familyi={E\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=TC}{%
+         family={Turc},
+         familyi={T\bibinitperiod},
+         given={Catalin},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \keyw{Acoustic scattering,Combined field integral
+  equations,Pseudo-differential operators}
+    \strng{namehash}{BOETTC1}
+    \strng{fullhash}{BOETTC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{abstract}{%
+    This text introduces the following: (1) new regularized combined field
+  integral equations (CFIE-R) for frequency-domain sound-hard scattering
+  problems; and (2) fast, high-order algorithms for the numerical solution of
+  the CFIE-R and related integral equations. Similar to the classical combined
+  field integral equation (CFIE), the CFIE-R are uniquely-solvable integral
+  equations based on the use of single and double layer potentials. Unlike the
+  CFIE, however, the CFIE-R utilize a composition of the double-layer potential
+  with a regularizing operator that gives rise to highly favorable spectral
+  properties-thus making it possible to produce accurate solutions by means of
+  iterative solvers in small numbers of iterations. The CFIE-R-based fast
+  high-order integral algorithms introduced in this text enable highly accurate
+  solution of challenging sound-hard scattering problems, including
+  hundred-wavelength cases, in single-processor runs on present-day desktop
+  computers. A variety of numerical results demonstrate the qualities of the
+  numerical solvers as well as the advantages that arise from the new integral
+  equation formulation. {\textcopyright} 2012 John Wiley & Sons, Ltd.%
+    }
+    \verb{doi}
+    \verb 10.1002/NME.4302
+    \endverb
+    \field{issn}{00295981}
+    \field{number}{10}
+    \field{pages}{1045\bibrangedash 1072}
+    \field{title}{{Regularized integral equations and fast high-order solvers
+  for sound-hard acoustic scattering problems}}
+    \field{volume}{91}
+    \verb{file}
+    \verb :home/sri/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded
+    \verb /Bruno, Elling, Turc - 2012 - Regularized integral equations and fast
+    \verb  high-order solvers for sound-hard acoustic scattering problems.pdf:p
+    \verb df
+    \endverb
+    \field{journaltitle}{International Journal for Numerical Methods in
+  Engineering}
+    \field{year}{2012}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
 \enddatalist
 \endinput
