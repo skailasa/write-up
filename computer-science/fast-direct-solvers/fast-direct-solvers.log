@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.4)  20 JUL 2022 13:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.5.4)  10 AUG 2022 16:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -604,7 +604,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write5
 \openout5 = `fast-direct-solvers.toc'.
 
-<euler.png, id=91, 475.7775pt x 396.48125pt>
+<euler.png, id=121, 475.7775pt x 396.48125pt>
 File: euler.png Graphic file (type png)
 <use euler.png>
 Package pdftex.def Info: euler.png  used on input line 48.
@@ -613,7 +613,7 @@ Package pdftex.def Info: euler.png  used on input line 48.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<table.png, id=93, 720.6925pt x 307.1475pt>
+<table.png, id=123, 720.6925pt x 307.1475pt>
 File: table.png Graphic file (type png)
 <use table.png>
 Package pdftex.def Info: table.png  used on input line 56.
@@ -621,11 +621,8 @@ Package pdftex.def Info: table.png  used on input line 56.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Underfull \vbox (badness 5077) has occurred while \output is active []
-
- [2]
-<outgoing_proxy.jpg, id=104, 2860.6875pt x 2770.35pt>
+[2]
+<outgoing_proxy.jpg, id=134, 2860.6875pt x 2770.35pt>
 File: outgoing_proxy.jpg Graphic file (type jpg)
 <use outgoing_proxy.jpg>
 Package pdftex.def Info: outgoing_proxy.jpg  used on input line 71.
@@ -657,26 +654,43 @@ Overfull \hbox (7.30324pt too wide) in paragraph at lines 235--236
 \OT1/cmr/m/n/12 po-nents we must com-press are $\OML/cmm/m/it/12 C[] \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 r[]S[]$\OT1/cmr/m/n/12 , giv-ing us $[\OMS/cmsy/m/n/12 r[]S[]\OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 r[]S[]\OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 r[]S[]\OT1/cmr/m/n/12 ]$
  []
 
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 247.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 247.
+
 [8] [9]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
- [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 298.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 298.
+
+[10] [11] [12] [13]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 483.
+ [14]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 483.
  (/home/sri/Github/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 347.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 483.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 483.
 Package rerunfilecheck Info: File `fast-direct-solvers.out' has not changed.
-(rerunfilecheck)             Checksum: C77F9F24055226A1DFF410C86EB73EE0;889.
+(rerunfilecheck)             Checksum: CD0A0B1E19D7B6CB404BF51CAA387E72;1327.
 Package logreq Info: Writing requests to 'fast-direct-solvers.run.xml'.
 \openout1 = `fast-direct-solvers.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 483.
  ) 
 Here is how much of TeX's memory you used:
- 14252 strings out of 481239
- 247020 string characters out of 5920378
- 718951 words of memory out of 5000000
- 29248 multiletter control sequences out of 15000+600000
- 543426 words of font info for 66 fonts, out of 8000000 for 9000
+ 14295 strings out of 481239
+ 247605 string characters out of 5920378
+ 718958 words of memory out of 5000000
+ 29256 multiletter control sequences out of 15000+600000
+ 544047 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  35i,20n,39p,1027b,1135s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{cite.0@Bruno2012} has been referenced but does not exist, replaced by a fixed one
@@ -684,10 +698,10 @@ pdfTeX warning (dest): name{cite.0@Bruno2012} has been referenced but does not e
 pdfTeX warning (dest): name{cite.0@Ambikasaran2013} has been referenced but does not exist, replaced by a fixed one
 
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on /home/sri/Github/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.pdf (10 pages, 2252902 bytes).
+Output written on /home/sri/Github/write-up/computer-science/fast-direct-solvers/fast-direct-solvers.pdf (14 pages, 2262225 bytes).
 PDF statistics:
- 252 PDF objects out of 1000 (max. 8388607)
- 217 compressed objects within 3 object streams
- 67 named destinations out of 1000 (max. 500000)
- 120 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 328 PDF objects out of 1000 (max. 8388607)
+ 289 compressed objects within 3 object streams
+ 100 named destinations out of 1000 (max. 500000)
+ 168 words of extra memory for PDF output out of 10000 (max. 10000000)
 
