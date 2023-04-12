@@ -1,0 +1,129 @@
+\documentclass[12pt, a4, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{adaptive-fmm.bib}
+
+\title{Accelerated M2L}
+% \author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Accelerating the M2L with the SVD}
+
+Consider the application of the M2L operator $K$ to a multipole expansion $w$ to get the check potential $g$.
+
+\begin{equation}
+    g = K w
+\end{equation}
+
+This can be approximated with a rank $k$ SVD,
+
+\begin{equation}
+    \tilde{g} = U_k \Sigma_k V_k^T
+\end{equation}
+
+
+Stacking the M2L operators for all the source nodes in a given target node's interaction list can be done in two ways, column wise,
+
+\begin{flalign}
+    K_{\text{fat}} &= \left [ K^1, ..., K^316 \right ] \\
+    &= U \Sigma \left [ V^{(1)T}, ..., V^{(316)T} \right ]
+\end{flalign}
+
+where we use the fact that there are at most 316 unique orientations for the M2L operator in 3D. Similarly they can be stacked row wise,
+
+\begin{flalign}
+    K_{\text{thin}} &= \left [ K^1; ...; K^{316} \right ] \\
+    &= \left [ R^{(1)T}; ...; R^{(316)T} \right ]  \Lambda S^T
+\end{flalign}
+
+we note that
+\begin{flalign}
+    K_{\text{thin}}  = K_{\text{fat}}^T 
+\end{flalign}
+
+for symmetric kernels.
+
+We can do some algebra to reduce the application cost of $K$ when we've done these two SVDs. Consider the application of a single M2L operator corresponding to a single source box in a target box's interaction list,
+
+\begin{flalign}
+    K^{(i)}w = R^{(i)}\Lambda S^T w
+\end{flalign}
+
+Using the fact that $S$ is unitary, $S^TS = I$, we can insert into the above equation,
+
+\begin{flalign}
+    K^{(i)}w &= R^{(i)}\Lambda S S^T S^T w \\
+    &= K^{(i)} SS^T w \\ 
+    &= U \Sigma V^{(i)T} SS^T w \\
+\end{flalign}
+
+Now using the fact that $U$ is also unitary, such that $U^T U = I$, we find
+
+\begin{flalign}
+    K^{(i)}w &= UU^T U \Sigma V^{(i)T} SS^T w \\
+    &= U [U^T U \Sigma V^{(i)T} S] S^T w \\
+    &= U[U^T K^{(i)} S] S^T w 
+\end{flalign}
+
+The term in the brackets can be calculated using the low rank (k-rank) terms from the SVD,
+
+\begin{flalign}
+    [U^T K^{(i)} S] &= \Sigma V^{(i)T}S\\
+    &= U^T R^{(i)} \Lambda 
+\end{flalign}
+
+We call this previous equation the compressed M2L operator,
+
+\begin{flalign}
+    C^{i,k} =  U^T K^{(i)} S
+\end{flalign}
+
+This object can be pre-computed for each unique interaction. The M2L operation can be then broken down into 4 steps
+
+1. Find the `compressed multipole expansion'
+
+\begin{flalign}
+    w_c = S^T w    
+\end{flalign}
+
+2. Compute the convolution to find the compressed check potential
+
+\begin{flalign}
+    g_c = \sum_{i \in I} C^{i, k} w_c
+\end{flalign}
+
+where the sum is over the interaction list $I$.
+
+3. A post processing step to recover the check potential
+
+\begin{flalign}
+    g = U g_c
+\end{flalign}
+
+4. The calculatation of the local expansion, as usual, in the KIFMM.
+
+Doing this the convolution step is reduced to matrix vector products involving the compressed M2L matrix, which is only of size $k \times k$, rather than $6(p-1)^2 + 2$ where $p$ is the expansion order.
+
+\end{document}

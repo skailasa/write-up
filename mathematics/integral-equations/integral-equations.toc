@@ -10,6 +10,8 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1}Surface Potentials}{13}{subsection.2.1}%
 \defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Regularity Properties of Surface Potentials}{14}{subsection.2.2}%
+\defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Boundary Value Problems}{14}{section.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1}Laplace}{14}{subsection.3.1}%
