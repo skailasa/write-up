@@ -132,6 +132,8 @@ Doing this the convolution step is reduced to matrix vector products involving t
 
 \subsection{Taking Advantage of Modern Compute Architectures}
 
+For scale invariant kernels (e.g. Laplace, Helmholtz etc) many M2L translations can be seen to be rotations/scalings of each other. The authors of \cite{Messner2012} take advantage of this to batch together the matvecs that correspond to M2L interactions into cache-efficient matrix-matrix products that take advantage of highly-efficient BLAS L3 operations. We describe our adaption of this approach here, as well as its limitations \dots
+
 \section{Accelerating M2L with FFT}
 
 The M2L operation can also be accelerated with a fast fourier transform (FFT). The M2L accelerated this way is quite natural, as it's simply a convolution operation, however computing it in practice can be be tricky. Here I document how I've managed to compute it, as well as a summary of the relevant FFT theory as a background.
@@ -202,7 +204,6 @@ Therefore,
 \end{flalign}
 
 We've pulled the coefficient out, but the expression involves all the other coefficients! Instead, we can try and integrate both sides over 0 to 1 (any function can be made to have this period if it's periodic). The integrals in the sum all cancel out,
-
 
 \begin{flalign}
     \int_0^1 e^{2\pi (n-k)t}dt = \frac{1}{2\pi i (n-k)} e^{2\pi i (n-k)t} |_{t=0}^{t=1} = 0
@@ -378,12 +379,136 @@ $$
 N = \frac{2B}{1/L} = 2BL
 $$
 
-the same as in the time domain.
+the same as in the time domain. We base the discrete version of the FT using the discrete version of the signal,
+
+\begin{flalign}
+    F(s_0) = \sum_{n=0}^{N-1}f(t_n)e^{-2 \pi i s_0 t_n}
+\end{flalign}
+
+etc. We now have a way of converting from the discrete signal to the discrete FT,
+
+\begin{flalign}
+    F(s_m) = \sum_{n=0}^{N-1} f(t_n) e^{-2 \pi i s_m t_n}
+\end{flalign}
+
+It's possible to link this to the continuous case by discretising the integral defining a continuous FT, we see that this sum (up to a scaling) comes out.
+
+using,
+
+\begin{flalign}
+    t_n = \frac{n}{2B}, \> \> s_m = \frac{m}{L}
+\end{flalign}
+
+we can write in terms of indices,
+
+\begin{flalign}
+    F(s_m) = \sum_{n=0}^{N-1} f(t_n) e ^{-2\pi i n m / 2BL} = \sum_{n=0}^{N-1} f(t_n) e ^{-2\pi i n m / N } 
+\end{flalign}
+
+Thinking about io as sequences of numbers, we can write in `array' form, where the transform is just defined on a sequence.
+
+\begin{flalign}
+    \mathbf{F}[m] = \sum_{n=0}^{N-1} \mathbf{f}[n] e^{-2\pi i m n /N}, \> \> m=0, 1, ..., N-1
+\end{flalign}
+
+The input sequence can be complex, it's not less valid, but the output sequence is always complex.
+
+A common notation is to write the complex exponentials as,
+
+$$
+\omega = e ^{2 \pi i /N} = \omega_N
+$$
+
+s.t.
+
+$$
+\omega_N^N = 1
+$$
+
+for any integer $n$ and $k$,
+
+$$
+\omega^{Nn}_N = 1
+$$
+
+$$
+\omega^{Nn+k}_N = \omega_N^k
+$$
+
+and,
+
+$$
+\omega_N^{N/2} = -1
+$$
+
+so,
+
+$$
+\omega_N^{kN/2} = (-1)^k
+$$
+
+We write a vector of the $N$th roots of unity as,
+
+$$
+\mathbf{\omega} = (1, \omega, \omega^2, ..., \omega^{N-1})
+$$
+
+the components,
+
+$$
+\mathbf{\omega}^k[m] = \omega^{km}
+$$
+
+The DFT can be thought of as a linear transfrom between $\mathbb{C}^N$ to $\mathbb{C}^N$. This linear transform can be explicitly written out as a matrix, which I won't bother with here, look at 257 in \cite{Osgood2014}.
+
+This is a dense $N \times N$ matrix! The FT is in general hard to compute, hence the revolution of the FFT which can do it in log-linear time.
+
 
 
 \subsection{The M2L Translation as a Fourier Convolution}
 
+For the M2L operation we're computing the following convolution,
 
+\begin{flalign}
+    \phi(x) = \int G(x-y) q(y)dy
+\end{flalign}
+
+where we're attempting to compute the far-field potential as a convolution of the Green's function with a charge distribution (multipole expansion) at some local box. This is definitely somewhere we can apply the FT/FFT. How is this actually done in practice though, we're only concerned about the BBFMM \cite{Fong2009} case where the charge distributions/multipole expansions are placed at regular intervals on the surface of a box enclosing a node in the octree. In the literature there is a significant gap in describing how to actually setup the convolution operation such that we can apply the FFT to accelerate it, I illustrate it pictorially below.
+
+Consider two boxes (source and target) in 2D for simplicity, the expansion order is set to $p=2$
+
+\begin{center}    
+\includegraphics{setup.jpg}
+\end{center}
+
+The boxes are referred to as lying in a `surface grid', with the equivalent charges, $q_1,...,q_4$,  placed at $y_1,...y_4$. We embed the unique kernel interactions between these two boxes on a so called `convolution grid', we define them wrt to a fixed point - we can take this to be just $x_1$. These can be pre-computed and stored.
+
+\begin{center}    
+    \includegraphics{conv_grid.jpg}
+\end{center}
+
+The unique interactions define the convolution grid points. We label these $K_1,...,K_9$. This is how the convolution is defined practically.
+
+\begin{center}    
+    \includegraphics{conv.jpg}
+\end{center}
+
+When we go ahead and compute this, taking care to `flip' the kernel values, we find the potentials we're looking for embedded in at the following corresponding points on the convolution grid (flipped wrt to the positions of the equivalent densities). Only the four positions that correspond to the positions of the original equivalent densities are significant, the remainder can be ignored.
+
+
+\begin{center}    
+    \includegraphics{result.jpg}
+\end{center}
+
+
+We can accelerate this convolution computation using the FFT as normal. Mathematically, this can be expressed as follows \dots
+
+\subsection{Taking Advantage of Modern CPU Architectures}
+
+We want to batch together computations sibling interactions and take advantage of SIMD to maximally take advantage of the cache hierarchies in modern CPUs. One strategy is as follows, we conclude by contrasting it with the BLAS3/SVD approach, and include some numerical benchmarks to contrast the two ...
+
+
+    
 \printbibliography[heading=bibintoc]
 
 \end{document}
