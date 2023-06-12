@@ -83,7 +83,7 @@
       <file>m2l-blx.bib</file>
     </requires>
     <requires type="editable">
-      <file>adaptive-fmm.bib</file>
+      <file>m2l.bib</file>
     </requires>
     <requires type="static">
       <file>biblatex.bst</file>

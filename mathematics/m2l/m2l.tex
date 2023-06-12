@@ -18,10 +18,10 @@
 }
 
 \usepackage[backend=bibtex]{biblatex}
-\addbibresource{adaptive-fmm.bib}
+\addbibresource{m2l.bib}
 
-\title{Accelerated M2L}
-% \author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
+\title{Accelerating the Multipole to Local Field Translations}
+\author{Srinath Kailasa \thanks{srinath.kailasa.18@ucl.ac.uk} \\ \small University College London}
 
 \date{\today}
 
@@ -29,7 +29,11 @@
 
 \maketitle
 
-\section*{Accelerating the M2L with the SVD}
+\tableofcontents
+
+\section{Accelerating the M2L with the SVD}
+
+This is the method first presented in \cite{Fong2009}. We've also done some improvements to this based on the suggestions in \cite{Messner2012}, however I haven't added them to this discussion yet, hence the empty section.
 
 Consider the application of the M2L operator $K$ to a multipole expansion $w$ to get the check potential $g$.
 
@@ -125,5 +129,261 @@ where the sum is over the interaction list $I$.
 4. The calculatation of the local expansion, as usual, in the KIFMM.
 
 Doing this the convolution step is reduced to matrix vector products involving the compressed M2L matrix, which is only of size $k \times k$, rather than $6(p-1)^2 + 2$ where $p$ is the expansion order.
+
+\subsection{Taking Advantage of Modern Compute Architectures}
+
+\section{Accelerating M2L with FFT}
+
+The M2L operation can also be accelerated with a fast fourier transform (FFT). The M2L accelerated this way is quite natural, as it's simply a convolution operation, however computing it in practice can be be tricky. Here I document how I've managed to compute it, as well as a summary of the relevant FFT theory as a background.
+
+\subsection{Fourier Transform Theoretical Background}
+
+A lot of the theoretical background I want to keep at hand is taken from the excellent course notes \cite{Osgood2014}. I summarise the key aspects here as related to the FFT, especially when discussing padding/indexing, as these issues come up most pertinently in real implementations.
+
+\subsubsection{Going from Fourier Series to Fourier Transforms}
+
+Starting off with Fourier Series (FS), i.e. representing periodic functions using a periodic (trig) basis, and generalising to non-periodic (i.e. $\infty$ period) functions takes us to Fourier Transforms (FT).
+
+Q: Is the sum of two periodic functions also periodic? 
+
+A: No if you're a mathematician, e.g. $cos(t)$ and $cos(\sqrt{2}t)$ are each periodic with periods $2\pi$ and $2\pi/\sqrt{2}$ resp. But the sum is not periodic. ie. no common divisors in the periods.
+
+When considering a sum of sinusoids, as Fourier pitched, 
+
+\begin{flalign}
+    \sum_{n=1}^N A_n \sin(n \theta + \phi_n)
+\end{flalign}
+
+The sum is also periodic as the frequencies are multiples of the fundamental frequency $1/2\pi$.
+
+It's more common to write a general trig sum as,
+
+\begin{flalign}
+    \frac{a_0}{2} + \sum_{n=1}^N (a_n \cos(2\pi nt) + b_n \sin(2\pi nt))
+\end{flalign}
+
+Where the zeroth component is often referred to as a DC component (from electrical engineering contexts). The half is a simplifying factor that comes up. Expressing this instead using complex exponentials, the sum can be written as,
+
+\begin{flalign}
+    \sum_{n=-N}^N c_n e^{2\pi i nt}
+\end{flalign}
+
+One can refer to RHB to see how the coefficients are related between forms. In particular we find $c_0 = a_0 / 2$. The complex conjugate property of the coefficients,
+
+\begin{flalign}
+    c{-n} = \bar{c_n}
+\end{flalign}
+
+is important, it allows us to group terms such that
+
+\begin{flalign}
+    \sum_{n=-N}^N c_n e^{2\pi i nt} = 2 \text {Re} 
+    \left \{ \sum_{n=0}^N c_n e^{ 2 \pi i n t} \right \}
+\end{flalign}
+
+
+Our goal is to express a general periodic function $f(t)$ as an FS.
+
+\begin{flalign}
+    f(t) = \sum_{-N}^N c_n e^{2\pi i n t}
+\end{flalign}
+
+Take a given coefficient, can we solve for it ? 
+
+\begin{flalign}
+    f(t) &= \sum_{-N}^N c_n e^{2\pi i n t} \\
+    e^{-2 \pi i k t} f(t)  &= e^{-2\pi i k t} \sum_{-N}^N c_n e^{2\pi i n t}
+\end{flalign}
+
+Therefore,
+
+\begin{flalign}
+    c_k =  e^{-2 \pi i k t} f(t) - \sum_{n=-N, n \neq k}^N c_n e^{2\pi i (n-k) t}
+\end{flalign}
+
+We've pulled the coefficient out, but the expression involves all the other coefficients! Instead, we can try and integrate both sides over 0 to 1 (any function can be made to have this period if it's periodic). The integrals in the sum all cancel out,
+
+
+\begin{flalign}
+    \int_0^1 e^{2\pi (n-k)t}dt = \frac{1}{2\pi i (n-k)} e^{2\pi i (n-k)t} |_{t=0}^{t=1} = 0
+\end{flalign}
+
+With this trick, the expression for the coefficient reduces to,
+
+\begin{flalign}
+    c_k = \int_{0}^1  e^{-2 \pi i k t} f(t) dt
+\end{flalign}
+
+We haven't stated whether any periodic function \textit{can} be expressed in such a way that we can apply this analysis, but if we can express it in the periodic form we started off with, we have a way of evaluating the coefficients.
+
+Note in particular that the zeroth coefficients corresponds to an average value of the function over its period.
+
+\begin{flalign}
+    \hat{f}(0) = \int_{0}^{1} f(t) dt
+\end{flalign}
+
+The case when all the coefficients are real is when the signal is real and even. For then,
+
+\begin{flalign}
+    \bar{\hat{f}}(n) &= \hat{f}(-n) = \int_{0}^{1} e^{-2\pi i (-n) t} f(t) dt = \int_{0}^{1} e^{2\pi i n t}f(t) dt \\ 
+    &= -\int_{0}^{-1} e^{-2\pi i n s} f(-s) ds, \text{  subs t = -s, changing lims} \\
+    &= \int{-1}^0  e^{-2\pi i n s} f(-s) ds, \text{ even f(s)} \\
+    &= \hat{f}(n)
+\end{flalign}
+
+So the coefficients are real. The evenness of $f$ seems to pass over into its fourier coefficients too.
+
+We haven't yet answered when a periodic function can be approximated by a fourier series \dots We're basically allowed to if $f(t) \in L^2([0, 1])$ as then the integral defining its Fourier coefficients exists. The fourier approximation is the best approximation in $L^2([0, 1])$ by a trigonemtric polynomial of degree $N$. The complex exponentials form a basis for this space, and the partial sums converge to $f(t)$ in its norm,
+
+\begin{flalign}
+    \lim_{N \rightarrow \infty} \left \| \sum_{n=-N}^{N} \hat{f}(n) e^{-2\pi i n t} - f(t) \right \| = 0
+\end{flalign}
+
+For Fourier Transforms, lets start off by considering a box function.
+
+\begin{flalign}
+    \Pi(t) = \begin{cases}
+        1 & \text{if } |t| < 1/2, \\
+        0 & \text{if } |t| \geq 1/2.
+    \end{cases}
+\end{flalign}
+
+This isn't periodic, and doesn't have an FS. However, if we make it repeat with intervals $T$, we can find a representation with coefficients given by,
+
+\begin{flalign}
+    c_n = \frac{1}{T} \int_{0}^T e^{-2 \pi i n t / T}f(t) dt =  \frac{1}{T} \int_{-T/2}^{T/2} e^{-2 \pi i n t / T}f(t) dt = \frac{1}{\pi n } \sin(\frac{\pi n }{T})
+\end{flalign}
+
+The coefficients tend to 0 for large $T$ as $1/T$, to compensate for this we can scale by $T$. Using a change of variables $s = n/T$ we can write,
+
+$\Pi (s) = \frac{\sin(\pi s)}{\pi s}$
+
+We can now take a limit as $T \rightarrow \infty$,
+
+\begin{flalign}
+    \hat{\Pi}(s) = \int_{-\infty}^{\infty} e^{-2\pi i s t} \Pi (t) dt = \int_{-1/2}^{1/2} e^{-2\pi i s t} \cdot 1 dt =  \frac{\sin(\pi s)}{\pi s}
+\end{flalign}
+
+We are lead to the same idea - scale the Fourier coefficients by $T$ - if we had started off periodising any function that is zero outside of some interval and letting the period tend to infinity. This gives us the following definition for Fourier Transforms,
+
+\begin{flalign}
+    \hat{f}(s) = \int_{-\infty}^{\infty} e^{-2 \pi i s t} f(t) dt
+\end{flalign}
+
+where the coefficients are in general complex. FTs produce continuous spectra, in contrast to a discrete set of (potentially infinitely many) frequencies as in FS.
+
+We can push this to get a definition for the dual, the inverse transform. Again supposing that we have a non-periodic function that we can say is zero outside of an interval, we find an expression for its FS, and fourier coefficients
+
+\begin{flalign}
+    f(t) = \sum_{n=-\infty}^{\infty} c_n e^{2\pi i n t/T}    
+\end{flalign}
+
+\begin{flalign}
+    c_n &= \frac{1}{T} \int_{-T/2}^{T/2} e^{-2 \pi i n t / T}f(t) dt = \frac{1}{T}  \int_{-\infty}^{\infty} e^{-2 \pi i n t / T}f(t) dt \\
+    & \text{ extension to infty ok as zero outside interval} \\
+    &= \frac{1}{T}\hat{f}(\frac{n}{T}) = \frac{1}{T}\hat{f}(s)
+\end{flalign}
+
+Plugging back in, and thinking of Riemann sum to approximate an integral,
+
+\begin{flalign}
+    f(t) = \sum_{-\infty}^{\infty} \frac{1}{T} \hat{f}(s_n) e^{2 \pi i s_n t} = \sum_{-\infty}^{\infty} \hat{f}(s_n) e^{2 \pi i s_n t} \Delta s \approx \int_{-\infty}^{\infty}\hat{f}(s_n) e^{2 \pi i s_n t} ds
+\end{flalign}
+\subsubsection{The Convolution}
+
+In general we want to modify signals by each other. Is there a combination of signals $f(t)$ and $g(t)$ such that in the frequency domain the FT is:
+
+$$
+\mathcal{F} g(s) \mathcal{F} f(s)
+$$
+
+i.e. is there a combination of the signals such that frequency components are scaled by each other?
+
+Very roughly, we find,
+
+\begin{flalign}
+    \mathcal{F} g(s) \mathcal{F} f(s) &= \int_{-\infty}^{\infty} e^{- 2 \pi i s t} g(t) ds \int_{-\infty}^{\infty} e^{- 2 \pi i s x} f(x) dx \\
+    &=   \int_{-\infty}^{\infty}  \int_{-\infty}^{\infty}  e^{- 2 \pi i s (t+x)} g(t) f(x) dt dx
+\end{flalign}
+
+using the change of variable $u = t+x$ for the inner integral,
+
+\begin{flalign}
+    \int_{-\infty}^{\infty} \left ( \int_{-\infty}^{\infty} e^{-2 \pi i s u} g(u-x) du \right ) f(x) dx
+\end{flalign}
+
+switching the order of integration,
+
+\begin{flalign}
+    \int_{-\infty}^{\infty} e^{-2 \pi i s u} \left ( \int_{-\infty}^{\infty}  g(u-x)  f(x) dx \right )du
+\end{flalign}
+
+The inner integral can be seen to be a function of $u$, we can write it as $h(u)$, the outer integral reduces to:
+
+\begin{flalign}
+    \int_{-\infty}^{\infty}  e^{-2 \pi i s u} h(u) du = \mathcal{F}h (s)
+\end{flalign}
+
+This defines our convolution,
+
+\begin{flalign}
+    (g * f)(t) =  h(t) = \int_{-\infty}^{\infty} g(t-x) f(x) dx
+\end{flalign}
+
+And the following theorem,
+
+\begin{flalign}
+    \mathcal{F} (g * f) (s) = \mathcal{F} g(s) \mathcal{F} f(s)
+\end{flalign}
+
+Most significantly for us, convolving in the time domain reduces to a multiliplication in the frequency domain.
+
+The convolution is defined by flipping the kernel, and dragging it over the signal.
+
+\subsubsection{Discrete Fourier Transforms, and the Fast Fourier Transform}
+
+We want to find a discrete analogue to the FT for real signals which are sampled at a certain rate.
+
+Let's suppose that $f(t)$ is zero outside of an interval $0 \leq t 
+\leq L$, similarly the FT $\mathcal{F} f(s)$ is assumed zero outside of $0 \leq s \leq 2B$ (indexing is easier if we ignore negative frequencies), $L$ and $B$ are both integers.
+
+According to Shannon, we can reconstruct $f(t)$ perfectly if we sample at a rate of $2B$ per second. So in total we want,
+
+$$
+N = \frac{L}{1/2B} = 2BL
+$$
+
+evenly spaced samples, notice that this is even. Sampled at points,
+
+$$
+t_0 = 0, t_1 = \frac{1}{2B},..., t_{N-1} = \frac{N-1}{2B}
+$$
+
+
+\begin{flalign}
+    f_{discrete}(t) = \sum_{n=0}^{N-1}\delta (t-t_n)f(t_n)
+\end{flalign}
+
+and therefore,
+
+\begin{flalign}
+    \mathcal{F}f_{discrete}(t) =  \sum_{n=0}^{N-1} f(t_n) \mathcal{F} \delta (t-t_n) =  \sum_{n=0}^{N-1} f(t_n)  e^{-2\pi i s t_n}
+\end{flalign}
+
+which is almost what we need, it's the continuous FT of the sampled form of $f(t)$.
+
+Shifting to the frequency domain, we find the number of sample points to be,
+
+$$
+N = \frac{2B}{1/L} = 2BL
+$$
+
+the same as in the time domain.
+
+
+\subsection{The M2L Translation as a Fourier Convolution}
+
+
+\printbibliography[heading=bibintoc]
 
 \end{document}
