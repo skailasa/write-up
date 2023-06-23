@@ -206,9 +206,9 @@ INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7
 OUTPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/m2l.toc
 INPUT /usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/setup.jpg
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/setup.jpg
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/setup.jpg
@@ -221,6 +221,8 @@ INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/conv.jpg
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/result.jpg
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/result.jpg
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/result.jpg
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
 INPUT /Users/sri/Documents/Papers/write-up/mathematics/m2l/m2l.aux
@@ -241,6 +243,7 @@ INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pf
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb

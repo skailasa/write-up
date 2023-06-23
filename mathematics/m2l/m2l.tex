@@ -31,6 +31,60 @@
 
 \tableofcontents
 
+\section{M2L Operators}
+The emergence of kernel independent `black box' FMM methods \cite{Fong2009, Ying2004} is revolutionary for software implementations of the FMM as we can create generic programs that work with a variety of kernels, rather than being optimised to a kernel that arises from a specific physical setting. Black box methods have been written that generalise to many asymptotically smooth kernel functions, e.g. $1/r$, $1/r^2$, Gauss, Stokes and RBFs. Indeed the fastest benchmark codes developed for single node \cite{wang2021exafmm} and multi-node \cite{Malhotra2015} FMMs are based on black box techniques.
+
+The so-called multipole-to-local, or `M2L' operator, that translates the field generated in the far-field of a given box to a local field is by far the most expensive calculation for black box methods, due to a relatively high number of FLOPS that result from these formulations.
+
+In this note I summarise different approaches to calculate this operator for black box FMM methods, and various computational/mathematical optimisations that can be taken to accelerate their calculation, as well as ideas for a new software interface for field-translations. There is a gap in the literature for direct comparisons between different approaches, as it is rare for a single group to have the computational test-bed set up for a fair comparison - especially once optimisations have been taken into account.
+
+\subsection{FMM Operator Basics}
+
+In 2D the single-layer Laplacian Green's function is,
+
+\begin{equation}
+    G(\mathbf{x}, \mathbf{y}) = -\frac{1}{2\pi} \log \rho
+\end{equation}
+
+where $\mathbf{r} = \mathbf{x} - \mathbf{y}$ and $\rho = |\mathbf{r}|$. It is useful to reformulate this using complex numbers, where $G(\mathbf{x}, \mathbf{y}) = \text{Re}\{ \log(z_x - z_y) \}$ where $z_x$ and $z_y$ are complex numbers corresponding to source and target points on the plane. The key idea of the FMM is to encode the potentials fo a set of source densities using a multipole expansion, and a local expansion at places far away from these sources.
+
+Suppose that source densities are supported on a disk centered at $z_c$ with radius $r$. Then for all $z$ outside the disk with radius $R$, ($R>r$) we can represent the potential at $z$ from the source densities using a set of coefficients $\{ a_k, 0 \leq k \leq p \}$ as,
+
+\begin{flalign}
+    q(z) = a_0 \log(z-z_c) + \sum_{k=1}^p \frac{a_k}{(z-z_c)^k} + \mathcal{O}\left( \frac{r^p}{R_p} \right), \> \> \text{Multipole Expansion}
+\end{flalign}
+
+On the other hand, if the source densities are outside the disk with radius $R$, the potential at a point $z$ inside the disk with radius $r$ can be represented by another set of coefficients $\{ c_l, 0 \leq k \leq p \}$ as,
+
+\begin{flalign}
+    q(z) = \sum_{k=0}^p c_k(z-z_c)^k + \mathcal{O}\left(\frac{r^p}{R_p}\right), \> \> \text{Local Expansion}
+\end{flalign}
+
+The M2L translation transforms a multipole expansion of a box to a local expansion of another non-adjacent box. Instead of Laurent series, in 3D the far-field is represented using spherical-harmonics.
+
+N.B KIFMM \cite{Ying2004} relies on smoothness of kernel, as well as uniqueness of properly posed interior/exterior Dirichlet problem.
+
+How do you prove that black box methods offer good approximations ? Something that I need to ask about and write down at some point.
+
+The formulation of the operator depends on the algorithm taken \cite{Ying2004,Fong2009}, however in general we will get some kind of matvec, where a translation matrix is applied to a vector of multipole expansion coefficients.
+
+\subsection{bbFMM}
+
+The basic idea is in this (and other interpolation based FMMs) is as follows. Letting $w_l(x)$ denote interpolating functions,
+
+\begin{flalign}
+    K(x, y) \approx \sum_l \sum_m K(x_l, y_m) w_l(x)w_m(y)
+\end{flalign}
+
+ie. finding a low-rank approximation of the kernel. The advantage of such methods is that we only require the ability to evaluate the kernel at various points, no kernel dependent analytical expansion is required. The drawback is that the number of terms can be relatively large for a given error tolerance (verify ?).
+
+In Fong et al's approach, a Chebyshev interpolation scheme is used to approximate the far-field behavoiur of the kernel. The M2L operator then consists of evaluating the field due to particles located at Chebyshev nodes, this can be effectively compressed using the SVD. If the kernel is translation invariant i.e. of the form $K(x-y)$, the cose of the SVD precomputations reduces to $O(\log N)$ instead of $O(N)$ as we only have to precompute for each level, reduces further if kernel can be scaled between levels.
+
+\subsection{KIFMM}
+
+
+As both formulations essentially result in the same kind of computation being taken, from here on we can just think of the operation as matvec that we're trying to optimise, the matvec happens to describe a convolution operation. There are a couple of approaches that have been taken
+
 \section{Accelerating the M2L with the SVD}
 
 This is the method first presented in \cite{Fong2009}. We've also done some improvements to this based on the suggestions in \cite{Messner2012}, however I haven't added them to this discussion yet, hence the empty section.
@@ -502,6 +556,28 @@ When we go ahead and compute this, taking care to `flip' the kernel values, we f
 
 
 We can accelerate this convolution computation using the FFT as normal. Mathematically, this can be expressed as follows \dots
+
+
+\subsection{$N$-Dimensional DFT}
+
+The DFT takes a sequence of complex numbers $u_0, u_1, ..., u_{N-1}$ and transforms them into another sequence of complex numbers $\hat{u}_0, \hat{u}_1,...,0\hat{u}_{N-1}$, the forward and backwatf transfroms is defined as,
+
+\begin{flalign}
+    \hat{u}_k = \frac{1}{N}\sum_{j=0}^{N-1}u_j e^{-ikx_j}, \> \> k=0,1,...,N-1 \\
+    u_k = \frac{1}{N}\sum_{j=0}^{N-1}\hat{u}_j e^{ikx_j}, \> \> k=0,1,...,N-1
+\end{flalign}
+
+where $x_j = 2\pi j / N$. If instead the data is arranged in a multidimensional array, $u_{j_0, j_1, ..., j_{d-1}}$ where there are $d$ index sets $j_m = 0, 1, ..., N_{m-1}$, $m \in 0, 1, ..., d-1$ with $N_m = \|j_m\|$ being the length of $j_m$. A forward $d$-dimensional DFT of the $d$-dimensional array will be computed as,
+
+\begin{flalign}
+    \hat{u}_{k_0, k_1, ..., k_{d-1}} = \sum_{j_0 = 0}^{N_0 - 1} 
+    \left( \frac{\omega_0^{k_0 j_0}}{N_0} \sum_{j_1 = 0}^{N_1-1} \left(  \frac{\omega_1^{k_1j_1}}{N_1} ... \sum_{j_d-1}^{N_{d-1}-1} \frac{\omega_{d-1}^{k_{d-1}j_{d-1}}}{N_{d-1}} u_{j_0, j_1,...,j_{d-1}} \right) \right)
+\end{flalign}
+
+where $w_j = e^{\frac{-2\pi i}{N_j}}$
+
+
+Normalisation in this context refers to the scaling of the output to be independent of input size. That is if you double the size of your input, e.g. via padding, the amplitude of the output frequencies should not change. This is done by dividing the output of the FFT by the length of the input array (or its square root depending on convention).
 
 \subsection{Taking Advantage of Modern CPU Architectures}
 
