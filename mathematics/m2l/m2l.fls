@@ -34,6 +34,10 @@ INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/algorithmicx/algpseudocode.st
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/multido/multido.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/multido/multido.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/multido/multido.tex
+INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/multido/multido.tex
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/amsmath/amsmath.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/amsmath/amsmath.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/amsmath/amstext.sty

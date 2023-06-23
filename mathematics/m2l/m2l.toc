@@ -24,8 +24,10 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.2}The M2L Translation as a Fourier Convolution}{15}{subsection.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}$N$-Dimensional DFT}{17}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.2.1}Acclerating the Hadamard Product}{19}{subsubsection.3.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Taking Advantage of Modern CPU Architectures}{18}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.3}$N$-Dimensional DFT}{20}{subsection.3.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{References}{18}{section*.2}%
+\contentsline {subsection}{\numberline {3.4}Taking Advantage of Modern CPU Architectures}{21}{subsection.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{References}{21}{section*.2}%

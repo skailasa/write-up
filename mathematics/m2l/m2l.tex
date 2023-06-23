@@ -3,6 +3,7 @@
 \usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{multido}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{hyperref}
@@ -16,6 +17,7 @@
     filecolor=magenta,
     urlcolor=cyan,
 }
+\algnewcommand{\parState}[1]{\State\textbf{in parallel do} #1}
 
 \usepackage[backend=bibtex]{biblatex}
 \addbibresource{m2l.bib}
@@ -555,7 +557,115 @@ When we go ahead and compute this, taking care to `flip' the kernel values, we f
 \end{center}
 
 
-We can accelerate this convolution computation using the FFT as normal. Mathematically, this can be expressed as follows \dots
+We can accelerate this convolution computation using the FFT as normal.
+
+Expressing this more explicitly, when we compute the check potential during the M2L operator during the KIFMM, we compute an approximation of the following integral,
+
+
+\begin{flalign}
+    \phi^c(\mathbf{x}) = \int_{y \in Y} G(\mathbf{x}-\mathbf{y})q(\mathbf{y}) d\mathbf{y}
+\end{flalign}
+
+where $\mathbf{x} \in X$ are points on the target surface, $\mathbf{y} \in Y$ are points on the source surface and $q(\mathbf{y})$ are discrete charges placed at source surface points and $\phi^c(\mathbf{x})$ is the check potential at a target surface point. Applying Fourier convolution theorem,
+
+\begin{flalign}
+    \phi^c(\mathbf{x}) = \mathcal{F}^{-1} \left[ \mathcal{F} G(\mathbf{\xi}) * \mathcal{F} q(\mathbf{\xi})\right] (\mathbf{x})
+\end{flalign}
+
+We notice that $G(\mathbf{\xi})$ must contain all the unique kernel evaluations between points on the source/target surface, and that when convolved with $q(\mathbf{\xi})$ we must recover the potentials in a predictable way (in order to create index maps to the write matrix elements).
+
+This is done by defining a `convolution grid', which is an extension of the surface discretisation of the KIFMM. This extension is defined by the unique evaluations of the Green's function with respect to a single point on the target surface grid. By doing this, the convolution can be drawn around the source surface grid in a formulaic way each time, as represneted by the above figure. Representing the points on the target and surface grids by their indices in their discrete form, i.e. $\mathbf{y} = y_{ijk}$, we can write the matrix elements of the kernel evaluations represented on this convolution grid as,
+
+\begin{flalign}
+    \underline{G}_{ijk} = G(x_{000}-y_{ijk})
+\end{flalign}
+
+where $x_{000}$ corresponds to the lower left corner of the target surface, though in principle any point on the target surface could be used, they will result in different mappings between the final convolved form and the potentials we're seeking to identify. This results in a 3D sequence,
+
+\begin{flalign}
+    G[i, j, k] =  \underline{G}_{ijk} 
+\end{flalign}
+
+where the indices, e.g. $i \in I$, extend over the indices of the axes of the convolution grid. 
+
+Next we discuss padding. For optimum performance, the size of the FFT in each dimension should be a power of two. So we begin by padding the convolution grid with zeros,
+
+\begin{equation}
+    G^{pad}[i',j',k'] = 
+    \begin{cases} 
+    0 & 
+    \begin{aligned}
+            &\text{if } 0 \leq i' \leq P-M \\
+            &\text{ and } 0 \leq j' \leq Q-N \\
+            &\text{ and } 0 \leq k' \leq R-K \\
+    \end{aligned} 
+    \end{cases}
+\end{equation}
+
+Where $P, Q, R$ correspond to the dimensions of the sequence before padding, and $M, N, K$ correspond to the next largest power of two of the size each of these dimensions, $i', j', k'$ are the indices of the padded array. The remainder of the array is filled by the original sequence $G[i, j, k]$.
+
+
+Similarly,we must pad the sequence of discrete charges to match the dimensions of the padded kernel sequence in order to compute the FFT. We start by creating a creating a new convolution grid, and placing the discrete charges at their corresponding positions from the source surface grid. Once this is complete, we have a sequence $q[i, j, k]$ with the same dimensions as the kernel sequence. We then choose the following padding,
+
+\begin{equation}
+    q^{pad}[i',j',k'] = 
+    \begin{cases} 
+    0 & 
+    \begin{aligned}
+            &\text{if } P-M \leq i' \leq P \\
+            &\text{ and } Q-N  \leq j' \leq Q \\
+            &\text{ and } R-K  \leq k' \leq R \\
+    \end{aligned} 
+    \end{cases}
+\end{equation}
+
+Where $P, Q, R$ are the same as for the kernel sequence, note $M, N, K$ are the same for the kernel and charge sequence now. This choice of padding for both sequences as well as taking the convolution grid with respect to $x_{000}$ is fortuitous. Noting that in the computation of the FFT convolution we must flip the kernel, we find that our sequence of potentials lie at the indices $[P-M-1:P, Q-N-1:Q, R-K-1:R]$ of the final FFT computed result. Looking up the potentials associated with each point on the target surface grid is exactly equivalent to looking up their associated index in the subsequence of the result indexed by $[P-M-1:P, Q-N-1:Q, R-K-1:R]$.
+
+\subsubsection{Acclerating the Hadamard Product}
+
+The Hadamard product is the most computationally intensive part of the above scheme. Here I spell out how to accelerate it using explicit SIMD instructions and careful data organisation.
+
+Instead of computing the convolution in the preceding section for a single source and target box, we now consider a set of siblings together,
+
+\begin{flalign}
+    S = \cup_{i=1}^{N=8} S_i
+\end{flalign}
+
+For a given M2L interaction, we'll have a sequence corresponding to the unique kernel interactions,
+
+\begin{flalign}
+    G_l[i, j, k]
+\end{flalign}
+
+We generally pre-compute and store these for use, so we'll have single sequence for a given M2L interaction,
+
+\begin{flalign}
+    \hat{G}_l[i, j, k]
+\end{flalign}
+
+Now we can compute, the Hadamard product of each sibling's discrete charge sequence with this sequence. By computing this way, we retain $\hat{G}[i, j, k]$ in cache, and the element wise Hadamard product is an $8 \times 8$ operation which we can write as an explicit SIMD instruction. The result is a matrix, $H$, the element $H_{pq}$ corresponds to the $p^{th}$ element of the $q^{th}$ sibling in the sibling set's Hadamard product.
+
+We can extend this scheme by `stacking' together sibling sets for this M2L translation, and processing them together. Iterating over all unique M2L translations in a given level of the FMM algorithm, which can be done in parallel.
+
+\begin{algorithm}
+    \caption{M2L Convolution}
+        \begin{algorithmic}[1]
+            \Require level $l$ 
+            \For{Translation Vector $t$}
+                \parState
+                
+                \State Result for these sibling set, $H$
+                \For{Siblings FFT sequence, $\hat{S}$, Kernel FFT sequence, $\hat{G}$ }
+                    \State $H[subI, subJ]$ = hadamard\_8x8($\hat{S}_{8x8}$, $\hat{G}_{8x8}$)
+                \EndFor
+            \EndFor
+    \end{algorithmic}
+\end{algorithm}
+    
+    
+    
+
+
 
 
 \subsection{$N$-Dimensional DFT}

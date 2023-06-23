@@ -10,6 +10,7 @@
 \BOOKMARK [3][-]{subsubsection.3.1.2}{The Convolution}{subsection.3.1}% 10
 \BOOKMARK [3][-]{subsubsection.3.1.3}{Discrete Fourier Transforms, and the Fast Fourier Transform}{subsection.3.1}% 11
 \BOOKMARK [2][-]{subsection.3.2}{The M2L Translation as a Fourier Convolution}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.3}{N-Dimensional DFT}{section.3}% 13
-\BOOKMARK [2][-]{subsection.3.4}{Taking Advantage of Modern CPU Architectures}{section.3}% 14
-\BOOKMARK [1][-]{section*.2}{References}{}% 15
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Acclerating the Hadamard Product}{subsection.3.2}% 13
+\BOOKMARK [2][-]{subsection.3.3}{N-Dimensional DFT}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.4}{Taking Advantage of Modern CPU Architectures}{section.3}% 15
+\BOOKMARK [1][-]{section*.2}{References}{}% 16
