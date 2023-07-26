@@ -9,6 +9,7 @@
 \usepackage{hyperref}
 \usepackage{mathtools}
 \usepackage{tikz}
+\usepackage{booktabs}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
@@ -85,11 +86,42 @@ How do you prove that black box methods offer good approximations ? Something th
 
 The formulation of the operator depends on the algorithm taken \cite{Ying2004,Fong2009}, however in general we will get some kind of matvec, where a translation matrix is applied to a vector of multipole expansion coefficients.
 
+\subsection{Transfer Vectors}
+
+In order to uniquely label M2L interactions we introduce transfer vectors $t = (t_1, t_2, t_3)$, $t \in \mathbb{Z}^3$. They describe the relative positioning of two nodes, $X$ and $Y$, in a hierarchical tree and computed from their centres $t = \frac{c_x - c_y}{w}$ where $w$ is the node width.
+
 \subsection{Interaction Lists}
 
-This section is based on a similar discussion in \cite{Messner2012}, we adapt it here adding expository notes and calculations.
+This section is based on a similar discussion in \cite{Messner2012}, we adapt it here adding expository notes and calculations. A common feature of kernels used in the FMM is translational invariance,
 
+\begin{flalign}\label{eq:translation_invariance_kernel}
+    K(x, y) = K(x + v, y+v)
+\end{flalign}
 
+where $v \in \mathbb{R}^3$. This alongside with the regular arrangement of interpolation points used in the MFS based KiFMM as well as the Chebyshev based bbFMM mean that it's sufficient to identify unique transfer vectors at each level of the octree, and compute their respective M2L operators. A set of such unique transfer vectors is referred to as an interaction list $T \subset \mathbb{Z}^3$.
+
+If we additionally consinder \textit{asymptotically smooth kernel functions} the near field is limited to transfer vectors satisfying $\|t\| \leq \sqrt{3}$, this leads to $3^3 = 27$ near field interactions in $\mathbb{R}^3$. In a multi-level scheme, these 27 near field interactions contain all $6^3=216$ near and far field interactions of its 8 child nodes. This comes from the fact that far-field interactions for such kernels are defined as nodes that are children of the source node's parent node, which do not neighbour the source node. These far field interactions must also satisfy $\|t \| > \sqrt{3}$, leading to a maximum of $6^3 - 3^3 = 189$ far-field interactions per node. The union of all possible far field interactions for the eight child cells gives $7^3 - 3^3 = 316$ possible interactions. This comes from the fact some subset of translation vectors are non-overlapping for each child, resulting in a total of $7^3$ total interactions for all children, subtracting the near-field interactions which are the same for all children gives the result. Thus 316 is the maximum number of interactions is largest number of different M2L operators that must be computed at each level of the tree in $\mathbb{R}^3$.
+
+If an asymptotically smooth kernel also happens to be homogenous to degree $n$,
+
+\begin{flalign}
+    \label{eq:homogenous_kernel}
+    K(\alpha r) = \alpha^n K(r)
+\end{flalign}
+
+i.e. we can scale the distance between source and target node by a factor of $\alpha$, the potential is scaled by a factor of $\alpha^n$, where $n$ is a kernel function dependent constant, the M2L operators can then be precomputed for a single level and scaled.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|ll}
+    \hline
+    \textbf{type of kernel function} & \textbf{cells in near field} & \textbf{cells in far field} \\ \hline
+    smooth & $\leq$ 27 per leaf &  $\leq$ 316 per level \\ 
+    smooth and homog. & $\leq$ 27 per leaf & $\leq$ 316 in total \\ 
+    \end{tabular}
+    \caption{Number of near and far field interactions by kernel function type}
+    \end{table}
+    
 
 \subsection{bbFMM}
 
@@ -210,9 +242,15 @@ Doing this the convolution step is reduced to matrix vector products involving t
 
 \subsection{Taking Advantage of Modern Compute Architectures}
 
-BLAS3 vs BLAS2
+The Basic Linear Algbebra Suprograms (BLAS) is a specification for a collection of low-level routines for common linear algebra operations, such as scalar and vector addition/multiplication, dot products, and matrix multiplication among other things. The specification is divided into three levels. BLAS2 is concerned with matrix-vector operations, and is usually a memory bound operation as the amount of data movement is significant in comparison to the size of the computation. BLAS3 on the other hand, which is concerned with matrix-matrix operations, is susually compute bound with similar reasoning for why so.
 
-% For scale invariant kernels (e.g. Laplace, Helmholtz etc) many M2L translations can be seen to be rotations/scalings of each other. The authors of \cite{Messner2012} take advantage of this to batch together the matvecs that correspond to M2L interactions into cache-efficient matrix-matrix products that take advantage of highly-efficient BLAS L3 operations. We describe our adaption of this approach here, as well as its limitations \dots
+As modern CPUs have a hierarchical memory structure with multiple levels of cache accessing cached data is much faster than accessing main-memory. BLAS3 uses block-partitioning to maximally use cache.
+
+For operations with the same number of FLOPS a BLAS3 operation will be more performant than a BLAS2 one for a given hardware. This is because BLAS3 operations have a higher ratio of computation to memory access. In BLAS3 once a chunk of data is loaded into cache it can be re-used multiple times before being written to main memory, on the other hand in a BLAS2 operation each element of the matrix is used only once resulting in cache-misses. It's therefore preferable to take advantage of this when designing M2L software. Instead of computing the matrix-vector products, we can block together all the right-hand sides sharing an M2L operation at a given tree level and compute a single BLAS3 operation.
+
+In \cite{Messner2012} they describe redundancies in the number M2L operations can be removed as many of them are simple combinations of translations/rotations of a subset of operators when FMM interpolation points arranged on regular grids as is the case in both the bbFMM and the KiFMM. Indeed the 316 unique operators, reduces to just 16 when translations and rotations are taken into account. Despite this, batching by this reduced set of translation operators has little effect on BLAS3 performance on modern CPUs as demonstrated by the experiment below ....
+
+[BLAS3 experiment]
 
 
 
@@ -322,7 +360,7 @@ Where $P, Q, R$ are the same as for the kernel sequence, note $M, N, K$ are the 
 
 \subsubsection{Accelerating the Hadamard Product}
 
-The Hadamard product is the most computationally intensive part of the above scheme. Here I spell out how to accelerate it using explicit SIMD instructions and careful data organisation.
+The Hadamard product is the most computationally intensive part of the above scheme. Here I spell out how to accelerate it using explicit SIMD instructions and careful data organisation which is the approach introduced by \cite{Malhotra2015} and re-implemented in \cite{wang2021exafmm}.
 
 Instead of computing the convolution in the preceding section for a single source and target box, we now consider a set of siblings together,
 
@@ -336,47 +374,82 @@ For a given M2L interaction, we'll have a sequence corresponding to the unique k
     G_l[i, j, k]
 \end{flalign}
 
-We generally pre-compute and store these for use, so we'll have single sequence for a given M2L interaction,
+We generally pre-compute and store the FFTs of these for use, for a given M2L interaction,
 
 \begin{flalign}
     \hat{G}_l[i, j, k]
 \end{flalign}
 
-Now we can compute, the Hadamard product of each sibling's discrete charge sequence with this sequence. By computing this way, we retain $\hat{G}[i, j, k]$ in cache, and the element wise Hadamard product is an $8 \times 8$ operation which we can write as an explicit SIMD instruction. The result is a matrix, $H$, the element $H_{pq}$ corresponds to the $p^{th}$ element of the $q^{th}$ sibling in the sibling set's Hadamard product.
+We can organise these in memory in a special way to maximise cache-reuse. Consider a node in a multilevel tree. For each node in its near field's child nodes we can compute $8 \times 8$ unique kernel interactions with respect to the source node's 8 children. This results in a total of $8 \times 8 \times 26 = 1664$ sequences corresponding to FFTs of these. The authors of the \cite{Malhotra2015} proceed by iterating in parallel over each frequency of the resulting Fourier transform, pulling out the corresponding components from these 1664 sequences of Fourier transforms of the kernel function, which results in 26 matrices of size $8 \times 8$ corresponding to the frequency chunk of the convolutions for that neighbour, for each of these matrices we can compute a Hadamard product with an $8 \times 1$ sized vector corresponding to the frequency component for each of the 8 child nodes in our source node. This is an $8 \times 8$ operation that the authors implement using explicit SIMD instructions. The benefit of this scheme is that the Fourier transforms of the kernel, chunked by frequency, are held in memory when applied to the signals, also chunked by frequency, in the source node.
 
-We can extend this scheme by `stacking' together sibling sets for this M2L translation, and processing them together. Iterating over all unique M2L translations in a given level of the FMM algorithm, which can be done in parallel.
 
-\begin{algorithm}
-    \caption{M2L Convolution}
-        \begin{algorithmic}[1]
-            \Require level $l$ 
-            \For{Translation Vector $t$}
-                \parState
+% \begin{algorithm}
+%     \caption{M2L Convolution}
+%         \begin{algorithmic}[1]
+%             \Require level $l$ 
+%             \For{Translation Vector $t$}
+%                 \parState
                 
-                \State Result for these sibling set, $H$
-                \For{Siblings FFT sequence, $\hat{S}$, Kernel FFT sequence, $\hat{G}$ }
-                    \State $H[subI, subJ]$ = hadamard\_8x8($\hat{S}_{8x8}$, $\hat{G}_{8x8}$)
-                \EndFor
-            \EndFor
-    \end{algorithmic}
-\end{algorithm}
-    
-
-\subsection{Taking Advantage of Modern CPU Architectures}
-
-We want to batch together computations sibling interactions and take advantage of SIMD to maximally take advantage of the cache hierarchies in modern CPUs. One strategy is as follows, we conclude by contrasting it with the BLAS3/SVD approach, and include some numerical benchmarks to contrast the two ...
+%                 \State Result for these sibling set, $H$
+%                 \For{Siblings FFT sequence, $\hat{S}$, Kernel FFT sequence, $\hat{G}$ }
+%                     \State $H[subI, subJ]$ = hadamard\_8x8($\hat{S}_{8x8}$, $\hat{G}_{8x8}$)
+%                 \EndFor
+%             \EndFor
+%     \end{algorithmic}
+% \end{algorithm}
 
 
 \section{A New Software and Algorithm for M2L operators}
 
+We identify a gap in the literature investigating the different approaches to compute the M2L operator. This is likely due to the highly specialised nature of FMM implementations, and the resulting brittleness of the software implementations. With our Rust framework it is easy to plug and play M2L implementations, allowing us to directly compare the performance in terms of accuracy and speed of the two main algorithmic approaches. Here we give an overview of the software's design, it's positioning withing the wider framework for the solution of integral equations. We proceed to describe our favoured implementation approach, which we believe maximally uses the features of modern hardware to increase the throughput (points/sec) of the M2L operation. We benchmark our approach with other FMM softwares.
+
 \subsection{Rusty Field}
 
-Software design of Rust field.
+By using Rust's traits system we can construct a software contract that specifies a field translation. The difficulty here is designing a contract that is general enough to capture the behaviour of an M2L operation, but also low-level enough to be easily editable and re-implemented. Unfortunately it is not possible to design a contract at the level of a tree node, as many computational optimisation strategies consume the tree's nodes level-by-level.
 
+We use the following interface,
+
+
+[FIELD INTERFACE CODE]
+
+
+This allows us to re-implement the M2L for a given method and set of computational optimisations, though we note that it will be difficult for re-implementers or users to design their own high performance implementation without a deep understanding of the software internals.
 
 \subsection{FFT based M2L with Symmetries}
 
-Algorithm description that leverages symmetries in the FFT M2L.
+We can extend the scheme introduced by \cite{Malhotra2015} for homogenous and translation invariant kernels using the methods described in \cite{Messner2012} which apply when FMM interpolation points are arranged on a regular grid, as is the case for both the bbFMM and the KIFMM. Instead of computing 1664 convolutions corresponding to  M2L interactions, which contains a lot of redundancy, we can instead compute just 16. This will also result in just 16 Hadamard products instead of 1664. Unlike with the BLAS3/SVD approach, this optimisation will dramatically cut down the FLOP count when using this approach for the convolution, and we therefore believe is the optimum method for computing the M2L operation.
+
+Here we describe the ways to remove redundant M2L translations as described in \cite{Messner2012}. They describe two symmetry planes, axial and diagonal. The axial planes are given by $t_1 = 0$, $t_2 = 0$ and $t_3 = 0$, each dividing $\mathbb{Z}^3$ into two parts, we can combine all three planes to divide $\mathbb{Z}^3$ into octants. We use $\mathbb{Z}^3_+$ as a reference octant. The diagonal planes are given by $t_1 = t_2$, $t_1 = t_3$ and $t_2 = t_3$, in all there are 6 diagonal symettries, however we restrict ourselves to those in the reference octant. By combining the axial and diagonal symmetries we obtain a cone,
+
+\begin{flalign}
+    \label{eq:reference_cone}
+    \mathbb{Z}^3_{sym} = \left \{ \mathbb{Z}^3_{sym} \subset \mathbb{Z}^3 : t_1 \geq t_2 \geq t_3 \geq 0 \text{ with } t \in \mathbb{Z}^3 \right \}
+\end{flalign}
+
+We identify a subset of transfer vectors $T_{sym} = T \cap \mathbb{Z}^3_{sym}$, all other transfer vectors can be expressed as reflections/rotations of this fundamental set. This can be used to construct permutation matrices that can be applied to the M2L operators for these unique transfer vectors, note that this is independent of the way in which these M2L operators are being calculated and therefore applies to either the SVD or FFT approach.
+
+Consider an M2L operator $K_p(t)$, corresponding to one of 316 unique orientations at a given level, any reflection of a transfer vector along a symettry plane determines the permutation of its associated operator as
+
+\begin{flalign}
+    K_t = P_t K_{p(t)} P_t^T
+\end{flalign}
+
+The permutation matrix $P_t$ depends upon the transfer vector $t \in T$, where we also need a surjective mapping $p : T \rightarrow T_{sym}$ that associates each transfer vector in $T$ with exactly one in $T_{sym}$. The left application corresponds to a permutation of the rows, and the right the columns of the original matrix. The permutation matrices depend only upon the transfer vector $t$ and are constructed as follows.
+
+
+\begin{list}{-}{Discussion}
+    \item Why is this better than the SVD approach (complexity analysis)
+    \item Why it doesn't make sense to necessarily take advantage of symettries with SVD approach - flop count same, experiments to prove that BLAS3 doesn't make much difference.
+    \item Outline of algorithm.
+\end{list}
+
+\subsection{Investigations}
+
+\begin{list}{-}{Benchmark figures}
+    \item Accuracy of svd method as a function of p and k, accuracy of fft method as a function of p.
+    \item FLOP counts of both methods vs accuracy, ie. complexity analysis.
+    \item Absolute speeds of both methods.
+\end{list}
 
 \section{Appendix}
 

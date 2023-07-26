@@ -197,6 +197,8 @@ INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/pgf/libraries/pgflibraryplo
 INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/booktabs/booktabs.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/biblatex/biblatex.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/biblatex/biblatex.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/etoolbox/etoolbox.sty
