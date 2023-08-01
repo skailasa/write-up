@@ -401,7 +401,7 @@ We can organise these in memory in a special way to maximise cache-reuse. Consid
 
 \section{A New Software and Algorithm for M2L operators}
 
-We identify a gap in the literature investigating the different approaches to compute the M2L operator. This is likely due to the highly specialised nature of FMM implementations, and the resulting brittleness of the software implementations. With our Rust framework it is easy to plug and play M2L implementations, allowing us to directly compare the performance in terms of accuracy and speed of the two main algorithmic approaches. Here we give an overview of the software's design, it's positioning withing the wider framework for the solution of integral equations. We proceed to describe our favoured implementation approach, which we believe maximally uses the features of modern hardware to increase the throughput (points/sec) of the M2L operation. We benchmark our approach with other FMM softwares.
+We identify a gap in the literature investigating the different approaches to compute the M2L operator. This is likely due to the highly specialised nature of FMM implementations, and the resulting brittleness of the software implementations. With our Rust framework it is easy to plug and play M2L implementations, allowing us to directly compare the performance in terms of accuracy and speed of the two main algorithmic approaches. Here we give an overview of the software's design, it's positioning withing the wider framework for the solution of integral equations. We proceed to describe our favoured implementation approach, which we believe maximally uses the features of modern hardware to increase the throughput (points/sec) of the M2L operation. In order to do this we combine the computational optimisations taken for the FFT in \cite{Malhotra2015} with the exploitation of redundancy in the translation vectors presented in \cite{Messner2012}. We benchmark our approach with ExaFMM-T \cite{wang2021exafmm}, which uses the implementation of PVFMM for its M2L operation. 
 
 \subsection{Rusty Field}
 
@@ -415,20 +415,22 @@ We use the following interface,
 
 This allows us to re-implement the M2L for a given method and set of computational optimisations, though we note that it will be difficult for re-implementers or users to design their own high performance implementation without a deep understanding of the software internals.
 
-\subsection{FFT based M2L with Symmetries}
+\subsection{M2L Operators with Symmetries}
 
-We can extend the scheme introduced by \cite{Malhotra2015} for homogenous and translation invariant kernels using the methods described in \cite{Messner2012} which apply when FMM interpolation points are arranged on a regular grid, as is the case for both the bbFMM and the KIFMM. Instead of computing 1664 convolutions corresponding to  M2L interactions, which contains a lot of redundancy, we can instead compute just 16. This will also result in just 16 Hadamard products instead of 1664. Unlike with the BLAS3/SVD approach, this optimisation will dramatically cut down the FLOP count when using this approach for the convolution, and we therefore believe is the optimum method for computing the M2L operation.
+We can extend the FFT based M2L scheme introduced by \cite{Malhotra2015} for homogenous and translation invariant kernels, as well as an SVD based scheme, using the methods described in \cite{Messner2012} which apply when FMM interpolation points are arranged on a regular grid, as is the case for both the bbFMM and the KIFMM. If computed naively, there are 1664 M2L operators, removing the redundancy due to invariance for our kernels of interest leaves just 316 which can be scaled at each level of a tree. However, by taking advantage of symmetries amongst the M2L operators we can reduce this to 16. Though investigated in \cite{Messner2012} we find that there is little benefit to reducing to 16 unique operators in the case of an SVD based scheme, the FLOP count of the operator is not reduced however the argument that we can better make use of cache via larger BLAS3 operations is invalidated by the experiments documented in [TODO: ROOFLINE EXPERIMENTS]. However for the FFT approach reducing the number of translations reduces the number of Hadamard products which have to be computed, and can therefore be seen to reduce the FLOP count. We therefore believe that this is the optimal method for calculating M2L operators.
 
-Here we describe the ways to remove redundant M2L translations as described in \cite{Messner2012}. They describe two symmetry planes, axial and diagonal. The axial planes are given by $t_1 = 0$, $t_2 = 0$ and $t_3 = 0$, each dividing $\mathbb{Z}^3$ into two parts, we can combine all three planes to divide $\mathbb{Z}^3$ into octants. We use $\mathbb{Z}^3_+$ as a reference octant. The diagonal planes are given by $t_1 = t_2$, $t_1 = t_3$ and $t_2 = t_3$, in all there are 6 diagonal symettries, however we restrict ourselves to those in the reference octant. By combining the axial and diagonal symmetries we obtain a cone,
+Here we describe the ways to remove redundant M2L translations as described in \cite{Messner2012} for an SVD based M2L operator. They describe two symmetry planes, axial and diagonal. The axial planes are given by $t_1 = 0$, $t_2 = 0$ and $t_3 = 0$, each dividing $\mathbb{Z}^3$ into two parts, we can combine all three planes to divide $\mathbb{Z}^3$ into octants. We use $\mathbb{Z}^3_+$ as a reference octant. The diagonal planes are given by $t_1 = t_2$, $t_1 = t_3$ and $t_2 = t_3$, in all there are 6 diagonal symettries, however we restrict ourselves to those in the reference octant. By combining the axial and diagonal symmetries we obtain a cone,
 
 \begin{flalign}
     \label{eq:reference_cone}
     \mathbb{Z}^3_{sym} = \left \{ \mathbb{Z}^3_{sym} \subset \mathbb{Z}^3 : t_1 \geq t_2 \geq t_3 \geq 0 \text{ with } t \in \mathbb{Z}^3 \right \}
 \end{flalign}
 
-We identify a subset of transfer vectors $T_{sym} = T \cap \mathbb{Z}^3_{sym}$, all other transfer vectors can be expressed as reflections/rotations of this fundamental set. This can be used to construct permutation matrices that can be applied to the M2L operators for these unique transfer vectors, note that this is independent of the way in which these M2L operators are being calculated and therefore applies to either the SVD or FFT approach.
+We identify a subset of transfer vectors $T_{sym} = T \cap \mathbb{Z}^3_{sym}$, all other transfer vectors can be expressed as reflections/rotations of this fundamental set. 
 
-Consider an M2L operator $K_p(t)$, corresponding to one of 316 unique orientations at a given level, any reflection of a transfer vector along a symettry plane determines the permutation of its associated operator as
+In order to take advantage of these redundancies we need to uniquely label the multi-indices that correspond to interpolation points. Consider the following arrangement for the KIFMM in figure [TODO: FIGURE OF INTERPOLATION POINTS]. The number of interpolation points will be $l = 6(n-2)^2 + 2$ where $n$ is a chosen expansion order, the corresponding M2L matrix $K_t$ will be of size $l \times l$. We need to store bijective maps, $m(.)$, between the multi-indices that describe the interpolation points and the rows/columns of $K_t$.
+
+Consider an M2L operator based on an SVD scheme $K_p(t)$, corresponding to one of 316 unique orientations at a given level, any reflection of a transfer vector along a symmetry plane determines the permutation of its associated operator as
 
 \begin{flalign}
     K_t = P_t K_{p(t)} P_t^T
@@ -436,14 +438,49 @@ Consider an M2L operator $K_p(t)$, corresponding to one of 316 unique orientatio
 
 The permutation matrix $P_t$ depends upon the transfer vector $t \in T$, where we also need a surjective mapping $p : T \rightarrow T_{sym}$ that associates each transfer vector in $T$ with exactly one in $T_{sym}$. The left application corresponds to a permutation of the rows, and the right the columns of the original matrix. The permutation matrices depend only upon the transfer vector $t$ and are constructed as follows.
 
+\begin{flalign}
+    \label{eq:permutation_matrix}
+    P_t = ( e_{m(\pi(m^{-1}(1)))} , ..., e_{m(\pi(m^{-1}(l)))}  )
+\end{flalign}
 
-\begin{list}{-}{Discussion}
-    \item Why is this better than the SVD approach (complexity analysis)
-    \item Why it doesn't make sense to necessarily take advantage of symettries with SVD approach - flop count same, experiments to prove that BLAS3 doesn't make much difference.
-    \item Outline of algorithm.
-\end{list}
+Where $\pi$ corresponds to an axial/diagonal reflection, and $m$ is the bijective map that takes one from a multi-index to the rows/columns of $K_t$, each $e_j$ is a unit vector of length $l$ whose entries are 0 except in row $i = m(\pi(m^{-1}(j)))$ is 1. We note that the permutation matrices are orthogonal, $P_t P_t^{-1} = I$, and that the combination of permutations is non-commutative. We define $P_t$ as,
 
-\subsection{Investigations}
+\begin{flalign}
+    P_t = P_t^{diag} P_t^{axial}
+\end{flalign}
+
+We can precompute and store the M2L operators corresponding to the reduced set of transfer vectors in $T_{sym}$ and use them as follows,
+
+\begin{enumerate}
+    \item Permute multipole expansions, $$w_t = P_t w$$
+    \item Compute the permuted local expansions, $$f_t = K_{p(t)} w_t$$
+    \item Unpermute the local expansions, $$f = P_t^T f_t$$
+\end{enumerate}
+
+In this way we only have to pre-compute and store $K_{p(t)}$, ie the M2L operators corresponding to $T_{sym}$.
+
+In FFT schemes the M2L operator is not the result of a matvec, but rather a convolution computed using the FFT and a Hadamard product. This convolution corresponds to a translation vector from $T_{sym}$. Therefore, when computing the kernel matrix, as described above, we simply need to lookup the map between a source-target pair's translation vector and the corresponding vector in $T_{sym}$, for each of which we store an associated FFT of the kernel $\hat{G}$.
+
+\subsubsection{Computational Complexity When Applied to SVD vs FFT M2L}
+
+This description applies to low-frequency Helmholtz problems, as well as Laplace problems, where the number of interpolation points on each tree node remains constant with the node's level.
+
+For an SVD based M2L, the computational complexity of calculating the check potential for a given box is proportional to the size of the M2L operator matrix, for the KIFMM and bbFMM this is $ \propto l^4$ and $\propto l^6$ respectively. These operator matrices must be applied in up to 189 directions for each node at a given level of the hierarchical tree. The complexity is therefore $O(\cdot l^4)$ for the KiFMM and $O(\cdot l^6)$ for the bbFMM. These operators can be compressed choosing the first $k$ singular values as a basis, and we investigate the impacts of this below computationally. However this is not seen to help significantly, and sacrifices significant accuracy for relatively modest speed improvements.
+
+For an FFT based M2L, the compoutational complexity of calculating the check potential for a given box is determined by the cost of the FFTs of the Kernel/Signal sequences, as well as the cost of computing the Hadamard products to find the convolution. For the KIFMM, an FFT of the kernel/signal sequence is $O(l^2 \log(l))$ and the Hadamard product is of $O(l^2)$. For the bBFMM we find correspondingly $O(l^3 \log(l))$ and $O(l^3)$.
+
+We see from previous analysis that the BLAS3 benefit from taking advantage of the redundancy in transfer vectors is minimal. Furthermore the precomputation time for large expansion orders can be significant due to the size of the SVDs being computed [FIGURE FOR SVD PRECOMPUTATION TIMES VS ORDER]. We also see that the FFT approach has a significant decrease in complexity measured in terms of FLOPS, with the added benefit of being an exact method, and additionally has a minimal precomputation time.
+
+
+\subsubsection{A New M2L Operator Algorithm}
+
+We describe the new algorithm for computing the M2L operator that builds on the cache advantages of PVFMM's implementation \cite{Malhotra2015} as well as exploiting the redundancy of interactions as explained in \cite{Messner2012}.
+
+
+\dots
+
+
+\subsubsection{Investigations}
 
 \begin{list}{-}{Benchmark figures}
     \item Accuracy of svd method as a function of p and k, accuracy of fft method as a function of p.
